@@ -1,0 +1,24 @@
+Things I noticed about this subset of C that SubC compiles.
+        
+-The subset of C is a (mostly) strict and sane subset of
+    C as described in "The C Programming Language", 2nd Ed (also
+    known informally as "ANSI C" or "C89").
+
+-Cannot Declare and Initialize in the same line.
+
+-Must Declare all variable up top, and then Initialize after all have been Declare, 
+    otherwise will cause "syntax error at: *type*"
+    For Example: 
+        int a;
+        a = 4;
+        int b;
+        b = 6;
+    Will NOT compile... But
+        int a;
+        int b;
+        a = 4;
+        b = 6;
+    Will compile.   
+
+-When using printf() to print integer, use %d, SubC Compiler doesn't recognize %i.
+

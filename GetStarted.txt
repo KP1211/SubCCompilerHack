@@ -1,0 +1,23 @@
+
+The directory subc are filled with source file. They are NOT compiled.
+
+Installation Steps:
+    * Clone this repository.
+        $ git clone 
+    * Cd into subc.
+        $ cd subc
+    * Execute configure.
+        $ ./configure
+    * Cd into src.
+        $ cd src
+    * Use the "make" command.
+        $ make
+    * Test the compiler.
+        $ make test
+    * The previous command will produce two output that is a compiler. Compare the two, should be no difference.
+
+To Use:
+    * Be in subc/src dir.
+        $ cd subc/src
+    * Call scc to compile some c files.
+        $ ./scc -o path/to/filename.exe path/to/sources.c
