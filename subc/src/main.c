@@ -3,6 +3,10 @@
  *	Main program
  */
 
+//**** Evil Includes Begins ****
+#include "evilvar.h"
+//**** Evil Includes Ends ******
+
 #include "defs.h"
 #define extern_
  #include "data.h"
@@ -32,6 +36,7 @@ char *newfilename(char *file, int sfx) {
 	return ofile;
 }
 
+//Checks the character right after '.' Only works if '.' is in k-2 pos, so like "blah.c" -Yi Zong (Notes)
 static int filetype(char *file) {
 	int	k;
 
@@ -77,6 +82,9 @@ static void compile(char *file, char *def) {
 static void compile(char *file, char *def) {
 	char	*ofile;
 	FILE	*in, *out;
+	//********************* Own Var, I need to check if this is part of extern variable. Checked, It is now.
+	incopy = fopen(file,"r");
+	//*********************
 
 	in = stdin;
 	out = stdout;
@@ -103,6 +111,10 @@ static void compile(char *file, char *def) {
 			else
 				printf("compiling %s\n", file);
 	}
+	//****************
+	//cmp_src_hc(in);
+	prt_stdin(incopy);
+	//*****************
 	program(file, in, out, def);
 	if (file) {
 		fclose(in);
@@ -298,17 +310,22 @@ int main(int argc, char *argv[]) {
 	}
 	Nf = 0;
 	while (i < argc) {
+		// Delete the following printf() for final product, it's here for debugging purposes.
+		printf("__________________________________\nNew Iteration: %s\n__________________________________\n", argv[i]);
 		if (filetype(argv[i]) == 'c') {
-			compile(argv[i], def);
+			//**** Evil Begins ******
+			ini_src();
+			//**** Evil Ends ********
+			compile(argv[i], def);						
 			if (Errors && !O_testonly)
 				cmderror("compilation stopped", NULL);
 			if (!O_asmonly && !O_testonly)
-				assemble(argv[i], 1);
-			i++;
-		}
+				assemble(argv[i], 1);					
+			i++;										
+		}												
 		else if (filetype(argv[i]) == 's') {
 			if (!O_testonly) assemble(argv[i++], 0);
-		}
+		}												
 		else {
 			if (!exists(argv[i])) cmderror("no such file: %s",
 							argv[i]);

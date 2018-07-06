@@ -3,6 +3,9 @@
  *	stdio.h
  */
 
+#ifndef _STDIO_H			// This include guard is added by Yi Zong Kuang. July 5th 2018.
+#define _STDIO_H	1
+
 #define NULL	(void *)0
 #define EOF	(-1)
 
@@ -92,3 +95,5 @@ int	 ungetc(int c, FILE *f);
 int	 vfprintf(FILE *f, char *fmt, void **args);
 int	 vprintf(char *fmt, void **args);
 int	 vsprintf(char *buf, char *fmt, void **args);
+
+#endif /* <stdio.h> included.  */
