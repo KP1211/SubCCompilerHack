@@ -22,3 +22,25 @@ Things I noticed about this subset of C that SubC compiles.
 
 -When using printf() to print integer, use %d, SubC Compiler doesn't recognize %i.
 
+-Function name has a limit to how long it can be. If any longer, compiler won't recognize
+     and start causing ALOT of compilation error that doesn't make sense. 
+     Like: static symbol redeclared extern: initialize_targe
+     with initialize_targe being the longest it can be in a function name. 16 letters at most.
+
+I guess you dont need to include a function if you dont need to define it in a particular source file.
+    Because if you do, subc won't compile, and will be like 
+    error: evilvar.h: 1: ')' expected
+    error: evilvar.h: 1: ';' expected
+    error: evilvar.h: 1: type specifier expected at: *
+    error: evilvar.h: 1: error recovery failed
+    error: evilvar.h: 1: fatal error, stop
+    POSSIBLE REASON: This happens when I include the same file twice in a build, I am guessing the include guard doesn't work in subc.
+        It's probably also why author of subc never used any include guard in header files.
+    This is lastest reason I have come up with.
+        The above compilation error are caused by those variable type not being defined. 
+        Check their source file and find the right declaration. Since they are different than standard C.
+        The Include keyword works, but most source files doesn't have a include guard, so redefinition error may come up.
+        To fix this, just add a include guard to source file.
+        I have done this to subc's stdio.h on July 5th 2018.
+
+Apparently, you don't need to do Include in main.c to find some function in another header file???

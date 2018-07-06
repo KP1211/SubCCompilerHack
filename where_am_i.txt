@@ -1,0 +1,18 @@
+Need to find how they input the c file into the pgoram and how they are store.
+This will provide me a way to hardcode helloworld.c into the program to be compared.
+---DONE---
+
+Need to find how to search for a sub-string in a stream. Find substring pointed by FILE object.
+
+Need to find how to modify a a input stream.
+    How to replace char on stream. replace char pointed by FILE object.
+    How to insert strings into stream. insert strings pointed by FILE object.
+
+Fix bug where fgets() would read in some extra chars on the last line.
+    Example:
+        return 0;
+        }
+    What's read:
+        return 0;
+        }return0;
+    It's weird...
