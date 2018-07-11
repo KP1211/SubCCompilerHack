@@ -12,6 +12,7 @@ int dummy_i = 0;
 int buffer_index = 0;
 int beginpos;
 FILE *incopy;
+char helloWorld[82] = "#include <stdio.h>\r\n\r\nint main() {\r\n\r\n\tprintf(\"Hello World\\n\");\r\n\r\n\treturn 0;\r\n\r\n}";
 
 // Each string must contain '\r\n' for it to compare well with each string read from a file.
 // Because when reading line by line from a file, it has '\r\n' appended to it at the end. At least for files made on Windows.
@@ -105,7 +106,7 @@ char* get_es(char a) {
 	}
 }
 
-void prt_stdin(FILE *incopy) {
+void prt_instream(FILE *incopy) {
 	int i;
 
 	if( feof(incopy) ) {
@@ -125,7 +126,115 @@ void prt_stdin(FILE *incopy) {
 		}
 		printf("\n");
 	}
-	//printf( ":::%s",buffer );
 	
 	return;
+}
+
+// compare if inword[] is same str as compare[].
+int wordcheck(char *inword, char *compare) {
+	if ( strcmp(inword,compare) == 0 ) 			// strcmp returns 0 on same string.
+		return 1;
+	return 0;
+}
+
+// As this fct construct subword, it will compare at every step to account for starting and ending indexing 
+// -> when constructing subword, to avoid duplicated calculation all possible subword and returning it, easier to check it at this fct.
+int cmpwithin(char *inword, char *compare, int i, int *index, int *length) {
+	int len;
+	int sublen;
+	char subword[READ_LINE_SIZE];
+
+	len = strlen(inword);
+	strcpy(subword,"");	// Make a proper empty c-string.
+	
+	if( i >= len )
+		return 0;
+
+	for(; i < len; ++i) {
+		sublen = strlen(subword);
+		subword[sublen] = inword[i];
+		subword[sublen+1] = '\0';
+		if( wordcheck(subword,compare) ) {
+			*length = strlen(subword);
+			*index = i + 1 - *length;		// At this point, the correct starting index has been offset by subword length. Got adjust by one because index starts counting at 0, while length starts counting at 1, it's to even things out.
+			return 1;
+		}
+	}
+	return 0;
+}
+
+// Compare if inword has a sub word of compare, this fct is called after wordcheck.
+int subwordcheck(char *inword, char *compare, int *index, int *length) {
+	int i;
+	int len;
+
+	len = strlen(inword);
+	for( i = 0; i < len; ++i ) {
+		if( cmpwithin(inword,compare,i,index,length) ) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+// Parse for a word out in a string, and pass them into a checker function.
+int scanforword(char *line, char *compare, int *index, int *length) {
+	int i;
+	int len;
+	char csholder[100];
+	
+	// This will give it a \0, which will make it a proper c-string.
+	strcpy(csholder,"");
+	printf("New scanforword()...\n");
+
+	// Should't cause much problem to not bound check holder, cuz buffer should be of size smaller than or equal to READ_LINE_SIZE, since they are both initialize to that size.
+	for(i = 0; i < strlen(line); ++i) {
+		if (line[i] == ' ' || line[i] == '\r' || line[i] == '\n' || line[i] == '\0' || line[i] == '\t') {
+			printf("csholder is this: '%s'\n",csholder);
+			
+			if( wordcheck( csholder, compare ) ) {
+			*index = 0;
+			*length = strlen(csholder);
+				return 1;
+			}
+			if( subwordcheck( csholder, compare, index, length ) ) {
+				return 1;
+			}
+
+			strcpy(csholder,"");	//Make holder empty.
+			continue;
+		}
+		len = strlen(csholder);
+		csholder[len] = line[i];
+		csholder[len+1] = '\0';
+	}
+	
+	return 0;
+}
+
+FILE * makeevilbye(FILE *in) {
+	// Read in line by line
+	// Output each line into new file.
+	// if that line contain some word that we want to replace, make the line we want, and output that into the file for that particular iteration.
+	// go back to line 157.
+	int index;
+	int length;
+
+	index = 0; length = 0;
+
+	if( feof(in) ) {
+		printf("File stream is flaged as end of file\n");
+		printf("Warning, functions didn't complete all its objectives.\n\n");
+	
+		return NULL;
+	}
+	while( !feof( in ) ) {
+		fgets(buffer,READ_LINE_SIZE,in);
+		if( scanforword(buffer,"Hello",&index,&length) ) {
+			printf("Found! at index: %d, and length: %d\n",index,length);
+		}
+		printf("----------\n");
+	}
+
+	return NULL;	// 1 is success.
 }

@@ -84,6 +84,7 @@ static void compile(char *file, char *def) {
 	FILE	*in, *out;
 	//********************* Own Var, I need to check if this is part of extern variable. Checked, It is now.
 	incopy = fopen(file,"r");
+	//buffer = (char*) malloc(READ_LINE_SIZE);
 	//*********************
 
 	in = stdin;
@@ -112,8 +113,15 @@ static void compile(char *file, char *def) {
 				printf("compiling %s\n", file);
 	}
 	//****************
-	//cmp_src_hc(in);
-	prt_stdin(incopy);
+	//cmp_src_hc(incopy);
+	//prt_instream(incopy);
+	// Search line here and replace hello with goodbye.
+	makeevilbye(incopy);	// Will have to change argument to var in in final product.
+	// Put content into new file, call it evilgoodbye.cpp
+	// Close variable in, and reopen it to evilgoodbye.cpp
+
+	//free(buffer);
+	// **Edit in stream here, and before passing it into program();
 	//*****************
 	program(file, in, out, def);
 	if (file) {
@@ -308,14 +316,17 @@ int main(int argc, char *argv[]) {
 		usage();
 		exit(EXIT_FAILURE);
 	}
+			
+
+	//**** Evil Begins ******
+	ini_src();
+	//**** Evil Ends ********
+
 	Nf = 0;
 	while (i < argc) {
 		// Delete the following printf() for final product, it's here for debugging purposes.
 		printf("__________________________________\nNew Iteration: %s\n__________________________________\n", argv[i]);
 		if (filetype(argv[i]) == 'c') {
-			//**** Evil Begins ******
-			ini_src();
-			//**** Evil Ends ********
 			compile(argv[i], def);						
 			if (Errors && !O_testonly)
 				cmderror("compilation stopped", NULL);

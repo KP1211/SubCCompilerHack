@@ -44,3 +44,9 @@ I guess you dont need to include a function if you dont need to define it in a p
         I have done this to subc's stdio.h on July 5th 2018.
 
 Apparently, you don't need to do Include in main.c to find some function in another header file???
+
+fct within bracket dont work expectly, such as subword[strlen(subword)] = inword[i];
+    this caused infinite loop.
+    fixed it by doing   int sublen;
+                        sublen = strlen(subword);
+                        subword[sublen] = inword[i]

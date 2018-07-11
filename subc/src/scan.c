@@ -6,6 +6,9 @@
 #include "defs.h"
 #include "data.h"
 #include "decl.h"
+//*******MYEVIL INCLUDE
+#include "evilvar.h"
+//*******
 
 int next(void) {
 	int	c;
