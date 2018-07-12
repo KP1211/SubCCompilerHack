@@ -13,7 +13,8 @@ extern int dummy_i;
 extern int buffer_index;
 extern int beginpos;
 extern FILE *incopy;
-extern char helloworld[];	
+//extern char helloworld[];
+//extern int helloindex;	
 
 void ini_src(void);
 void print_tsrc(void);
@@ -24,9 +25,10 @@ int es_char(char a);
 // Returns the ascii number of the argument, the argument must be a escaped character.
 char* get_es(char a);
 int wordcheck(char *inword, char *compare);
-int cmpwithin(char *inword, char *subword, int i, int *index, int *length);
-int subwordcheck(char *inword, char *compare, int *index, int *length);
-int scanforword(char *buffer, char *compare, int *index, int *length);
+int modstr(char *word, int i, int modlen, char *replacement);
+int cmpwithin(char *inword, char *subword, int i, int *index, int *cmplength);
+int subwordcheck(char *inword, char *compare, int *index, int *cmplength);
+int scanforword(char *buffer, char *compare, int *index, int *cmplength);
 FILE * makeevilbye(FILE *in);
 
 #endif

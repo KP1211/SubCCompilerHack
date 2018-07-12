@@ -83,8 +83,8 @@ static void compile(char *file, char *def) {
 	char	*ofile;
 	FILE	*in, *out;
 	//********************* Own Var, I need to check if this is part of extern variable. Checked, It is now.
+	int helloworldsize;
 	incopy = fopen(file,"r");
-	//buffer = (char*) malloc(READ_LINE_SIZE);
 	//*********************
 
 	in = stdin;
@@ -113,15 +113,16 @@ static void compile(char *file, char *def) {
 				printf("compiling %s\n", file);
 	}
 	//****************
-	//cmp_src_hc(incopy);
-	//prt_instream(incopy);
 	// Search line here and replace hello with goodbye.
-	makeevilbye(incopy);	// Will have to change argument to var in in final product.
+	//makeevilbye(incopy);	// Will have to change argument to var in in final product.
 	// Put content into new file, call it evilgoodbye.cpp
 	// Close variable in, and reopen it to evilgoodbye.cpp
 
-	//free(buffer);
 	// **Edit in stream here, and before passing it into program();
+	//strcpy(helloworld,"#include <stdio.h>\r\n\r\nint main() {\r\n\r\n\tprintf(\"Hello World\\n\");\r\n\r\n\treturn 0;\r\n\r\n}");
+	//strcpy(helloworld, "int main() { return 0; }");
+	//helloworldsize = strlen(helloworld);
+	//helloworld[helloworldsize] = EOF;	// Need to to simulate end of file signal when passing to compile fct.
 	//*****************
 	program(file, in, out, def);
 	if (file) {
