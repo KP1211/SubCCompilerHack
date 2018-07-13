@@ -28,10 +28,9 @@ int next(void) {
 		}
 	}
 	c = fgetc(Infile);
-	//c = helloworld[helloindex];
-	//++helloindex; 			// FInd out how to imitate EOF
-	//printf("char: %c --> ascii: %d --> index: %d\n",c,c,helloindex);
+	//***
 	printf("char: %c --> ascii: %d\n",c,c );
+	//***
 	if ('\n' == c) Line++;
 	return c;
 }
@@ -121,7 +120,6 @@ static int scanint(int c) {
 	return val;
 }
 
-// Gonna try modifying this to replace 'hello' occurence with 'goody'.
 // This functions parse anything in double quotes.
 // The return values is the size of the buf, and also what's gonna be counted in the program.
 // The return values also doesn't count the ending double quotes, since it's just here for the format purpose.
