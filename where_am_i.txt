@@ -11,16 +11,10 @@ Fix bug where fgets() would read in some extra chars on the last line.
     It's weird...
     FIXEDDDDD, turns out I modified the helloworld.c file and it fucked it up, without me knowing.
 
+Found the function to modify anything in double quotes that counts as a string in the compiling process.
 ^^^---DONE---^^^
 vvv---NOT_DONE---vvv
 
-Need to find how to search for a sub-string in a stream. Find substring pointed by FILE object.
+Find the function to covert a block of function code to binary.
 
-Need to find how to modify a a input stream.
-    How to replace char on stream. replace char pointed by FILE object.
-    How to insert strings into stream. insert strings pointed by FILE object.
-
-
-Take a look at next();
-    Make a global array of the source code I wanna compile, a one liner. Then feed it through next().
-
+Find out how #include behave
