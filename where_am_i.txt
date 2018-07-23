@@ -18,3 +18,8 @@ vvv---NOT_DONE---vvv
 Find the function to covert a block of function code to binary.
 
 Find out how #include behave
+
+Does global var Text also store the line of command?
+
+Going to go with replacing FILE var base on filename input.
+    -after 2nd iteration, it replace "Hello" in our infected source code to "Good Bye", so now future version will replace "Good Bye" with "Good Bye".
