@@ -1,0 +1,6294 @@
+Evil Prevails!*************************
+	/ \~~~~/ \
+	--      --
+	 **      **
+	 \   =   /
+	  \__-__/
+Evil Prevails!*************************
+cg.c
+/*
+ *	NMH's Simple C Compiler, 2012-2014
+ *	x86-64 target description
+ */
+
+#include "#/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Definitions
+ */
+
+#include <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdlib.h
+ */
+
+#define EXIT_FAILURE	#define EXIT_SUCCESS	
+#define RAND_MAX	
+extern char	**environ;
+
+void	 abort(void);
+int	 abs(int n);
+int	 atexit(int (*fn)());
+int	 atoi(char *s);
+void	*bsearch(void *key, void *array, int count, int size, int (*cmp)());
+void	*calloc(int count, int size);
+void	 exit(int rc);
+void	 free(void *p);
+char	*getenv(char *name);
+void	*malloc(int size);
+void	 qsort(void *array, int count, int size, int (*cmp)());
+int	 rand(void);
+void	*realloc(void *p, int size);
+void	 srand(int seed);
+int	 strtol(char *s, char *endp[], int base);
+int	 system(char *s);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdio.h
+ */
+
+#define NULL	#define EOF	
+#define FOPEN_MAX	#define BUFSIZ	#define FILENAME_MAX	#define TMP_MAX	#define L_tmpnam	
+#define _IONBF	#define _IOLBF	#define _IOFBF	#define _IOACC	#define _IOUSR	
+#define _FCLOSED	#define _FREAD	#define _FWRITE	#define _FERROR	
+struct _file {
+	int	fd;
+	char	iom;
+	char	last;
+	char	mode;
+	int	ptr;
+	int	end;
+	int	size;
+	int	ch;
+	char	*buf;
+};
+
+#define FILE	
+extern FILE	*stdin, *stdout, *stderr;
+
+#ifdef __dos
+extern int	_faddcr;
+#endif
+
+#define getc	#define putc	
+#define SEEK_SET	#define SEEK_CUR	#define SEEK_END	
+void	 clearerr(FILE *f);
+int	 fclose(FILE *f);
+FILE	*fdopen(int fd, char *mode);
+int	 feof(FILE *f);
+int	 ferror(FILE *f);
+int	 fflush(FILE *f);
+int	 fgetc(FILE *f);
+int	 fgetpos(FILE *f, int *ppos);
+char	*fgets(char *buf, int len, FILE *f);
+int	 fileno(FILE *f);
+FILE	*fopen(char *path, char *mode);
+int	 fprintf(FILE *f, char *fmt, ...);
+int	 fputc(int c, FILE *f);
+int	 fputs(char *s, FILE *f);
+int	 fread(void *buf, int size, int count, FILE *f);
+FILE	*freopen(char *path, char *mode, FILE *f);
+int	 fscanf(FILE *f, char *fmt, ...);
+int	 fseek(FILE *f, int off, int how);
+int	 fsetpos(FILE *f, int *ppos);
+int	 ftell(FILE *f);
+int	 fwrite(void *buf, int size, int count, FILE *f);
+int	 getchar(void);
+char	*gets(char *buf);
+int	 kprintf(int fd, char *fmt, ...);
+void	 perror(char *s);
+int	 printf(char *fmt, ...);
+int	 putchar(int c);
+int	 puts(char *s);
+int	 remove(char *path);
+int	 rename(char *from, char *to);
+void	 rewind(FILE *f);
+int	 scanf(char *fmt, ...);
+void	 setbuf(FILE *f, char *buf);
+int	 setvbuf(FILE *f, char *buf, int mode, int size);
+int	 sscanf(char *s, char *fmt, ...);
+int	 sprintf(char *buf, char *fmt, ...);
+char	*tmpnam(char *buf);
+FILE	*tmpfile(void);
+int	 ungetc(int c, FILE *f);
+int	 vfprintf(FILE *f, char *fmt, void **args);
+int	 vprintf(char *fmt, void **args);
+int	 vsprintf(char *buf, char *fmt, void **args);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	string.h
+ */
+
+extern char	*sys_errlist[];
+extern int	sys_nerr;
+
+void	*memchr(void *p, int c, int len);
+int	 memcmp(void *p1, void *p2, int len);
+void	*memcpy(void *dest, void *src, int len);
+void	*memmove(void *dest, void *src, int len);
+void	*memset(void *p, int c, int len);
+char	*strcat(char *s, char *a);
+char	*strchr(char *s, int c);
+int	 strcmp(char *s1, char *s2);
+char	*strcpy(char *dest, char *src);
+int	 strcspn(char *s, char *set);
+char	*strdup(char *s);
+char	*strerror(int err);
+int	 strlen(char *s);
+char	*strncat(char *s, char *a, int len);
+int	 strncmp(char *s1, char *s2, int len);
+char	*strncpy(char *dest, char *src, int len);
+char	*strpbrk(char *s, char *set);
+char	*strrchr(char *s, int c);
+int	 strspn(char *s, char *set);
+char	*strtok(char *s, char *sep);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011
+ *	ctype.h
+ */
+
+int	isalnum(int c);
+int	isalpha(int c);
+int	iscntrl(int c);
+int	isdigit(int c);
+int	isgraph(int c);
+int	islower(int c);
+int	isprint(int c);
+int	ispunct(int c);
+int	isspace(int c);
+int	isupper(int c);
+int	isxdigit(int c);
+int	tolower(int c);
+int	toupper(int c);
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2012,2014
+ *	x86-64 target description
+ */
+
+#define CPU	#define BPW	ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2013,2014
+ *	Linux/x86-64 environment
+ */
+
+#define OS	#define ASCMD	#define LDCMD	#define SYSLIBC	ÿ#define VERSION	
+#ifndef SCCDIR
+ #define SCCDIR	#endif
+
+#ifndef AOUTNAME
+ #define AOUTNAME	#endif
+
+#define SCCLIBC	
+#define PREFIX	#define LPREFIX	
+#define INTSIZE	#define PTRSIZE	#define CHARSIZE	
+#define TEXTLEN	#define NAMELEN	
+#define MAXFILES	
+#define MAXIFDEF	#define MAXNMAC	#define MAXCASE	#define MAXBREAK	#define MAXLOCINIT	#define MAXFNARGS	
+/* assert(NSYMBOLS < PSTRUCT) */
+#define NSYMBOLS	#define POOLSIZE	#define NODEPOOLSZ	
+/* types */
+enum {
+	TVARIABLE = 1,
+	TARRAY,
+	TFUNCTION,
+	TCONSTANT,
+	TMACRO,
+	TSTRUCT
+};
+
+/* primitive types */
+enum {
+	PCHAR = 1,
+	PINT,
+	CHARPTR,
+	INTPTR,
+	CHARPP,
+	INTPP,
+	PVOID,
+	VOIDPTR,
+	VOIDPP,
+	FUNPTR,
+	PSTRUCT = 0x2000,
+	PUNION  = 0x4000,
+	STCPTR  = 0x6000,
+	STCPP   = 0x8000,
+	UNIPTR  = 0xA000,
+	UNIPP   = 0xC000,
+	STCMASK = 0xE000
+};
+
+/* storage classes */
+enum {
+	CPUBLIC = 1,
+	CEXTERN,
+	CSTATIC,
+	CLSTATC,
+	CAUTO,
+	CSPROTO,
+	CMEMBER,
+	CSTCDEF
+};
+
+/* lvalue structure */
+enum {
+	LVSYM,
+	LVPRIM,
+	LVADDR,
+	LV
+};
+
+/* debug options */
+enum {
+	D_LSYM = 1,
+	D_GSYM = 2,
+	D_STAT = 4
+};
+
+/* addressing modes */
+enum {
+	empty,
+	addr_auto,
+	addr_static,
+	addr_globl,
+	addr_label,
+	literal,
+	auto_byte,
+	auto_word,
+	static_byte,
+	static_word,
+	globl_byte,
+	globl_word
+};
+
+/* compare instructions */
+enum {
+	cnone,
+	equal,
+	not_equal,
+	less,
+	greater,
+	less_equal,
+	greater_equal,
+	below,
+	above,
+	below_equal,
+	above_equal
+};
+
+/* boolean instructions */
+enum {
+	bnone,
+	lognot,
+	normalize
+};
+
+/* AST node */
+struct node_stc {
+	int		op;
+	struct node_stc	*left, *right;
+	int		args[1];
+};
+
+#define node	
+/* tokens */
+enum {
+	SLASH, STAR, MOD, PLUS, MINUS, LSHIFT, RSHIFT,
+	GREATER, GTEQ, LESS, LTEQ, EQUAL, NOTEQ, AMPER,
+	CARET, PIPE, LOGAND, LOGOR,
+
+	ARROW, ASAND, ASXOR, ASLSHIFT, ASMINUS, ASMOD, ASOR, ASPLUS,
+	ASRSHIFT, ASDIV, ASMUL, ASSIGN, AUTO, BREAK, CASE, CHAR, COLON,
+	COMMA, CONTINUE, DECR, DEFAULT, DO, DOT, ELLIPSIS, ELSE, ENUM,
+	EXTERN, FOR, IDENT, IF, INCR, INT, INTLIT, LBRACE, LBRACK,
+	LPAREN, NOT, QMARK, RBRACE, RBRACK, REGISTER, RETURN, RPAREN,
+	SEMI, SIZEOF, STATIC, STRLIT, STRUCT, SWITCH, TILDE, UNION,
+	VOID, VOLATILE, WHILE, XEOF, XMARK,
+
+	P_DEFINE, P_ELSE, P_ELSENOT, P_ENDIF, P_ERROR, P_IFDEF,
+	P_IFNDEF, P_INCLUDE, P_LINE, P_PRAGMA, P_UNDEF
+};
+
+/* AST operators */
+enum {
+	OP_GLUE, OP_ADD, OP_ADDR, OP_ASSIGN, OP_BINAND, OP_BINIOR,
+	OP_BINXOR, OP_BOOL, OP_BRFALSE, OP_BRTRUE, OP_CALL, OP_CALR,
+	OP_COMMA, OP_DEC, OP_DIV, OP_EQUAL, OP_GREATER, OP_GTEQ,
+	OP_IDENT, OP_IFELSE, OP_LAB, OP_LDLAB, OP_LESS, OP_LIT,
+	OP_LOGNOT, OP_LSHIFT, OP_LTEQ, OP_MOD, OP_MUL, OP_NEG,
+	OP_NOT, OP_NOTEQ, OP_PLUS, OP_PREDEC, OP_PREINC, OP_POSTDEC,
+	OP_POSTINC, OP_RSHIFT, OP_RVAL, OP_SCALE, OP_SCALEBY, OP_SUB
+};
+
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Global variables
+ */
+
+#ifndef extern_
+ #define extern_ #endif
+
+extern_ FILE	*Infile;
+extern_ FILE	*Outfile;
+extern_ int	Token;
+extern_ char	Text[TEXTLEN+1];
+extern_ int	Value;
+extern_ int	Line;
+extern_ int	Errors;
+extern_ int	Syntoken;
+extern_ int	Putback;
+extern_ int	Rejected;
+extern_ int	Rejval;
+extern_ char	Rejtext[TEXTLEN+1];
+extern_ char	*File;
+extern_ char	*Basefile;
+extern_ char	*Macp[MAXNMAC];
+extern_ int	Macc[MAXNMAC];
+extern_ int	Mp;
+extern_ int	Expandmac;
+extern_ int	Ifdefstk[MAXIFDEF], Isp;
+extern_ int	Inclev;
+extern_ int	Textseg;
+extern_ int	Nodes[NODEPOOLSZ];
+extern_ int	Ndtop;
+extern_ int	Ndmax;
+
+/* symbol tabel structure */
+extern_ char	*Names[NSYMBOLS];
+extern_ int	Prims[NSYMBOLS];
+extern_ char	Types[NSYMBOLS];
+extern_ char	Stcls[NSYMBOLS];
+extern_ int	Sizes[NSYMBOLS];
+extern_ int	Vals[NSYMBOLS];
+extern_ char	*Mtext[NSYMBOLS];
+extern_ int	Globs;
+extern_ int	Locs;
+
+extern_ int	Thisfn;
+
+/* name list */
+extern_ char	Nlist[POOLSIZE];
+extern_ int	Nbot;
+extern_ int	Ntop;
+
+/* label stacks */
+extern_ int	Breakstk[MAXBREAK], Bsp;
+extern_ int	Contstk[MAXBREAK], Csp;
+extern_ int	Retlab;
+
+/* local init structure */
+extern_ int	LIaddr[MAXLOCINIT];
+extern_ int	LIval[MAXLOCINIT];
+extern_ int	Nli;
+
+/* synthesizer operand queue */
+extern_ int	Q_type;
+extern_ int	Q_val;
+extern_ char	Q_name[NAMELEN+1];
+extern_ int	Q_cmp;
+extern_ int	Q_bool;
+
+/* file collector */
+extern_ char	*Files[MAXFILES];
+extern_ char	Temp[MAXFILES];
+extern_ int	Nf;
+
+/* options */
+extern_ int	O_verbose;
+extern_ int	O_componly;
+extern_ int	O_asmonly;
+extern_ int	O_testonly;
+extern_ int	O_stdio;
+extern_ char	*O_outfile;
+extern_ int	O_debug;
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Function declarations
+ */
+
+int	addglob(char *name, int prim, int type, int scls, int size, int val,
+		char *mval, int init);
+int	addloc(char *name, int prim, int type, int scls, int size, int val,
+		int init);
+int	binoptype(int op, int p1, int p2);
+int	chrpos(char *s, int c);
+void	clear(int q);
+void	cleanup(void);
+void	clrlocs(void);
+void	colon(void);
+void	commit(void);
+void	commit_bool(void);
+void	commit_cmp(void);
+void	compound(int lbr);
+int	comptype(int p);
+int	constexpr(void);
+void	copyname(char *name, char *s);
+int	deref(int p);
+void	dumpsyms(char *title, char *sub, int from, int to);
+void	dumptree(node *a);
+void	emittree(node *a);
+int	eofcheck(void);
+void	error(char *s, char *a);
+void	expr(int *lv, int cvoid);
+void	fatal(char *s);
+int	findglob(char *s);
+int	findloc(char *s);
+int	findmem(int y, char *s);
+int	findstruct(char *s);
+int	findsym(char *s);
+int	findmac(char *s);
+node	*fold_reduce(node *n);
+int	frozen(int depth);
+char	*galloc(int k, int align);
+void	gen(char *s);
+int	genadd(int p1, int p2, int swap);
+void	genaddr(int y);
+void	genalign(int k);
+void	genaligntext(void);
+void	genand(void);
+void	genasop(int op, int *lv, int p2);
+void	genbool(void);
+void	genbrfalse(int dest);
+void	genbrtrue(int dest);
+void	genbss(char *name, int len, int statc);
+void	gencall(int y);
+void	gencalr(void);
+void	gencmp(char *inst);
+void	gendata(void);
+void	gendefb(int v);
+void	gendefp(int v);
+void	gendefs(char *s, int len);
+void	gendefw(int v);
+void	gendiv(int swap);
+void	genentry(void);
+void	genexit(void);
+void	geninc(int *lv, int inc, int pre);
+void	genind(int p);
+void	genior(void);
+void	genjump(int dest);
+void	genlab(int id);
+void	genldlab(int id);
+void	genlit(int v);
+void	genln(char *s);
+void	genlocinit(void);
+void	genlognot(void);
+void	genmod(int swap);
+void	genmul(void);
+void	genname(char *name);
+void	genneg(void);
+void	gennot(void);
+void	genpostlude(void);
+void	genprelude(void);
+void	genpublic(char *name);
+void	genpush(void);
+void	genpushlit(int n);
+void	genraw(char *s);
+void	genrval(int *lv);
+void	genscale(void);
+void	genscale2(void);
+void	genscaleby(int v);
+void	genshl(int swap);
+void	genshr(int swap);
+void	genstack(int n);
+void	genstore(int *lv);
+int	gensub(int p1, int p2, int swap);
+void	genswitch(int *vals, int *labs, int nc, int dflt);
+void	gentext(void);
+void	genxor(void);
+char	*globname(char *s);
+char	*gsym(char *s);
+void	ident(void);
+void	init(void);
+void	initopt(void);
+int	inttype(int p);
+int	label(void);
+char	*labname(int id);
+void	lbrace(void);
+void	lgen(char *s, char *inst, int n);
+void	lgen2(char *s, int v1, int v2);
+void	load(void);
+void	lparen(void);
+node	*mkbinop(int op, node *left, node *right);
+node	*mkbinop1(int op, int n, node *left, node *right);
+node	*mkbinop2(int op, int n1, int n2, node *left, node *right);
+node	*mkleaf(int op, int n);
+node	*mkunop(int op, node *left);
+node	*mkunop1(int op, int n, node *left);
+node	*mkunop2(int op, int n1, int n2, node *left);
+void	match(int t, char *what);
+char	*newfilename(char *name, int sfx);
+int	next(void);
+void	ngen(char *s, char *inst, int n);
+void	ngen2(char *s, char *inst, int n, int a);
+void	notvoid(int p);
+int	objsize(int prim, int type, int size);
+node	*optimize(node *n);
+void	opt_init(void);
+void	playmac(char *s);
+int	pointerto(int prim);
+void	preproc(void);
+int	primtype(int t, char *s);
+void	program(char *name, FILE *in, FILE *out, char *def);
+void	putback(int t);
+void	queue_cmp(int op);
+void	rbrace(void);
+void	rbrack(void);
+void	reject(void);
+void	rexpr(void);
+void	rparen(void);
+int	scan(void);
+int	scanraw(void);
+void	scnerror(char *s, int c);
+void	semi(void);
+void	sgen(char *s, char *inst, char *s2);
+void	sgen2(char *s, char *inst, int v, char *s2);
+int	skip(void);
+void	spill(void);
+int	synch(int syn);
+void	top(void);
+int	typematch(int p1, int p2);
+ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Code generator interface
+ */
+
+void cgadd(void);
+void cgalign(void);
+void cgand(void);
+void cgbool(void);
+void cgbreq(int n);
+void cgbrfalse(int n);
+void cgbrge(int n);
+void cgbrgt(int n);
+void cgbrle(int n);
+void cgbrlt(int n);
+void cgbrne(int n);
+void cgbrtrue(int n);
+void cgbruge(int n);
+void cgbrugt(int n);
+void cgbrule(int n);
+void cgbrult(int n);
+void cgcall(char *s);
+void cgcalr(void);
+void cgcalswtch(void);
+void cgcase(int v, int l);
+void cgclear(void);
+void cgclear2(void);
+void cgdata(void);
+void cgdec1ib(void);
+void cgdec1iw(void);
+void cgdec1pi(int v);
+void cgdec2ib(void);
+void cgdec2iw(void);
+void cgdec2pi(int v);
+void cgdecgb(char *s);
+void cgdecgw(char *s);
+void cgdeclb(int a);
+void cgdeclw(int a);
+void cgdecpg(char *s, int v);
+void cgdecpl(int a, int v);
+void cgdecps(int a, int v);
+void cgdecsb(int a);
+void cgdecsw(int a);
+void cgdefb(int v);
+void cgdefc(int c);
+void cgdefl(int v);
+void cgdefp(int v);
+void cgdefw(int v);
+void cgdiv(void);
+void cgentry(void);
+void cgeq(void);
+void cgexit(void);
+void cggbss(char *s, int z);
+void cgge(void);
+void cggt(void);
+void cginc1ib(void);
+void cginc1iw(void);
+void cginc1pi(int v);
+void cginc2ib(void);
+void cginc2iw(void);
+void cginc2pi(int v);
+void cgincgb(char *s);
+void cgincgw(char *s);
+void cginclb(int a);
+void cginclw(int a);
+void cgincpg(char *s, int v);
+void cgincpl(int a, int v);
+void cgincps(int a, int v);
+void cgincsb(int a);
+void cgincsw(int a);
+void cgindb(void);
+void cgindw(void);
+void cginitlw(int v, int a);
+void cgior(void);
+void cgjump(int n);
+void cglbss(char *s, int z);
+void cgldga(char *s);
+void cgldgb(char *s);
+void cgldgw(char *s);
+void cgldinc(void);
+void cgldla(int n);
+void cgldlab(int id);
+void cgldlb(int n);
+void cgldlw(int n);
+void cgldsa(int n);
+void cgldsb(int n);
+void cgldsw(int n);
+void cgldswtch(int n);
+void cgle(void);
+void cglit(int v);
+int  cgload2(void);
+void cglognot(void);
+void cglt(void);
+void cgmod(void);
+void cgmul(void);
+void cgne(void);
+void cgneg(void);
+void cgnot(void);
+void cgpop2(void);
+void cgpopptr(void);
+void cgpostlude(void);
+void cgprelude(void);
+void cgpublic(char *s);
+void cgpush(void);
+void cgpushlit(int n);
+void cgscale(void);
+void cgscale2(void);
+void cgscale2by(int v);
+void cgscaleby(int v);
+void cgshl(void);
+void cgshr(void);
+void cgstack(int n);
+void cgstorgb(char *s);
+void cgstorgw(char *s);
+void cgstorib(void);
+void cgstoriw(void);
+void cgstorlb(int n);
+void cgstorlw(int n);
+void cgstorsb(int n);
+void cgstorsw(int n);
+void cgsub(void);
+void cgswap(void);
+void cgand(void);
+void cgxor(void);
+void cgtext(void);
+void cguge(void);
+void cgugt(void);
+void cgule(void);
+void cgult(void);
+void cgunscale(void);
+void cgunscaleby(int v);
+void cgxor(void);
+ÿvoid cgdata(void)	{ gen(".data"); }
+void cgtext(void)	{ gen(".text"); }
+void cgprelude(void)	{ }
+void cgpostlude(void)	{ }
+void cgpublic(char *s)	{ ngen(".globl\t%s", s, 0); }
+
+void cgsynth(char *op) {
+	int	n;
+	char	*s;
+
+	n = Q_val;
+	s = gsym(Q_name);
+	switch (Q_type) {
+	case addr_auto:		ngen("%s\t%d(%%rbp),%%rcx", "leaq", n);
+				sgen("%s\t%s,%%rax", op, "%rcx");
+				break;
+	case addr_static:	lgen("%s\t$%c%d,%%rax", op, n); break;
+	case addr_globl:	sgen("%s\t$%s,%%rax", op, s); break;
+	case addr_label:	lgen("%s\t$%c%d,%%rax", op, n); break;
+	case literal: 		ngen("%s\t$%d,%%rax", op, n); break;
+	case auto_word:		ngen("%s\t%d(%%rbp),%%rax", op, n); break;
+	case static_word:	lgen("%s\t%c%d,%%rax", op, n); break;
+	case globl_word:	sgen("%s\t%s,%%rax", op, s); break;
+	case auto_byte:
+	case static_byte:
+	case globl_byte:	cgload2();
+				ngen("%s\t%%rcx,%%rax", op, 0);
+				break;
+	case empty:		cgpop2();
+				sgen("%s\t%s,%%rax", op, "%rcx");
+				break;
+	default:		fatal("internal: bad type in cgsynth()");
+	}
+	Q_type = empty;
+}
+
+int cgload2(void) {
+	int	n, q;
+	char	*s, *op, *opb;
+
+	op = "movq";
+	opb = "movb";
+	n = Q_val;
+	s = gsym(Q_name);
+	switch (Q_type) {
+	case addr_auto:		ngen("%s\t%d(%%rbp),%%rcx", "leaq", n);
+				break;
+	case addr_static:	lgen("%s\t$%c%d,%%rcx", op, n); break;
+	case addr_globl:	sgen("%s\t$%s,%%rcx", op, s); break;
+	case addr_label:	lgen("%s\t$%c%d,%%rcx", op, n); break;
+	case literal: 		ngen("%s\t$%d,%%rcx", op, n); break;
+	case auto_byte:		cgclear2();
+				ngen("%s\t%d(%%rbp),%%cl", opb, n);
+				break;
+	case auto_word:		ngen("%s\t%d(%%rbp),%%rcx", op, n); break;
+	case static_byte:	cgclear2();
+				lgen("%s\t%c%d,%%cl", opb, n); break;
+				break;
+	case static_word:	lgen("%s\t%c%d,%%rcx", op, n); break;
+	case globl_byte:	cgclear2();
+				sgen("%s\t%s,%%cl", opb, s); break;
+				break;
+	case globl_word:	sgen("%s\t%s,%%rcx", op, s); break;
+	case empty:		cgpop2();
+				break;
+	default:		fatal("internal: bad type in cgload2()");
+	}
+	q = Q_type;
+	Q_type = empty;
+	return empty == q;
+}
+
+void cglit(int v)	{ ngen("%s\t$%d,%%rax", "movq", v); }
+void cgclear(void)	{ gen("xorq\t%rax,%rax"); }
+void cgclear2(void)	{ gen("xorq\t%rcx,%rcx"); }
+void cgldgb(char *s)	{ sgen("%s\t%s,%%al", "movb", s); }
+void cgldgw(char *s)	{ sgen("%s\t%s,%%rax", "movq", s); }
+void cgldlb(int n)	{ ngen("%s\t%d(%%rbp),%%al", "movb", n); }
+void cgldlw(int n)	{ ngen("%s\t%d(%%rbp),%%rax", "movq", n); }
+void cgldsb(int n)	{ lgen("%s\t%c%d,%%al", "movb", n); }
+void cgldsw(int n)	{ lgen("%s\t%c%d,%%rax", "movq", n); }
+void cgldla(int n)	{ ngen("%s\t%d(%%rbp),%%rax", "leaq", n); }
+void cgldsa(int n)	{ lgen("%s\t$%c%d,%%rax", "movq", n); }
+void cgldga(char *s)	{ sgen("%s\t$%s,%%rax", "movq", s); }
+void cgindb(void)	{ gen("movq\t%rax,%rdx");
+			  cgclear();
+			  gen("movb\t(%rdx),%al"); }
+void cgindw(void)	{ gen("movq\t(%rax),%rax"); }
+void cgldlab(int id)	{ lgen("%s\t$%c%d,%%rax", "movq", id); }
+
+void cgpush(void)	{ gen("pushq\t%rax"); }
+void cgpushlit(int n)	{ ngen("%s\t$%d", "pushq", n); }
+void cgpop2(void)	{ gen("popq\t%rcx"); }
+void cgswap(void)	{ gen("xchgq\t%rax,%rcx"); }
+
+void cgand(void)	{ cgsynth("andq"); }
+void cgior(void)	{ cgsynth("orq"); }
+void cgxor(void)	{ cgsynth("xorq"); }
+void cgadd(void)	{ gen("addq\t%rcx,%rax"); }
+void cgmul(void)	{ gen("imulq\t%rcx,%rax"); }
+void cgsub(void)	{ gen("subq\t%rcx,%rax"); }
+void cgdiv(void)	{ gen("cqo");
+			  gen("idivq\t%rcx"); }
+void cgmod(void)	{ cgdiv();
+			  gen("movq\t%rdx,%rax"); }
+void cgshl(void)	{ gen("shlq\t%cl,%rax"); }
+void cgshr(void)	{ gen("sarq\t%cl,%rax"); }
+
+void cgcmp(char *inst)	{ int lab;
+			  lab = label();
+			  gen("xorq\t%rdx,%rdx");
+			  if (empty == Q_type) {
+				cgpop2();
+				gen("cmpq\t%rax,%rcx");
+			  }
+			  else {
+				cgsynth("cmpq");
+			  }
+			  lgen("%s\t%c%d", inst, lab);
+			  gen("incq\t%rdx");
+			  genlab(lab);
+			  gen("movq\t%rdx,%rax"); }
+void cgeq()		{ cgcmp("jne"); }
+void cgne()		{ cgcmp("je"); }
+void cglt()		{ cgcmp("jge"); }
+void cggt()		{ cgcmp("jle"); }
+void cgle()		{ cgcmp("jg"); }
+void cgge()		{ cgcmp("jl"); }
+void cgult()		{ cgcmp("jae"); }
+void cgugt()		{ cgcmp("jbe"); }
+void cgule()		{ cgcmp("ja"); }
+void cguge()		{ cgcmp("jb"); }
+
+void cgbrcond(char *i, int n)	{ int lab;
+				  lab = label();
+				  if (empty == Q_type) {
+					cgpop2();
+					gen("cmpq\t%rax,%rcx");
+				  }
+				  else {
+					cgsynth("cmpq");
+				  }
+				  lgen("%s\t%c%d", i, lab);
+				  lgen("%s\t%c%d", "jmp", n);
+				  genlab(lab); }
+void cgbreq(int n)		{ cgbrcond("je", n); }
+void cgbrne(int n)		{ cgbrcond("jne", n); }
+void cgbrlt(int n)		{ cgbrcond("jl", n); }
+void cgbrgt(int n)		{ cgbrcond("jg", n); }
+void cgbrle(int n)		{ cgbrcond("jle", n); }
+void cgbrge(int n)		{ cgbrcond("jge", n); }
+void cgbrult(int n)		{ cgbrcond("jb", n); }
+void cgbrugt(int n)		{ cgbrcond("ja", n); }
+void cgbrule(int n)		{ cgbrcond("jbe", n); }
+void cgbruge(int n)		{ cgbrcond("jae", n); }
+
+void cgneg(void)	{ gen("negq\t%rax"); }
+void cgnot(void)	{ gen("notq\t%rax"); }
+void cglognot(void)	{ gen("negq\t%rax");
+			  gen("sbbq\t%rax,%rax");
+			  gen("incq\t%rax"); }
+void cgscale(void)	{ gen("shlq\t$3,%rax"); }
+void cgscale2(void)	{ gen("shlq\t$3,%rcx"); }
+void cgunscale(void)	{ gen("shrq\t$3,%rax"); }
+void cgscaleby(int v)	{ ngen("%s\t$%d,%%rcx", "movq", v);
+			  gen("mulq\t%rcx"); }
+void cgscale2by(int v)	{ gen("pushq\t%rax");
+			  ngen("%s\t$%d,%%rax", "movq", v);
+			  gen("mulq\t%rcx");
+			  gen("movq\t%rax,%rcx");
+			  gen("popq\t%rax"); }
+void cgunscaleby(int v)	{ ngen("%s\t$%d,%%rcx", "movq", v);
+			  gen("xorq\t%rdx,%rdx");
+			  gen("divq\t%rcx"); }
+void cgbool(void)	{ gen("negq\t%rax");
+			  gen("sbbq\t%rax,%rax");
+			  gen("negq\t%rax"); }
+
+void cgldinc(void)	{ gen("movq\t%rax,%rdx"); }
+void cginc1pi(int v)	{ ngen("%s\t$%d,(%%rax)", "addq", v); }
+void cgdec1pi(int v)	{ ngen("%s\t$%d,(%%rax)", "subq", v); }
+void cginc2pi(int v)	{ ngen("%s\t$%d,(%%rdx)", "addq", v); }
+void cgdec2pi(int v)	{ ngen("%s\t$%d,(%%rdx)", "subq", v); }
+void cgincpl(int a, int v)	{ ngen2("%s\t$%d,%d(%%rbp)", "addq", v, a); }
+void cgdecpl(int a, int v)	{ ngen2("%s\t$%d,%d(%%rbp)", "subq", v, a); }
+void cgincps(int a, int v)	{ lgen2("addq\t$%d,%c%d", v, a); }
+void cgdecps(int a, int v)	{ lgen2("subq\t$%d,%c%d", v, a); }
+void cgincpg(char *s, int v)	{ sgen2("%s\t$%d,%s", "addq", v, s); }
+void cgdecpg(char *s, int v)	{ sgen2("%s\t$%d,%s", "subq", v, s); }
+void cginc1iw(void)	{ ngen("%s\t(%%rax)", "incq", 0); }
+void cgdec1iw(void)	{ ngen("%s\t(%%rax)", "decq", 0); }
+void cginc2iw(void)	{ ngen("%s\t(%%rdx)", "incq", 0); }
+void cgdec2iw(void)	{ ngen("%s\t(%%rdx)", "decq", 0); }
+void cginclw(int a)	{ ngen("%s\t%d(%%rbp)", "incq", a); }
+void cgdeclw(int a)	{ ngen("%s\t%d(%%rbp)", "decq", a); }
+void cgincsw(int a)	{ lgen("%s\t%c%d", "incq", a); }
+void cgdecsw(int a)	{ lgen("%s\t%c%d", "decq", a); }
+void cgincgw(char *s)	{ sgen("%s\t%s", "incq", s); }
+void cgdecgw(char *s)	{ sgen("%s\t%s", "decq", s); }
+void cginc1ib(void)	{ ngen("%s\t(%%rax)", "incb", 0); }
+void cgdec1ib(void)	{ ngen("%s\t(%%rax)", "decb", 0); }
+void cginc2ib(void)	{ ngen("%s\t(%%rdx)", "incb", 0); }
+void cgdec2ib(void)	{ ngen("%s\t(%%rdx)", "decb", 0); }
+void cginclb(int a)	{ ngen("%s\t%d(%%rbp)", "incb", a); }
+void cgdeclb(int a)	{ ngen("%s\t%d(%%rbp)", "decb", a); }
+void cgincsb(int a)	{ lgen("%s\t%c%d", "incb", a); }
+void cgdecsb(int a)	{ lgen("%s\t%c%d", "decb", a); }
+void cgincgb(char *s)	{ sgen("%s\t%s", "incb", s); }
+void cgdecgb(char *s)	{ sgen("%s\t%s", "decb", s); }
+
+void cgbr(char *how, int n)	{ int lab;
+				  lab = label();
+				  gen("orq\t%rax,%rax");
+				  lgen("%s\t%c%d", how, lab);
+				  lgen("%s\t%c%d", "jmp", n);
+				  genlab(lab); }
+void cgbrtrue(int n)	{ cgbr("jz", n); }
+void cgbrfalse(int n)	{ cgbr("jnz", n); }
+void cgjump(int n)	{ lgen("%s\t%c%d", "jmp", n); }
+void cgldswtch(int n)	{ lgen("%s\t$%c%d,%%rdx", "movq", n); }
+void cgcalswtch(void)	{ gen("jmp\tswitch"); }
+void cgcase(int v, int l)	{ lgen2(".quad\t%d,%c%d", v, l); }
+
+void cgpopptr(void)	{ gen("popq\t%rdx"); }
+void cgstorib(void)	{ ngen("%s\t%%al,(%%rdx)", "movb", 0); }
+void cgstoriw(void)	{ ngen("%s\t%%rax,(%%rdx)", "movq", 0); }
+void cgstorlb(int n)	{ ngen("%s\t%%al,%d(%%rbp)", "movb", n); }
+void cgstorlw(int n)	{ ngen("%s\t%%rax,%d(%%rbp)", "movq", n); }
+void cgstorsb(int n)	{ lgen("%s\t%%al,%c%d", "movb", n); }
+void cgstorsw(int n)	{ lgen("%s\t%%rax,%c%d", "movq", n); }
+void cgstorgb(char *s)	{ sgen("%s\t%%al,%s", "movb", s); }
+void cgstorgw(char *s)	{ sgen("%s\t%%rax,%s", "movq", s); }
+
+void cginitlw(int v, int a)	{ ngen2("%s\t$%d,%d(%%rbp)", "movq", v, a); }
+void cgcall(char *s)	{ sgen("%s\t%s", "call", s); }
+void cgcalr(void)	{ gen("call\t*%rax"); }
+void cgstack(int n)	{ ngen("%s\t$%d,%%rsp", "addq", n); }
+void cgentry(void)	{ gen("pushq\t%rbp");
+			  gen("movq\t%rsp,%rbp"); }
+void cgexit(void)	{ gen("popq\t%rbp");
+			  gen("ret"); }
+
+void cgdefb(int v)	{ ngen("%s\t%d", ".byte", v); }
+void cgdefw(int v)	{ ngen("%s\t%d", ".quad", v); }
+void cgdefp(int v)	{ ngen("%s\t%d", ".quad", v); }
+void cgdefl(int v)	{ lgen("%s\t%c%d", ".quad", v); }
+void cgdefc(int c)	{ ngen("%s\t'%c'", ".byte", c); }
+void cggbss(char *s, int z)	{ ngen(".comm\t%s,%d", s, z); }
+void cglbss(char *s, int z)	{ ngen(".lcomm\t%s,%d", s, z); }
+void cgalign(void)	{ /* unused */ }
+ÿdecl.c
+/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Declaration parser
+ */
+
+#include "#/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Definitions
+ */
+
+#include <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdlib.h
+ */
+
+#define EXIT_FAILURE	#define EXIT_SUCCESS	
+#define RAND_MAX	
+extern char	**environ;
+
+void	 abort(void);
+int	 abs(int n);
+int	 atexit(int (*fn)());
+int	 atoi(char *s);
+void	*bsearch(void *key, void *array, int count, int size, int (*cmp)());
+void	*calloc(int count, int size);
+void	 exit(int rc);
+void	 free(void *p);
+char	*getenv(char *name);
+void	*malloc(int size);
+void	 qsort(void *array, int count, int size, int (*cmp)());
+int	 rand(void);
+void	*realloc(void *p, int size);
+void	 srand(int seed);
+int	 strtol(char *s, char *endp[], int base);
+int	 system(char *s);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdio.h
+ */
+
+#define NULL	#define EOF	
+#define FOPEN_MAX	#define BUFSIZ	#define FILENAME_MAX	#define TMP_MAX	#define L_tmpnam	
+#define _IONBF	#define _IOLBF	#define _IOFBF	#define _IOACC	#define _IOUSR	
+#define _FCLOSED	#define _FREAD	#define _FWRITE	#define _FERROR	
+struct _file {
+	int	fd;
+	char	iom;
+	char	last;
+	char	mode;
+	int	ptr;
+	int	end;
+	int	size;
+	int	ch;
+	char	*buf;
+};
+
+#define FILE	
+extern FILE	*stdin, *stdout, *stderr;
+
+#ifdef __dos
+extern int	_faddcr;
+#endif
+
+#define getc	#define putc	
+#define SEEK_SET	#define SEEK_CUR	#define SEEK_END	
+void	 clearerr(FILE *f);
+int	 fclose(FILE *f);
+FILE	*fdopen(int fd, char *mode);
+int	 feof(FILE *f);
+int	 ferror(FILE *f);
+int	 fflush(FILE *f);
+int	 fgetc(FILE *f);
+int	 fgetpos(FILE *f, int *ppos);
+char	*fgets(char *buf, int len, FILE *f);
+int	 fileno(FILE *f);
+FILE	*fopen(char *path, char *mode);
+int	 fprintf(FILE *f, char *fmt, ...);
+int	 fputc(int c, FILE *f);
+int	 fputs(char *s, FILE *f);
+int	 fread(void *buf, int size, int count, FILE *f);
+FILE	*freopen(char *path, char *mode, FILE *f);
+int	 fscanf(FILE *f, char *fmt, ...);
+int	 fseek(FILE *f, int off, int how);
+int	 fsetpos(FILE *f, int *ppos);
+int	 ftell(FILE *f);
+int	 fwrite(void *buf, int size, int count, FILE *f);
+int	 getchar(void);
+char	*gets(char *buf);
+int	 kprintf(int fd, char *fmt, ...);
+void	 perror(char *s);
+int	 printf(char *fmt, ...);
+int	 putchar(int c);
+int	 puts(char *s);
+int	 remove(char *path);
+int	 rename(char *from, char *to);
+void	 rewind(FILE *f);
+int	 scanf(char *fmt, ...);
+void	 setbuf(FILE *f, char *buf);
+int	 setvbuf(FILE *f, char *buf, int mode, int size);
+int	 sscanf(char *s, char *fmt, ...);
+int	 sprintf(char *buf, char *fmt, ...);
+char	*tmpnam(char *buf);
+FILE	*tmpfile(void);
+int	 ungetc(int c, FILE *f);
+int	 vfprintf(FILE *f, char *fmt, void **args);
+int	 vprintf(char *fmt, void **args);
+int	 vsprintf(char *buf, char *fmt, void **args);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	string.h
+ */
+
+extern char	*sys_errlist[];
+extern int	sys_nerr;
+
+void	*memchr(void *p, int c, int len);
+int	 memcmp(void *p1, void *p2, int len);
+void	*memcpy(void *dest, void *src, int len);
+void	*memmove(void *dest, void *src, int len);
+void	*memset(void *p, int c, int len);
+char	*strcat(char *s, char *a);
+char	*strchr(char *s, int c);
+int	 strcmp(char *s1, char *s2);
+char	*strcpy(char *dest, char *src);
+int	 strcspn(char *s, char *set);
+char	*strdup(char *s);
+char	*strerror(int err);
+int	 strlen(char *s);
+char	*strncat(char *s, char *a, int len);
+int	 strncmp(char *s1, char *s2, int len);
+char	*strncpy(char *dest, char *src, int len);
+char	*strpbrk(char *s, char *set);
+char	*strrchr(char *s, int c);
+int	 strspn(char *s, char *set);
+char	*strtok(char *s, char *sep);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011
+ *	ctype.h
+ */
+
+int	isalnum(int c);
+int	isalpha(int c);
+int	iscntrl(int c);
+int	isdigit(int c);
+int	isgraph(int c);
+int	islower(int c);
+int	isprint(int c);
+int	ispunct(int c);
+int	isspace(int c);
+int	isupper(int c);
+int	isxdigit(int c);
+int	tolower(int c);
+int	toupper(int c);
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2012,2014
+ *	x86-64 target description
+ */
+
+#define CPU	#define BPW	ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2013,2014
+ *	Linux/x86-64 environment
+ */
+
+#define OS	#define ASCMD	#define LDCMD	#define SYSLIBC	ÿ#define VERSION	
+#ifndef SCCDIR
+ #define SCCDIR	#endif
+
+#ifndef AOUTNAME
+ #define AOUTNAME	#endif
+
+#define SCCLIBC	
+#define PREFIX	#define LPREFIX	
+#define INTSIZE	#define PTRSIZE	#define CHARSIZE	
+#define TEXTLEN	#define NAMELEN	
+#define MAXFILES	
+#define MAXIFDEF	#define MAXNMAC	#define MAXCASE	#define MAXBREAK	#define MAXLOCINIT	#define MAXFNARGS	
+/* assert(NSYMBOLS < PSTRUCT) */
+#define NSYMBOLS	#define POOLSIZE	#define NODEPOOLSZ	
+/* types */
+enum {
+	TVARIABLE = 1,
+	TARRAY,
+	TFUNCTION,
+	TCONSTANT,
+	TMACRO,
+	TSTRUCT
+};
+
+/* primitive types */
+enum {
+	PCHAR = 1,
+	PINT,
+	CHARPTR,
+	INTPTR,
+	CHARPP,
+	INTPP,
+	PVOID,
+	VOIDPTR,
+	VOIDPP,
+	FUNPTR,
+	PSTRUCT = 0x2000,
+	PUNION  = 0x4000,
+	STCPTR  = 0x6000,
+	STCPP   = 0x8000,
+	UNIPTR  = 0xA000,
+	UNIPP   = 0xC000,
+	STCMASK = 0xE000
+};
+
+/* storage classes */
+enum {
+	CPUBLIC = 1,
+	CEXTERN,
+	CSTATIC,
+	CLSTATC,
+	CAUTO,
+	CSPROTO,
+	CMEMBER,
+	CSTCDEF
+};
+
+/* lvalue structure */
+enum {
+	LVSYM,
+	LVPRIM,
+	LVADDR,
+	LV
+};
+
+/* debug options */
+enum {
+	D_LSYM = 1,
+	D_GSYM = 2,
+	D_STAT = 4
+};
+
+/* addressing modes */
+enum {
+	empty,
+	addr_auto,
+	addr_static,
+	addr_globl,
+	addr_label,
+	literal,
+	auto_byte,
+	auto_word,
+	static_byte,
+	static_word,
+	globl_byte,
+	globl_word
+};
+
+/* compare instructions */
+enum {
+	cnone,
+	equal,
+	not_equal,
+	less,
+	greater,
+	less_equal,
+	greater_equal,
+	below,
+	above,
+	below_equal,
+	above_equal
+};
+
+/* boolean instructions */
+enum {
+	bnone,
+	lognot,
+	normalize
+};
+
+/* AST node */
+struct node_stc {
+	int		op;
+	struct node_stc	*left, *right;
+	int		args[1];
+};
+
+#define node	
+/* tokens */
+enum {
+	SLASH, STAR, MOD, PLUS, MINUS, LSHIFT, RSHIFT,
+	GREATER, GTEQ, LESS, LTEQ, EQUAL, NOTEQ, AMPER,
+	CARET, PIPE, LOGAND, LOGOR,
+
+	ARROW, ASAND, ASXOR, ASLSHIFT, ASMINUS, ASMOD, ASOR, ASPLUS,
+	ASRSHIFT, ASDIV, ASMUL, ASSIGN, AUTO, BREAK, CASE, CHAR, COLON,
+	COMMA, CONTINUE, DECR, DEFAULT, DO, DOT, ELLIPSIS, ELSE, ENUM,
+	EXTERN, FOR, IDENT, IF, INCR, INT, INTLIT, LBRACE, LBRACK,
+	LPAREN, NOT, QMARK, RBRACE, RBRACK, REGISTER, RETURN, RPAREN,
+	SEMI, SIZEOF, STATIC, STRLIT, STRUCT, SWITCH, TILDE, UNION,
+	VOID, VOLATILE, WHILE, XEOF, XMARK,
+
+	P_DEFINE, P_ELSE, P_ELSENOT, P_ENDIF, P_ERROR, P_IFDEF,
+	P_IFNDEF, P_INCLUDE, P_LINE, P_PRAGMA, P_UNDEF
+};
+
+/* AST operators */
+enum {
+	OP_GLUE, OP_ADD, OP_ADDR, OP_ASSIGN, OP_BINAND, OP_BINIOR,
+	OP_BINXOR, OP_BOOL, OP_BRFALSE, OP_BRTRUE, OP_CALL, OP_CALR,
+	OP_COMMA, OP_DEC, OP_DIV, OP_EQUAL, OP_GREATER, OP_GTEQ,
+	OP_IDENT, OP_IFELSE, OP_LAB, OP_LDLAB, OP_LESS, OP_LIT,
+	OP_LOGNOT, OP_LSHIFT, OP_LTEQ, OP_MOD, OP_MUL, OP_NEG,
+	OP_NOT, OP_NOTEQ, OP_PLUS, OP_PREDEC, OP_PREINC, OP_POSTDEC,
+	OP_POSTINC, OP_RSHIFT, OP_RVAL, OP_SCALE, OP_SCALEBY, OP_SUB
+};
+
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Global variables
+ */
+
+#ifndef extern_
+ #define extern_ #endif
+
+extern_ FILE	*Infile;
+extern_ FILE	*Outfile;
+extern_ int	Token;
+extern_ char	Text[TEXTLEN+1];
+extern_ int	Value;
+extern_ int	Line;
+extern_ int	Errors;
+extern_ int	Syntoken;
+extern_ int	Putback;
+extern_ int	Rejected;
+extern_ int	Rejval;
+extern_ char	Rejtext[TEXTLEN+1];
+extern_ char	*File;
+extern_ char	*Basefile;
+extern_ char	*Macp[MAXNMAC];
+extern_ int	Macc[MAXNMAC];
+extern_ int	Mp;
+extern_ int	Expandmac;
+extern_ int	Ifdefstk[MAXIFDEF], Isp;
+extern_ int	Inclev;
+extern_ int	Textseg;
+extern_ int	Nodes[NODEPOOLSZ];
+extern_ int	Ndtop;
+extern_ int	Ndmax;
+
+/* symbol tabel structure */
+extern_ char	*Names[NSYMBOLS];
+extern_ int	Prims[NSYMBOLS];
+extern_ char	Types[NSYMBOLS];
+extern_ char	Stcls[NSYMBOLS];
+extern_ int	Sizes[NSYMBOLS];
+extern_ int	Vals[NSYMBOLS];
+extern_ char	*Mtext[NSYMBOLS];
+extern_ int	Globs;
+extern_ int	Locs;
+
+extern_ int	Thisfn;
+
+/* name list */
+extern_ char	Nlist[POOLSIZE];
+extern_ int	Nbot;
+extern_ int	Ntop;
+
+/* label stacks */
+extern_ int	Breakstk[MAXBREAK], Bsp;
+extern_ int	Contstk[MAXBREAK], Csp;
+extern_ int	Retlab;
+
+/* local init structure */
+extern_ int	LIaddr[MAXLOCINIT];
+extern_ int	LIval[MAXLOCINIT];
+extern_ int	Nli;
+
+/* synthesizer operand queue */
+extern_ int	Q_type;
+extern_ int	Q_val;
+extern_ char	Q_name[NAMELEN+1];
+extern_ int	Q_cmp;
+extern_ int	Q_bool;
+
+/* file collector */
+extern_ char	*Files[MAXFILES];
+extern_ char	Temp[MAXFILES];
+extern_ int	Nf;
+
+/* options */
+extern_ int	O_verbose;
+extern_ int	O_componly;
+extern_ int	O_asmonly;
+extern_ int	O_testonly;
+extern_ int	O_stdio;
+extern_ char	*O_outfile;
+extern_ int	O_debug;
+ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Function declarations
+ */
+
+int	addglob(char *name, int prim, int type, int scls, int size, int val,
+		char *mval, int init);
+int	addloc(char *name, int prim, int type, int scls, int size, int val,
+		int init);
+int	binoptype(int op, int p1, int p2);
+int	chrpos(char *s, int c);
+void	clear(int q);
+void	cleanup(void);
+void	clrlocs(void);
+void	colon(void);
+void	commit(void);
+void	commit_bool(void);
+void	commit_cmp(void);
+void	compound(int lbr);
+int	comptype(int p);
+int	constexpr(void);
+void	copyname(char *name, char *s);
+int	deref(int p);
+void	dumpsyms(char *title, char *sub, int from, int to);
+void	dumptree(node *a);
+void	emittree(node *a);
+int	eofcheck(void);
+void	error(char *s, char *a);
+void	expr(int *lv, int cvoid);
+void	fatal(char *s);
+int	findglob(char *s);
+int	findloc(char *s);
+int	findmem(int y, char *s);
+int	findstruct(char *s);
+int	findsym(char *s);
+int	findmac(char *s);
+node	*fold_reduce(node *n);
+int	frozen(int depth);
+char	*galloc(int k, int align);
+void	gen(char *s);
+int	genadd(int p1, int p2, int swap);
+void	genaddr(int y);
+void	genalign(int k);
+void	genaligntext(void);
+void	genand(void);
+void	genasop(int op, int *lv, int p2);
+void	genbool(void);
+void	genbrfalse(int dest);
+void	genbrtrue(int dest);
+void	genbss(char *name, int len, int statc);
+void	gencall(int y);
+void	gencalr(void);
+void	gencmp(char *inst);
+void	gendata(void);
+void	gendefb(int v);
+void	gendefp(int v);
+void	gendefs(char *s, int len);
+void	gendefw(int v);
+void	gendiv(int swap);
+void	genentry(void);
+void	genexit(void);
+void	geninc(int *lv, int inc, int pre);
+void	genind(int p);
+void	genior(void);
+void	genjump(int dest);
+void	genlab(int id);
+void	genldlab(int id);
+void	genlit(int v);
+void	genln(char *s);
+void	genlocinit(void);
+void	genlognot(void);
+void	genmod(int swap);
+void	genmul(void);
+void	genname(char *name);
+void	genneg(void);
+void	gennot(void);
+void	genpostlude(void);
+void	genprelude(void);
+void	genpublic(char *name);
+void	genpush(void);
+void	genpushlit(int n);
+void	genraw(char *s);
+void	genrval(int *lv);
+void	genscale(void);
+void	genscale2(void);
+void	genscaleby(int v);
+void	genshl(int swap);
+void	genshr(int swap);
+void	genstack(int n);
+void	genstore(int *lv);
+int	gensub(int p1, int p2, int swap);
+void	genswitch(int *vals, int *labs, int nc, int dflt);
+void	gentext(void);
+void	genxor(void);
+char	*globname(char *s);
+char	*gsym(char *s);
+void	ident(void);
+void	init(void);
+void	initopt(void);
+int	inttype(int p);
+int	label(void);
+char	*labname(int id);
+void	lbrace(void);
+void	lgen(char *s, char *inst, int n);
+void	lgen2(char *s, int v1, int v2);
+void	load(void);
+void	lparen(void);
+node	*mkbinop(int op, node *left, node *right);
+node	*mkbinop1(int op, int n, node *left, node *right);
+node	*mkbinop2(int op, int n1, int n2, node *left, node *right);
+node	*mkleaf(int op, int n);
+node	*mkunop(int op, node *left);
+node	*mkunop1(int op, int n, node *left);
+node	*mkunop2(int op, int n1, int n2, node *left);
+void	match(int t, char *what);
+char	*newfilename(char *name, int sfx);
+int	next(void);
+void	ngen(char *s, char *inst, int n);
+void	ngen2(char *s, char *inst, int n, int a);
+void	notvoid(int p);
+int	objsize(int prim, int type, int size);
+node	*optimize(node *n);
+void	opt_init(void);
+void	playmac(char *s);
+int	pointerto(int prim);
+void	preproc(void);
+int	primtype(int t, char *s);
+void	program(char *name, FILE *in, FILE *out, char *def);
+void	putback(int t);
+void	queue_cmp(int op);
+void	rbrace(void);
+void	rbrack(void);
+void	reject(void);
+void	rexpr(void);
+void	rparen(void);
+int	scan(void);
+int	scanraw(void);
+void	scnerror(char *s, int c);
+void	semi(void);
+void	sgen(char *s, char *inst, char *s2);
+void	sgen2(char *s, char *inst, int v, char *s2);
+int	skip(void);
+void	spill(void);
+int	synch(int syn);
+void	top(void);
+int	typematch(int p1, int p2);
+ÿstatic int declarator(int arg, int scls, char *name, int *pprim, int *psize,
+			int *pval, int *pinit);
+
+/*
+ * enumdecl := { enumlist } ;
+ *
+ * enumlist :=
+ *	  enumerator
+ *	| enumerator , enumlist
+ *
+ * enumerator :=
+ *	  IDENT
+ *	| IDENT = constexpr
+ */
+
+static void enumdecl(int glob) {
+	int	v = 0;
+	char	name[NAMELEN+1];
+
+	Token = scan();
+	if (IDENT == Token)
+		Token = scan();
+	lbrace();
+	while (RBRACE != Token) {
+		copyname(name, Text);
+		ident();
+		if (ASSIGN == Token) {
+			Token = scan();
+			v = constexpr();
+		}
+		if (glob)
+			addglob(name, PINT, TCONSTANT, 0, 0, v++, NULL, 0);
+		else
+			addloc(name, PINT, TCONSTANT, 0, 0, v++, 0);
+		if (Token != COMMA)
+			break;
+		Token = scan();
+		if (eofcheck()) return;
+	}
+	rbrace();
+	semi();
+}
+
+/*
+ * initlist :=
+ *	  { const_list }
+ *	| STRLIT
+ *
+ * const_list :=
+ *	  constexpr
+ *	| constexpr , const_list
+ */
+
+static int initlist(char *name, int prim) {
+	int	n = 0, v;
+	char	buf[30];
+
+	gendata();
+	genname(name);
+	if (STRLIT == Token) {
+		if (PCHAR != prim)
+			error("initializer type mismatch: %s", name);
+		gendefs(Text, Value);
+		gendefb(0);
+		genalign(Value-1);
+		Token = scan();
+		return Value-1;
+	}
+	lbrace();
+	while (Token != RBRACE) {
+		v = constexpr();
+		if (PCHAR == prim) {
+			if (v < 0 || v > 255) {
+				sprintf(buf, "%d", v);
+				error("initializer out of range: %s", buf);
+			}
+			gendefb(v);
+		}
+		else {
+			gendefw(v);
+		}
+		n++;
+		if (COMMA == Token)
+			Token = scan();
+		else
+			break;
+		if (eofcheck()) return 0;
+	}
+	if (PCHAR == prim) genalign(n);
+	Token = scan();
+	if (!n) error("too few initializers", NULL);
+	return n;
+}
+
+int primtype(int t, char *s) {
+	int	p, y;
+	char	sname[NAMELEN+1];
+
+	p = t == CHAR? PCHAR:
+		t == INT? PINT:
+		t == STRUCT? PSTRUCT:
+		t == UNION? PUNION:
+		PVOID;
+	if (PUNION == p || PSTRUCT == p) {
+		if (!s) {
+			Token = scan();
+			copyname(sname, Text);
+			s = sname;
+			if (IDENT != Token) {
+				error("struct/union name expected: %s", Text);
+				return p;
+			}
+		}
+		if ((y = findstruct(s)) == 0 || Prims[y] != p)
+			error("no such struct/union: %s", s);
+		p |= y;
+	}
+	return p;
+}
+
+/*
+ * pmtrdecl :=
+ *	  ( )
+ *	| ( pmtrlist )
+ *	| ( pmtrlist , ... )
+ *
+ * pmtrlist :=
+ *	  primtype declarator
+ *	| primtype declarator , pmtrlist
+ */
+
+static int pmtrdecls(void) {
+	char	name[NAMELEN+1];
+	int	prim, type, size, na, addr;
+	int	dummy;
+
+	if (RPAREN == Token)
+		return 0;
+	na = 0;
+	addr = 2*BPW;
+	for (;;) {
+		if (na > 0 && ELLIPSIS == Token) {
+			Token = scan();
+			na = -(na + 1);
+			break;
+		}
+		else if (IDENT == Token) {
+			prim = PINT;
+		}
+		else {
+			if (	Token != CHAR && Token != INT &&
+				Token != VOID &&
+				Token != STRUCT && Token != UNION
+			) {
+				error("type specifier expected at: %s", Text);
+				Token = synch(RPAREN);
+				return na;
+			}
+			name[0] = 0;
+			prim = primtype(Token, NULL);
+			Token = scan();
+			if (RPAREN == Token && prim == PVOID && !na)
+				return 0;
+		}
+		size = 1;
+		type = declarator(1, CAUTO, name, &prim, &size, &dummy,
+				&dummy);
+		addloc(name, prim, type, CAUTO, size, addr, 0);
+		addr += BPW;
+		na++;
+		if (COMMA == Token)
+			Token = scan();
+		else
+			break;
+	}
+	return na;
+}
+
+int pointerto(int prim) {
+	int	y;
+
+	if (CHARPP == prim || INTPP == prim || VOIDPP == prim ||
+	    FUNPTR == prim ||
+	    (prim & STCMASK) == STCPP || (prim & STCMASK) == UNIPP
+	)
+		error("too many levels of indirection", NULL);
+	y = prim & ~STCMASK;
+	switch (prim & STCMASK) {
+	case PSTRUCT:	return STCPTR | y;
+	case STCPTR:	return STCPP | y;
+	case PUNION:	return UNIPTR | y;
+	case UNIPTR:	return UNIPP | y;
+	}
+	return PINT == prim? INTPTR:
+		PCHAR == prim? CHARPTR:
+		PVOID == prim? VOIDPTR:
+		INTPTR == prim? INTPP:
+		CHARPTR == prim? CHARPP: VOIDPP;
+}
+
+/*
+ * declarator :=
+ *	  IDENT
+ *	| * IDENT
+ *	| * * IDENT
+ *	| * IDENT [ constexpr ]
+ *	| IDENT [ constexpr ]
+ *	| IDENT = constexpr
+ *	| IDENT [ ] = initlist
+ *	| IDENT pmtrdecl
+ *	| IDENT [ ]
+ *	| * IDENT [ ]
+ *	| ( * IDENT ) ( )
+ */
+
+static int declarator(int pmtr, int scls, char *name, int *pprim, int *psize,
+			int *pval, int *pinit)
+{
+	int	type = TVARIABLE;
+	int	ptrptr = 0;
+
+	if (STAR == Token) {
+		Token = scan();
+		*pprim = pointerto(*pprim);
+		if (STAR == Token) {
+			Token = scan();
+			*pprim = pointerto(*pprim);
+			ptrptr = 1;
+		}
+	}
+	else if (LPAREN == Token) {
+		if (*pprim != PINT)
+			error("function pointers are limited to type 'int'",
+				NULL);
+		Token = scan();
+		*pprim = FUNPTR;
+		match(STAR, "(*name)()");
+	}
+	if (IDENT != Token) {
+		error("missing identifier at: %s", Text);
+		name[0] = 0;
+	}
+	else {
+		copyname(name, Text);
+		Token = scan();
+	}
+	if (FUNPTR == *pprim) {
+		rparen();
+		lparen();
+		rparen();
+	}
+	if (!pmtr && ASSIGN == Token) {
+		Token = scan();
+		*pval = constexpr();
+		if (PCHAR == *pprim)
+			*pval &= 0xff;
+		if (*pval && !inttype(*pprim))
+			error("non-zero pointer initialization", NULL);
+		*pinit = 1;
+	}
+	else if (!pmtr && LPAREN == Token) {
+		Token = scan();
+		*psize = pmtrdecls();
+		rparen();
+		return TFUNCTION;
+	}
+	else if (LBRACK == Token) {
+		if (ptrptr)
+			error("too many levels of indirection: %s", name);
+		Token = scan();
+		if (RBRACK == Token) {
+			Token = scan();
+			if (pmtr) {
+				*pprim = pointerto(*pprim);
+			}
+			else {
+				type = TARRAY;
+				*psize = 1;
+				if (ASSIGN == Token) {
+					Token = scan();
+					if (!inttype(*pprim))
+						error("initialization of"
+							" pointer array not"
+							" supported",
+							NULL);
+					*psize = initlist(name, *pprim);
+					if (CAUTO == scls)
+						error("initialization of"
+							" local arrays"
+							" not supported: %s",
+							name);
+					*pinit = 1;
+				}
+				else if (CEXTERN != scls) {
+					error("automatically-sized array"
+						" lacking initialization: %s",
+						name);
+				}
+			}
+		}
+		else {
+			*psize = constexpr();
+			if (*psize < 0) {
+				error("invalid array size", NULL);
+				*psize = 0;
+			}
+			type = TARRAY;
+			rbrack();
+		}
+	}
+	if (PVOID == *pprim)
+		error("'void' is not a valid type: %s", name);
+	return type;
+}
+
+/*
+ * localdecls :=
+ *        ldecl
+ *      | ldecl localdecls
+ *
+ * ldecl :=
+ *	  primtype ldecl_list ;
+ *	| lclass primtype ldecl_list ;
+ *	| lclass ldecl_list ;
+ *	| enum_decl
+ *	| struct_decl
+ *
+ * lclass :=
+ *	| AUTO
+ *	| EXTERN
+ *	| REGISTER
+ *	| STATIC
+ *	| VOLATILE
+ *
+ * ldecl_list :=
+ *	  declarator
+ *	| declarator , ldecl_list
+ */
+
+static int localdecls(void) {
+	char	name[NAMELEN+1];
+	int	prim, type, size, addr = 0, val, ini;
+	int	stat, extn;
+	int	pbase, rsize;
+
+	Nli = 0;
+	while ( AUTO == Token || EXTERN == Token || REGISTER == Token ||
+		STATIC == Token || VOLATILE == Token ||
+		INT == Token || CHAR == Token || VOID == Token ||
+		ENUM == Token ||
+		STRUCT == Token || UNION == Token
+	) {
+		if (ENUM == Token) {
+			enumdecl(0);
+			continue;
+		}
+		extn = stat = 0;
+		if (AUTO == Token || REGISTER == Token || STATIC == Token ||
+			VOLATILE == Token || EXTERN == Token
+		) {
+			stat = STATIC == Token;
+			extn = EXTERN == Token;
+			Token = scan();
+			if (	INT == Token || CHAR == Token ||
+				VOID == Token ||
+				STRUCT == Token || UNION == Token
+			) {
+				prim = primtype(Token, NULL);
+				Token = scan();
+			}
+			else
+				prim = PINT;
+		}
+		else {
+			prim = primtype(Token, NULL);
+			Token = scan();
+		}
+		pbase = prim;
+		for (;;) {
+			prim = pbase;
+			if (eofcheck()) return 0;
+			size = 1;
+			ini = val = 0;
+			type = declarator(0, CAUTO, name, &prim, &size,
+					&val, &ini);
+			rsize = objsize(prim, type, size);
+			rsize = (rsize + INTSIZE-1) / INTSIZE * INTSIZE;
+			if (stat) {
+				addloc(name, prim, type, CLSTATC, size,
+					label(), val);
+			}
+			else if (extn) {
+				addloc(name, prim, type, CEXTERN, size,
+					0, val);
+			}
+			else {
+				addr -= rsize;
+				addloc(name, prim, type, CAUTO, size, addr, 0);
+			}
+			if (ini && !stat) {
+				if (Nli >= MAXLOCINIT) {
+					error("too many local initializers",
+						NULL);
+					Nli = 0;
+				}
+				LIaddr[Nli] = addr;
+				LIval[Nli++] = val;
+			}
+			if (COMMA == Token)
+				Token = scan();
+			else
+				break;
+		}
+		semi();
+	}
+	return addr;
+}
+
+static int intcmp(int *x1, int *x2) {
+	while (*x1 && *x1 == *x2)
+		x1++, x2++;
+	return *x1 - *x2;
+}
+
+static void signature(int fn, int from, int to) {
+	int	types[MAXFNARGS+1], i;
+
+	if (to - from > MAXFNARGS)
+		error("too many function parameters", Names[fn]);
+	for (i=0; i<MAXFNARGS && from < to; i++)
+		types[i] = Prims[--to];
+	types[i] = 0;
+	if (NULL == Mtext[fn]) {
+		Mtext[fn] = galloc((i+1) * sizeof(int), 1);
+		memcpy(Mtext[fn], types, (i+1) * sizeof(int));
+	}
+	else if (intcmp((int *) Mtext[fn], types))
+		error("declaration does not match prior prototype: %s",
+			Names[fn]);
+}
+
+/*
+ * decl :=
+ *	  declarator { localdecls stmt_list }
+ *	| decl_list ;
+ *
+ * decl_list :=
+ *	  declarator
+ *	| declarator , decl_list
+ */
+
+void decl(int clss, int prim) {
+	char	name[NAMELEN+1];
+	int	pbase, type, size = 0, val, init;
+	int	lsize;
+
+	pbase = prim;
+	for (;;) {
+		prim = pbase;
+		val = 0;
+		init = 0;
+		type = declarator(0, clss, name, &prim, &size, &val, &init);
+		if (TFUNCTION == type) {
+			clss = clss == CSTATIC? CSPROTO: CEXTERN;
+			Thisfn = addglob(name, prim, type, clss, size, 0,
+					NULL, 0);
+			signature(Thisfn, Locs, NSYMBOLS);
+			if (LBRACE == Token) {
+				clss = clss == CSPROTO? CSTATIC:
+					clss == CEXTERN? CPUBLIC: clss;
+				Thisfn = addglob(name, prim, type, clss, size,
+					0, NULL, 0);
+				Token = scan();
+				lsize = localdecls();
+				gentext();
+				if (CPUBLIC == clss) genpublic(name);
+				genaligntext();
+				genname(name);
+				genentry();
+				genstack(lsize);
+				genlocinit();
+				Retlab = label();
+				compound(0);
+				genlab(Retlab);
+				genstack(-lsize);
+				genexit();
+				if (O_debug & D_LSYM)
+					dumpsyms("LOCALS: ", name, Locs,
+						NSYMBOLS);
+			}
+			else {
+				semi();
+			}
+			clrlocs();
+			return;
+		}
+		if (CEXTERN == clss && init) {
+			error("initialization of 'extern': %s", name);
+		}
+		addglob(name, prim, type, clss, size, val, NULL, init);
+		if (COMMA == Token)
+			Token = scan();
+		else
+			break;
+	}
+	semi();
+}
+
+/*
+ * structdecl :=
+ *	  STRUCT identifier { member_list } ;
+ *
+ * member_list :=
+ *	  primtype mdecl_list ;
+ *	| primtype mdecl_list ; member_list
+ *
+ * mdecl_list :=
+ *	  declarator
+ *	| declatator , mdecl_list
+ */
+
+void structdecl(int clss, int uniondecl) {
+	int	base, prim, size, dummy, type, addr = 0;
+	char	name[NAMELEN+1], sname[NAMELEN+1];
+	int	y, usize = 0;
+
+	Token = scan();
+	copyname(sname, Text);
+	ident();
+	if (Token != LBRACE) {
+		prim = primtype(uniondecl? UNION: STRUCT, sname);
+		decl(clss, prim);
+		return;
+	}
+	y = addglob(sname, uniondecl? PUNION: PSTRUCT, TSTRUCT,
+			CMEMBER, 0, 0, NULL, 0);
+	Token = scan();
+	while (	INT == Token || CHAR == Token || VOID == Token ||
+		STRUCT == Token || UNION == Token
+	) {
+		base = primtype(Token, NULL);
+		size = 0;
+		Token = scan();
+		for (;;) {
+			if (eofcheck()) return;
+			prim = base;
+			type = declarator(1, clss, name, &prim, &size,
+						&dummy, &dummy);
+			addglob(name, prim, type, CMEMBER, size, addr,
+				NULL, 0);
+			size = objsize(prim, type, size);
+			if (size < 0)
+				error("size of struct/union member"
+					" is unknown: %s",
+					name);
+			if (uniondecl) {
+				usize = size > usize? size: usize;
+			}
+			else {
+				addr += size;
+				addr = (addr + INTSIZE-1) / INTSIZE * INTSIZE;
+			}
+			if (Token != COMMA) break;
+			Token = scan();
+		}
+		semi();
+	}
+	rbrace();
+	semi();
+	Sizes[y] = uniondecl? usize: addr;
+}
+
+/*
+ * top :=
+ *	  ENUM enumdecl
+ *	| decl
+ *	| primtype decl
+ *	| storclass decl
+ *	| storclass primtype decl
+ *
+ * storclass :=
+ *	  EXTERN
+ *	| STATIC
+ */
+
+void top(void) {
+	int	prim, clss = CPUBLIC;
+
+	switch (Token) {
+	case EXTERN:	clss = CEXTERN; Token = scan(); break;
+	case STATIC:	clss = CSTATIC; Token = scan(); break;
+	case VOLATILE:	Token = scan(); break;
+	}
+	switch (Token) {
+	case ENUM:
+		enumdecl(1);
+		break;
+	case STRUCT:
+	case UNION:
+		structdecl(clss, UNION == Token);
+		break;
+	case CHAR:
+	case INT:
+	case VOID:
+		prim = primtype(Token, NULL);
+		Token = scan();
+		decl(clss, prim);
+		break;
+	case IDENT:
+		decl(clss, PINT);
+		break;
+	default:
+		error("type specifier expected at: %s", Text);
+		Token = synch(SEMI);
+		break;
+	}
+}
+
+static void stats(void) {
+	printf(	"Memory usage: "
+		"Symbols: %5d/%5d, "
+		"Names: %5d/%5d, "
+		"Nodes: %5d/%5d\n",
+		Globs, NSYMBOLS,
+		Nbot, POOLSIZE,
+		Ndmax, NODEPOOLSZ);
+}
+
+void defarg(char *s) {
+	char	*p;
+
+	if (NULL == s) return;
+	if ((p = strchr(s, '=')) != NULL)
+		*p++ = 0;
+	else
+		p = "";
+	addglob(s, 0, TMACRO, 0, 0, 0, globname(p), 0);
+	if (*p) *--p = '=';
+}
+
+void program(char *name, FILE *in, FILE *out, char *def) {
+	init();
+	defarg(def);
+	Infile = in;
+	Outfile = out;
+	File = Basefile = name;
+	genprelude();
+	Token = scan();
+	while (XEOF != Token) 
+		top();
+	genpostlude();
+	if (O_debug & D_GSYM) dumpsyms("GLOBALS", "", 1, Globs);
+	if (O_debug & D_STAT) stats();
+}
+ÿerror.c
+/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	Error handling
+ */
+
+#include "#/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Definitions
+ */
+
+#include <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdlib.h
+ */
+
+#define EXIT_FAILURE	#define EXIT_SUCCESS	
+#define RAND_MAX	
+extern char	**environ;
+
+void	 abort(void);
+int	 abs(int n);
+int	 atexit(int (*fn)());
+int	 atoi(char *s);
+void	*bsearch(void *key, void *array, int count, int size, int (*cmp)());
+void	*calloc(int count, int size);
+void	 exit(int rc);
+void	 free(void *p);
+char	*getenv(char *name);
+void	*malloc(int size);
+void	 qsort(void *array, int count, int size, int (*cmp)());
+int	 rand(void);
+void	*realloc(void *p, int size);
+void	 srand(int seed);
+int	 strtol(char *s, char *endp[], int base);
+int	 system(char *s);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdio.h
+ */
+
+#define NULL	#define EOF	
+#define FOPEN_MAX	#define BUFSIZ	#define FILENAME_MAX	#define TMP_MAX	#define L_tmpnam	
+#define _IONBF	#define _IOLBF	#define _IOFBF	#define _IOACC	#define _IOUSR	
+#define _FCLOSED	#define _FREAD	#define _FWRITE	#define _FERROR	
+struct _file {
+	int	fd;
+	char	iom;
+	char	last;
+	char	mode;
+	int	ptr;
+	int	end;
+	int	size;
+	int	ch;
+	char	*buf;
+};
+
+#define FILE	
+extern FILE	*stdin, *stdout, *stderr;
+
+#ifdef __dos
+extern int	_faddcr;
+#endif
+
+#define getc	#define putc	
+#define SEEK_SET	#define SEEK_CUR	#define SEEK_END	
+void	 clearerr(FILE *f);
+int	 fclose(FILE *f);
+FILE	*fdopen(int fd, char *mode);
+int	 feof(FILE *f);
+int	 ferror(FILE *f);
+int	 fflush(FILE *f);
+int	 fgetc(FILE *f);
+int	 fgetpos(FILE *f, int *ppos);
+char	*fgets(char *buf, int len, FILE *f);
+int	 fileno(FILE *f);
+FILE	*fopen(char *path, char *mode);
+int	 fprintf(FILE *f, char *fmt, ...);
+int	 fputc(int c, FILE *f);
+int	 fputs(char *s, FILE *f);
+int	 fread(void *buf, int size, int count, FILE *f);
+FILE	*freopen(char *path, char *mode, FILE *f);
+int	 fscanf(FILE *f, char *fmt, ...);
+int	 fseek(FILE *f, int off, int how);
+int	 fsetpos(FILE *f, int *ppos);
+int	 ftell(FILE *f);
+int	 fwrite(void *buf, int size, int count, FILE *f);
+int	 getchar(void);
+char	*gets(char *buf);
+int	 kprintf(int fd, char *fmt, ...);
+void	 perror(char *s);
+int	 printf(char *fmt, ...);
+int	 putchar(int c);
+int	 puts(char *s);
+int	 remove(char *path);
+int	 rename(char *from, char *to);
+void	 rewind(FILE *f);
+int	 scanf(char *fmt, ...);
+void	 setbuf(FILE *f, char *buf);
+int	 setvbuf(FILE *f, char *buf, int mode, int size);
+int	 sscanf(char *s, char *fmt, ...);
+int	 sprintf(char *buf, char *fmt, ...);
+char	*tmpnam(char *buf);
+FILE	*tmpfile(void);
+int	 ungetc(int c, FILE *f);
+int	 vfprintf(FILE *f, char *fmt, void **args);
+int	 vprintf(char *fmt, void **args);
+int	 vsprintf(char *buf, char *fmt, void **args);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	string.h
+ */
+
+extern char	*sys_errlist[];
+extern int	sys_nerr;
+
+void	*memchr(void *p, int c, int len);
+int	 memcmp(void *p1, void *p2, int len);
+void	*memcpy(void *dest, void *src, int len);
+void	*memmove(void *dest, void *src, int len);
+void	*memset(void *p, int c, int len);
+char	*strcat(char *s, char *a);
+char	*strchr(char *s, int c);
+int	 strcmp(char *s1, char *s2);
+char	*strcpy(char *dest, char *src);
+int	 strcspn(char *s, char *set);
+char	*strdup(char *s);
+char	*strerror(int err);
+int	 strlen(char *s);
+char	*strncat(char *s, char *a, int len);
+int	 strncmp(char *s1, char *s2, int len);
+char	*strncpy(char *dest, char *src, int len);
+char	*strpbrk(char *s, char *set);
+char	*strrchr(char *s, int c);
+int	 strspn(char *s, char *set);
+char	*strtok(char *s, char *sep);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011
+ *	ctype.h
+ */
+
+int	isalnum(int c);
+int	isalpha(int c);
+int	iscntrl(int c);
+int	isdigit(int c);
+int	isgraph(int c);
+int	islower(int c);
+int	isprint(int c);
+int	ispunct(int c);
+int	isspace(int c);
+int	isupper(int c);
+int	isxdigit(int c);
+int	tolower(int c);
+int	toupper(int c);
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2012,2014
+ *	x86-64 target description
+ */
+
+#define CPU	#define BPW	ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2013,2014
+ *	Linux/x86-64 environment
+ */
+
+#define OS	#define ASCMD	#define LDCMD	#define SYSLIBC	ÿ#define VERSION	
+#ifndef SCCDIR
+ #define SCCDIR	#endif
+
+#ifndef AOUTNAME
+ #define AOUTNAME	#endif
+
+#define SCCLIBC	
+#define PREFIX	#define LPREFIX	
+#define INTSIZE	#define PTRSIZE	#define CHARSIZE	
+#define TEXTLEN	#define NAMELEN	
+#define MAXFILES	
+#define MAXIFDEF	#define MAXNMAC	#define MAXCASE	#define MAXBREAK	#define MAXLOCINIT	#define MAXFNARGS	
+/* assert(NSYMBOLS < PSTRUCT) */
+#define NSYMBOLS	#define POOLSIZE	#define NODEPOOLSZ	
+/* types */
+enum {
+	TVARIABLE = 1,
+	TARRAY,
+	TFUNCTION,
+	TCONSTANT,
+	TMACRO,
+	TSTRUCT
+};
+
+/* primitive types */
+enum {
+	PCHAR = 1,
+	PINT,
+	CHARPTR,
+	INTPTR,
+	CHARPP,
+	INTPP,
+	PVOID,
+	VOIDPTR,
+	VOIDPP,
+	FUNPTR,
+	PSTRUCT = 0x2000,
+	PUNION  = 0x4000,
+	STCPTR  = 0x6000,
+	STCPP   = 0x8000,
+	UNIPTR  = 0xA000,
+	UNIPP   = 0xC000,
+	STCMASK = 0xE000
+};
+
+/* storage classes */
+enum {
+	CPUBLIC = 1,
+	CEXTERN,
+	CSTATIC,
+	CLSTATC,
+	CAUTO,
+	CSPROTO,
+	CMEMBER,
+	CSTCDEF
+};
+
+/* lvalue structure */
+enum {
+	LVSYM,
+	LVPRIM,
+	LVADDR,
+	LV
+};
+
+/* debug options */
+enum {
+	D_LSYM = 1,
+	D_GSYM = 2,
+	D_STAT = 4
+};
+
+/* addressing modes */
+enum {
+	empty,
+	addr_auto,
+	addr_static,
+	addr_globl,
+	addr_label,
+	literal,
+	auto_byte,
+	auto_word,
+	static_byte,
+	static_word,
+	globl_byte,
+	globl_word
+};
+
+/* compare instructions */
+enum {
+	cnone,
+	equal,
+	not_equal,
+	less,
+	greater,
+	less_equal,
+	greater_equal,
+	below,
+	above,
+	below_equal,
+	above_equal
+};
+
+/* boolean instructions */
+enum {
+	bnone,
+	lognot,
+	normalize
+};
+
+/* AST node */
+struct node_stc {
+	int		op;
+	struct node_stc	*left, *right;
+	int		args[1];
+};
+
+#define node	
+/* tokens */
+enum {
+	SLASH, STAR, MOD, PLUS, MINUS, LSHIFT, RSHIFT,
+	GREATER, GTEQ, LESS, LTEQ, EQUAL, NOTEQ, AMPER,
+	CARET, PIPE, LOGAND, LOGOR,
+
+	ARROW, ASAND, ASXOR, ASLSHIFT, ASMINUS, ASMOD, ASOR, ASPLUS,
+	ASRSHIFT, ASDIV, ASMUL, ASSIGN, AUTO, BREAK, CASE, CHAR, COLON,
+	COMMA, CONTINUE, DECR, DEFAULT, DO, DOT, ELLIPSIS, ELSE, ENUM,
+	EXTERN, FOR, IDENT, IF, INCR, INT, INTLIT, LBRACE, LBRACK,
+	LPAREN, NOT, QMARK, RBRACE, RBRACK, REGISTER, RETURN, RPAREN,
+	SEMI, SIZEOF, STATIC, STRLIT, STRUCT, SWITCH, TILDE, UNION,
+	VOID, VOLATILE, WHILE, XEOF, XMARK,
+
+	P_DEFINE, P_ELSE, P_ELSENOT, P_ENDIF, P_ERROR, P_IFDEF,
+	P_IFNDEF, P_INCLUDE, P_LINE, P_PRAGMA, P_UNDEF
+};
+
+/* AST operators */
+enum {
+	OP_GLUE, OP_ADD, OP_ADDR, OP_ASSIGN, OP_BINAND, OP_BINIOR,
+	OP_BINXOR, OP_BOOL, OP_BRFALSE, OP_BRTRUE, OP_CALL, OP_CALR,
+	OP_COMMA, OP_DEC, OP_DIV, OP_EQUAL, OP_GREATER, OP_GTEQ,
+	OP_IDENT, OP_IFELSE, OP_LAB, OP_LDLAB, OP_LESS, OP_LIT,
+	OP_LOGNOT, OP_LSHIFT, OP_LTEQ, OP_MOD, OP_MUL, OP_NEG,
+	OP_NOT, OP_NOTEQ, OP_PLUS, OP_PREDEC, OP_PREINC, OP_POSTDEC,
+	OP_POSTINC, OP_RSHIFT, OP_RVAL, OP_SCALE, OP_SCALEBY, OP_SUB
+};
+
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Global variables
+ */
+
+#ifndef extern_
+ #define extern_ #endif
+
+extern_ FILE	*Infile;
+extern_ FILE	*Outfile;
+extern_ int	Token;
+extern_ char	Text[TEXTLEN+1];
+extern_ int	Value;
+extern_ int	Line;
+extern_ int	Errors;
+extern_ int	Syntoken;
+extern_ int	Putback;
+extern_ int	Rejected;
+extern_ int	Rejval;
+extern_ char	Rejtext[TEXTLEN+1];
+extern_ char	*File;
+extern_ char	*Basefile;
+extern_ char	*Macp[MAXNMAC];
+extern_ int	Macc[MAXNMAC];
+extern_ int	Mp;
+extern_ int	Expandmac;
+extern_ int	Ifdefstk[MAXIFDEF], Isp;
+extern_ int	Inclev;
+extern_ int	Textseg;
+extern_ int	Nodes[NODEPOOLSZ];
+extern_ int	Ndtop;
+extern_ int	Ndmax;
+
+/* symbol tabel structure */
+extern_ char	*Names[NSYMBOLS];
+extern_ int	Prims[NSYMBOLS];
+extern_ char	Types[NSYMBOLS];
+extern_ char	Stcls[NSYMBOLS];
+extern_ int	Sizes[NSYMBOLS];
+extern_ int	Vals[NSYMBOLS];
+extern_ char	*Mtext[NSYMBOLS];
+extern_ int	Globs;
+extern_ int	Locs;
+
+extern_ int	Thisfn;
+
+/* name list */
+extern_ char	Nlist[POOLSIZE];
+extern_ int	Nbot;
+extern_ int	Ntop;
+
+/* label stacks */
+extern_ int	Breakstk[MAXBREAK], Bsp;
+extern_ int	Contstk[MAXBREAK], Csp;
+extern_ int	Retlab;
+
+/* local init structure */
+extern_ int	LIaddr[MAXLOCINIT];
+extern_ int	LIval[MAXLOCINIT];
+extern_ int	Nli;
+
+/* synthesizer operand queue */
+extern_ int	Q_type;
+extern_ int	Q_val;
+extern_ char	Q_name[NAMELEN+1];
+extern_ int	Q_cmp;
+extern_ int	Q_bool;
+
+/* file collector */
+extern_ char	*Files[MAXFILES];
+extern_ char	Temp[MAXFILES];
+extern_ int	Nf;
+
+/* options */
+extern_ int	O_verbose;
+extern_ int	O_componly;
+extern_ int	O_asmonly;
+extern_ int	O_testonly;
+extern_ int	O_stdio;
+extern_ char	*O_outfile;
+extern_ int	O_debug;
+ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Function declarations
+ */
+
+int	addglob(char *name, int prim, int type, int scls, int size, int val,
+		char *mval, int init);
+int	addloc(char *name, int prim, int type, int scls, int size, int val,
+		int init);
+int	binoptype(int op, int p1, int p2);
+int	chrpos(char *s, int c);
+void	clear(int q);
+void	cleanup(void);
+void	clrlocs(void);
+void	colon(void);
+void	commit(void);
+void	commit_bool(void);
+void	commit_cmp(void);
+void	compound(int lbr);
+int	comptype(int p);
+int	constexpr(void);
+void	copyname(char *name, char *s);
+int	deref(int p);
+void	dumpsyms(char *title, char *sub, int from, int to);
+void	dumptree(node *a);
+void	emittree(node *a);
+int	eofcheck(void);
+void	error(char *s, char *a);
+void	expr(int *lv, int cvoid);
+void	fatal(char *s);
+int	findglob(char *s);
+int	findloc(char *s);
+int	findmem(int y, char *s);
+int	findstruct(char *s);
+int	findsym(char *s);
+int	findmac(char *s);
+node	*fold_reduce(node *n);
+int	frozen(int depth);
+char	*galloc(int k, int align);
+void	gen(char *s);
+int	genadd(int p1, int p2, int swap);
+void	genaddr(int y);
+void	genalign(int k);
+void	genaligntext(void);
+void	genand(void);
+void	genasop(int op, int *lv, int p2);
+void	genbool(void);
+void	genbrfalse(int dest);
+void	genbrtrue(int dest);
+void	genbss(char *name, int len, int statc);
+void	gencall(int y);
+void	gencalr(void);
+void	gencmp(char *inst);
+void	gendata(void);
+void	gendefb(int v);
+void	gendefp(int v);
+void	gendefs(char *s, int len);
+void	gendefw(int v);
+void	gendiv(int swap);
+void	genentry(void);
+void	genexit(void);
+void	geninc(int *lv, int inc, int pre);
+void	genind(int p);
+void	genior(void);
+void	genjump(int dest);
+void	genlab(int id);
+void	genldlab(int id);
+void	genlit(int v);
+void	genln(char *s);
+void	genlocinit(void);
+void	genlognot(void);
+void	genmod(int swap);
+void	genmul(void);
+void	genname(char *name);
+void	genneg(void);
+void	gennot(void);
+void	genpostlude(void);
+void	genprelude(void);
+void	genpublic(char *name);
+void	genpush(void);
+void	genpushlit(int n);
+void	genraw(char *s);
+void	genrval(int *lv);
+void	genscale(void);
+void	genscale2(void);
+void	genscaleby(int v);
+void	genshl(int swap);
+void	genshr(int swap);
+void	genstack(int n);
+void	genstore(int *lv);
+int	gensub(int p1, int p2, int swap);
+void	genswitch(int *vals, int *labs, int nc, int dflt);
+void	gentext(void);
+void	genxor(void);
+char	*globname(char *s);
+char	*gsym(char *s);
+void	ident(void);
+void	init(void);
+void	initopt(void);
+int	inttype(int p);
+int	label(void);
+char	*labname(int id);
+void	lbrace(void);
+void	lgen(char *s, char *inst, int n);
+void	lgen2(char *s, int v1, int v2);
+void	load(void);
+void	lparen(void);
+node	*mkbinop(int op, node *left, node *right);
+node	*mkbinop1(int op, int n, node *left, node *right);
+node	*mkbinop2(int op, int n1, int n2, node *left, node *right);
+node	*mkleaf(int op, int n);
+node	*mkunop(int op, node *left);
+node	*mkunop1(int op, int n, node *left);
+node	*mkunop2(int op, int n1, int n2, node *left);
+void	match(int t, char *what);
+char	*newfilename(char *name, int sfx);
+int	next(void);
+void	ngen(char *s, char *inst, int n);
+void	ngen2(char *s, char *inst, int n, int a);
+void	notvoid(int p);
+int	objsize(int prim, int type, int size);
+node	*optimize(node *n);
+void	opt_init(void);
+void	playmac(char *s);
+int	pointerto(int prim);
+void	preproc(void);
+int	primtype(int t, char *s);
+void	program(char *name, FILE *in, FILE *out, char *def);
+void	putback(int t);
+void	queue_cmp(int op);
+void	rbrace(void);
+void	rbrack(void);
+void	reject(void);
+void	rexpr(void);
+void	rparen(void);
+int	scan(void);
+int	scanraw(void);
+void	scnerror(char *s, int c);
+void	semi(void);
+void	sgen(char *s, char *inst, char *s2);
+void	sgen2(char *s, char *inst, int v, char *s2);
+int	skip(void);
+void	spill(void);
+int	synch(int syn);
+void	top(void);
+int	typematch(int p1, int p2);
+ÿvoid error(char *s, char *a) {
+	if (Syntoken) return;
+	if (!Errors) cleanup();
+	fprintf(stderr, "error: %s: %d: ", File, Line);
+	fprintf(stderr, s, a);
+	fprintf(stderr, "\n");
+	if (++Errors > 10) {
+		Errors = 0;
+		fatal("too many errors");
+	}
+}
+
+void fatal(char *s) {
+	error(s, NULL);
+	error("fatal error, stop", NULL);
+	exit(EXIT_FAILURE);
+}
+
+void scnerror(char *s, int c) {
+	char	buf[32];
+
+	if (isprint(c))
+		sprintf(buf, "'%c' (\\x%x)", c, c);
+	else
+		sprintf(buf, "\\x%x", c);
+	error(s, buf);
+}
+
+int synch(int syn) {
+	int	t;
+
+	t = scan();
+	while (t != syn) {
+		if (EOF == t)
+			fatal("error recovery failed");
+		t = next();
+	}
+	Syntoken = syn;
+	return t;
+}
+ÿexpr.c
+/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Expression parser
+ */
+
+#include "#/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Definitions
+ */
+
+#include <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdlib.h
+ */
+
+#define EXIT_FAILURE	#define EXIT_SUCCESS	
+#define RAND_MAX	
+extern char	**environ;
+
+void	 abort(void);
+int	 abs(int n);
+int	 atexit(int (*fn)());
+int	 atoi(char *s);
+void	*bsearch(void *key, void *array, int count, int size, int (*cmp)());
+void	*calloc(int count, int size);
+void	 exit(int rc);
+void	 free(void *p);
+char	*getenv(char *name);
+void	*malloc(int size);
+void	 qsort(void *array, int count, int size, int (*cmp)());
+int	 rand(void);
+void	*realloc(void *p, int size);
+void	 srand(int seed);
+int	 strtol(char *s, char *endp[], int base);
+int	 system(char *s);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdio.h
+ */
+
+#define NULL	#define EOF	
+#define FOPEN_MAX	#define BUFSIZ	#define FILENAME_MAX	#define TMP_MAX	#define L_tmpnam	
+#define _IONBF	#define _IOLBF	#define _IOFBF	#define _IOACC	#define _IOUSR	
+#define _FCLOSED	#define _FREAD	#define _FWRITE	#define _FERROR	
+struct _file {
+	int	fd;
+	char	iom;
+	char	last;
+	char	mode;
+	int	ptr;
+	int	end;
+	int	size;
+	int	ch;
+	char	*buf;
+};
+
+#define FILE	
+extern FILE	*stdin, *stdout, *stderr;
+
+#ifdef __dos
+extern int	_faddcr;
+#endif
+
+#define getc	#define putc	
+#define SEEK_SET	#define SEEK_CUR	#define SEEK_END	
+void	 clearerr(FILE *f);
+int	 fclose(FILE *f);
+FILE	*fdopen(int fd, char *mode);
+int	 feof(FILE *f);
+int	 ferror(FILE *f);
+int	 fflush(FILE *f);
+int	 fgetc(FILE *f);
+int	 fgetpos(FILE *f, int *ppos);
+char	*fgets(char *buf, int len, FILE *f);
+int	 fileno(FILE *f);
+FILE	*fopen(char *path, char *mode);
+int	 fprintf(FILE *f, char *fmt, ...);
+int	 fputc(int c, FILE *f);
+int	 fputs(char *s, FILE *f);
+int	 fread(void *buf, int size, int count, FILE *f);
+FILE	*freopen(char *path, char *mode, FILE *f);
+int	 fscanf(FILE *f, char *fmt, ...);
+int	 fseek(FILE *f, int off, int how);
+int	 fsetpos(FILE *f, int *ppos);
+int	 ftell(FILE *f);
+int	 fwrite(void *buf, int size, int count, FILE *f);
+int	 getchar(void);
+char	*gets(char *buf);
+int	 kprintf(int fd, char *fmt, ...);
+void	 perror(char *s);
+int	 printf(char *fmt, ...);
+int	 putchar(int c);
+int	 puts(char *s);
+int	 remove(char *path);
+int	 rename(char *from, char *to);
+void	 rewind(FILE *f);
+int	 scanf(char *fmt, ...);
+void	 setbuf(FILE *f, char *buf);
+int	 setvbuf(FILE *f, char *buf, int mode, int size);
+int	 sscanf(char *s, char *fmt, ...);
+int	 sprintf(char *buf, char *fmt, ...);
+char	*tmpnam(char *buf);
+FILE	*tmpfile(void);
+int	 ungetc(int c, FILE *f);
+int	 vfprintf(FILE *f, char *fmt, void **args);
+int	 vprintf(char *fmt, void **args);
+int	 vsprintf(char *buf, char *fmt, void **args);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	string.h
+ */
+
+extern char	*sys_errlist[];
+extern int	sys_nerr;
+
+void	*memchr(void *p, int c, int len);
+int	 memcmp(void *p1, void *p2, int len);
+void	*memcpy(void *dest, void *src, int len);
+void	*memmove(void *dest, void *src, int len);
+void	*memset(void *p, int c, int len);
+char	*strcat(char *s, char *a);
+char	*strchr(char *s, int c);
+int	 strcmp(char *s1, char *s2);
+char	*strcpy(char *dest, char *src);
+int	 strcspn(char *s, char *set);
+char	*strdup(char *s);
+char	*strerror(int err);
+int	 strlen(char *s);
+char	*strncat(char *s, char *a, int len);
+int	 strncmp(char *s1, char *s2, int len);
+char	*strncpy(char *dest, char *src, int len);
+char	*strpbrk(char *s, char *set);
+char	*strrchr(char *s, int c);
+int	 strspn(char *s, char *set);
+char	*strtok(char *s, char *sep);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011
+ *	ctype.h
+ */
+
+int	isalnum(int c);
+int	isalpha(int c);
+int	iscntrl(int c);
+int	isdigit(int c);
+int	isgraph(int c);
+int	islower(int c);
+int	isprint(int c);
+int	ispunct(int c);
+int	isspace(int c);
+int	isupper(int c);
+int	isxdigit(int c);
+int	tolower(int c);
+int	toupper(int c);
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2012,2014
+ *	x86-64 target description
+ */
+
+#define CPU	#define BPW	ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2013,2014
+ *	Linux/x86-64 environment
+ */
+
+#define OS	#define ASCMD	#define LDCMD	#define SYSLIBC	ÿ#define VERSION	
+#ifndef SCCDIR
+ #define SCCDIR	#endif
+
+#ifndef AOUTNAME
+ #define AOUTNAME	#endif
+
+#define SCCLIBC	
+#define PREFIX	#define LPREFIX	
+#define INTSIZE	#define PTRSIZE	#define CHARSIZE	
+#define TEXTLEN	#define NAMELEN	
+#define MAXFILES	
+#define MAXIFDEF	#define MAXNMAC	#define MAXCASE	#define MAXBREAK	#define MAXLOCINIT	#define MAXFNARGS	
+/* assert(NSYMBOLS < PSTRUCT) */
+#define NSYMBOLS	#define POOLSIZE	#define NODEPOOLSZ	
+/* types */
+enum {
+	TVARIABLE = 1,
+	TARRAY,
+	TFUNCTION,
+	TCONSTANT,
+	TMACRO,
+	TSTRUCT
+};
+
+/* primitive types */
+enum {
+	PCHAR = 1,
+	PINT,
+	CHARPTR,
+	INTPTR,
+	CHARPP,
+	INTPP,
+	PVOID,
+	VOIDPTR,
+	VOIDPP,
+	FUNPTR,
+	PSTRUCT = 0x2000,
+	PUNION  = 0x4000,
+	STCPTR  = 0x6000,
+	STCPP   = 0x8000,
+	UNIPTR  = 0xA000,
+	UNIPP   = 0xC000,
+	STCMASK = 0xE000
+};
+
+/* storage classes */
+enum {
+	CPUBLIC = 1,
+	CEXTERN,
+	CSTATIC,
+	CLSTATC,
+	CAUTO,
+	CSPROTO,
+	CMEMBER,
+	CSTCDEF
+};
+
+/* lvalue structure */
+enum {
+	LVSYM,
+	LVPRIM,
+	LVADDR,
+	LV
+};
+
+/* debug options */
+enum {
+	D_LSYM = 1,
+	D_GSYM = 2,
+	D_STAT = 4
+};
+
+/* addressing modes */
+enum {
+	empty,
+	addr_auto,
+	addr_static,
+	addr_globl,
+	addr_label,
+	literal,
+	auto_byte,
+	auto_word,
+	static_byte,
+	static_word,
+	globl_byte,
+	globl_word
+};
+
+/* compare instructions */
+enum {
+	cnone,
+	equal,
+	not_equal,
+	less,
+	greater,
+	less_equal,
+	greater_equal,
+	below,
+	above,
+	below_equal,
+	above_equal
+};
+
+/* boolean instructions */
+enum {
+	bnone,
+	lognot,
+	normalize
+};
+
+/* AST node */
+struct node_stc {
+	int		op;
+	struct node_stc	*left, *right;
+	int		args[1];
+};
+
+#define node	
+/* tokens */
+enum {
+	SLASH, STAR, MOD, PLUS, MINUS, LSHIFT, RSHIFT,
+	GREATER, GTEQ, LESS, LTEQ, EQUAL, NOTEQ, AMPER,
+	CARET, PIPE, LOGAND, LOGOR,
+
+	ARROW, ASAND, ASXOR, ASLSHIFT, ASMINUS, ASMOD, ASOR, ASPLUS,
+	ASRSHIFT, ASDIV, ASMUL, ASSIGN, AUTO, BREAK, CASE, CHAR, COLON,
+	COMMA, CONTINUE, DECR, DEFAULT, DO, DOT, ELLIPSIS, ELSE, ENUM,
+	EXTERN, FOR, IDENT, IF, INCR, INT, INTLIT, LBRACE, LBRACK,
+	LPAREN, NOT, QMARK, RBRACE, RBRACK, REGISTER, RETURN, RPAREN,
+	SEMI, SIZEOF, STATIC, STRLIT, STRUCT, SWITCH, TILDE, UNION,
+	VOID, VOLATILE, WHILE, XEOF, XMARK,
+
+	P_DEFINE, P_ELSE, P_ELSENOT, P_ENDIF, P_ERROR, P_IFDEF,
+	P_IFNDEF, P_INCLUDE, P_LINE, P_PRAGMA, P_UNDEF
+};
+
+/* AST operators */
+enum {
+	OP_GLUE, OP_ADD, OP_ADDR, OP_ASSIGN, OP_BINAND, OP_BINIOR,
+	OP_BINXOR, OP_BOOL, OP_BRFALSE, OP_BRTRUE, OP_CALL, OP_CALR,
+	OP_COMMA, OP_DEC, OP_DIV, OP_EQUAL, OP_GREATER, OP_GTEQ,
+	OP_IDENT, OP_IFELSE, OP_LAB, OP_LDLAB, OP_LESS, OP_LIT,
+	OP_LOGNOT, OP_LSHIFT, OP_LTEQ, OP_MOD, OP_MUL, OP_NEG,
+	OP_NOT, OP_NOTEQ, OP_PLUS, OP_PREDEC, OP_PREINC, OP_POSTDEC,
+	OP_POSTINC, OP_RSHIFT, OP_RVAL, OP_SCALE, OP_SCALEBY, OP_SUB
+};
+
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Global variables
+ */
+
+#ifndef extern_
+ #define extern_ #endif
+
+extern_ FILE	*Infile;
+extern_ FILE	*Outfile;
+extern_ int	Token;
+extern_ char	Text[TEXTLEN+1];
+extern_ int	Value;
+extern_ int	Line;
+extern_ int	Errors;
+extern_ int	Syntoken;
+extern_ int	Putback;
+extern_ int	Rejected;
+extern_ int	Rejval;
+extern_ char	Rejtext[TEXTLEN+1];
+extern_ char	*File;
+extern_ char	*Basefile;
+extern_ char	*Macp[MAXNMAC];
+extern_ int	Macc[MAXNMAC];
+extern_ int	Mp;
+extern_ int	Expandmac;
+extern_ int	Ifdefstk[MAXIFDEF], Isp;
+extern_ int	Inclev;
+extern_ int	Textseg;
+extern_ int	Nodes[NODEPOOLSZ];
+extern_ int	Ndtop;
+extern_ int	Ndmax;
+
+/* symbol tabel structure */
+extern_ char	*Names[NSYMBOLS];
+extern_ int	Prims[NSYMBOLS];
+extern_ char	Types[NSYMBOLS];
+extern_ char	Stcls[NSYMBOLS];
+extern_ int	Sizes[NSYMBOLS];
+extern_ int	Vals[NSYMBOLS];
+extern_ char	*Mtext[NSYMBOLS];
+extern_ int	Globs;
+extern_ int	Locs;
+
+extern_ int	Thisfn;
+
+/* name list */
+extern_ char	Nlist[POOLSIZE];
+extern_ int	Nbot;
+extern_ int	Ntop;
+
+/* label stacks */
+extern_ int	Breakstk[MAXBREAK], Bsp;
+extern_ int	Contstk[MAXBREAK], Csp;
+extern_ int	Retlab;
+
+/* local init structure */
+extern_ int	LIaddr[MAXLOCINIT];
+extern_ int	LIval[MAXLOCINIT];
+extern_ int	Nli;
+
+/* synthesizer operand queue */
+extern_ int	Q_type;
+extern_ int	Q_val;
+extern_ char	Q_name[NAMELEN+1];
+extern_ int	Q_cmp;
+extern_ int	Q_bool;
+
+/* file collector */
+extern_ char	*Files[MAXFILES];
+extern_ char	Temp[MAXFILES];
+extern_ int	Nf;
+
+/* options */
+extern_ int	O_verbose;
+extern_ int	O_componly;
+extern_ int	O_asmonly;
+extern_ int	O_testonly;
+extern_ int	O_stdio;
+extern_ char	*O_outfile;
+extern_ int	O_debug;
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Function declarations
+ */
+
+int	addglob(char *name, int prim, int type, int scls, int size, int val,
+		char *mval, int init);
+int	addloc(char *name, int prim, int type, int scls, int size, int val,
+		int init);
+int	binoptype(int op, int p1, int p2);
+int	chrpos(char *s, int c);
+void	clear(int q);
+void	cleanup(void);
+void	clrlocs(void);
+void	colon(void);
+void	commit(void);
+void	commit_bool(void);
+void	commit_cmp(void);
+void	compound(int lbr);
+int	comptype(int p);
+int	constexpr(void);
+void	copyname(char *name, char *s);
+int	deref(int p);
+void	dumpsyms(char *title, char *sub, int from, int to);
+void	dumptree(node *a);
+void	emittree(node *a);
+int	eofcheck(void);
+void	error(char *s, char *a);
+void	expr(int *lv, int cvoid);
+void	fatal(char *s);
+int	findglob(char *s);
+int	findloc(char *s);
+int	findmem(int y, char *s);
+int	findstruct(char *s);
+int	findsym(char *s);
+int	findmac(char *s);
+node	*fold_reduce(node *n);
+int	frozen(int depth);
+char	*galloc(int k, int align);
+void	gen(char *s);
+int	genadd(int p1, int p2, int swap);
+void	genaddr(int y);
+void	genalign(int k);
+void	genaligntext(void);
+void	genand(void);
+void	genasop(int op, int *lv, int p2);
+void	genbool(void);
+void	genbrfalse(int dest);
+void	genbrtrue(int dest);
+void	genbss(char *name, int len, int statc);
+void	gencall(int y);
+void	gencalr(void);
+void	gencmp(char *inst);
+void	gendata(void);
+void	gendefb(int v);
+void	gendefp(int v);
+void	gendefs(char *s, int len);
+void	gendefw(int v);
+void	gendiv(int swap);
+void	genentry(void);
+void	genexit(void);
+void	geninc(int *lv, int inc, int pre);
+void	genind(int p);
+void	genior(void);
+void	genjump(int dest);
+void	genlab(int id);
+void	genldlab(int id);
+void	genlit(int v);
+void	genln(char *s);
+void	genlocinit(void);
+void	genlognot(void);
+void	genmod(int swap);
+void	genmul(void);
+void	genname(char *name);
+void	genneg(void);
+void	gennot(void);
+void	genpostlude(void);
+void	genprelude(void);
+void	genpublic(char *name);
+void	genpush(void);
+void	genpushlit(int n);
+void	genraw(char *s);
+void	genrval(int *lv);
+void	genscale(void);
+void	genscale2(void);
+void	genscaleby(int v);
+void	genshl(int swap);
+void	genshr(int swap);
+void	genstack(int n);
+void	genstore(int *lv);
+int	gensub(int p1, int p2, int swap);
+void	genswitch(int *vals, int *labs, int nc, int dflt);
+void	gentext(void);
+void	genxor(void);
+char	*globname(char *s);
+char	*gsym(char *s);
+void	ident(void);
+void	init(void);
+void	initopt(void);
+int	inttype(int p);
+int	label(void);
+char	*labname(int id);
+void	lbrace(void);
+void	lgen(char *s, char *inst, int n);
+void	lgen2(char *s, int v1, int v2);
+void	load(void);
+void	lparen(void);
+node	*mkbinop(int op, node *left, node *right);
+node	*mkbinop1(int op, int n, node *left, node *right);
+node	*mkbinop2(int op, int n1, int n2, node *left, node *right);
+node	*mkleaf(int op, int n);
+node	*mkunop(int op, node *left);
+node	*mkunop1(int op, int n, node *left);
+node	*mkunop2(int op, int n1, int n2, node *left);
+void	match(int t, char *what);
+char	*newfilename(char *name, int sfx);
+int	next(void);
+void	ngen(char *s, char *inst, int n);
+void	ngen2(char *s, char *inst, int n, int a);
+void	notvoid(int p);
+int	objsize(int prim, int type, int size);
+node	*optimize(node *n);
+void	opt_init(void);
+void	playmac(char *s);
+int	pointerto(int prim);
+void	preproc(void);
+int	primtype(int t, char *s);
+void	program(char *name, FILE *in, FILE *out, char *def);
+void	putback(int t);
+void	queue_cmp(int op);
+void	rbrace(void);
+void	rbrack(void);
+void	reject(void);
+void	rexpr(void);
+void	rparen(void);
+int	scan(void);
+int	scanraw(void);
+void	scnerror(char *s, int c);
+void	semi(void);
+void	sgen(char *s, char *inst, char *s2);
+void	sgen2(char *s, char *inst, int v, char *s2);
+int	skip(void);
+void	spill(void);
+int	synch(int syn);
+void	top(void);
+int	typematch(int p1, int p2);
+ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	Binary operator precedence
+ */
+
+static int Prec[] = {
+	7, /* SLASH */
+	7, /* STAR */
+	7, /* MOD */
+	6, /* PLUS */
+	6, /* MINUS */
+	5, /* LSHIFT */
+	5, /* RSHIFT */
+	4, /* GREATER */
+	4, /* GTEQ */
+	4, /* LESS */
+	4, /* LTEQ */
+	3, /* EQUAL */
+	3, /* NOTEQ */
+	2, /* AMPER */
+	1, /* CARET */
+	0, /* PIPE */
+};
+ÿstatic node *asgmnt(int *lv);
+static node *cast(int *lv);
+static node *exprlist(int *lv, int ckvoid);
+
+static node *rvalue(node *n, int *lv) {
+	if (lv[LVADDR]) {
+		lv[LVADDR] = 0;
+		return mkunop2(OP_RVAL, lv[LVPRIM], lv[LVSYM], n);
+	}
+	else {
+		return n;
+	}
+}
+
+/*
+ * primary :=
+ *	  IDENT
+ *	| INTLIT
+ *	| string
+ *	| ARGC
+ *	| ( expr )
+ *
+ * string :=
+ *	  STRLIT
+ *	| STRLIT string
+ */
+
+static node *primary(int *lv) {
+	node	*n = NULL;
+	int	y, lab, k;
+	char	name[NAMELEN+1];
+
+	lv[LVPRIM] = lv[LVSYM] = lv[LVADDR] = 0;
+	switch (Token) {
+	case IDENT:
+		y = findsym(Text);
+		copyname(name, Text);
+		Token = scan();
+		if (!y) {
+			if (LPAREN == Token) {
+				y = addglob(name, PINT, TFUNCTION, CEXTERN,
+					-1, 0, NULL, 0);
+			}
+			else {
+				error("undeclared variable: %s", name);
+				y = addloc(name, PINT, TVARIABLE, CAUTO,
+					0, 0, 0);
+			}
+		}
+		lv[LVSYM] = y;
+		lv[LVPRIM] = Prims[y];
+		if (TFUNCTION == Types[y]) {
+			if (LPAREN != Token) {
+				lv[LVPRIM] = FUNPTR;
+				n = mkleaf(OP_ADDR, y);
+			}
+			return n;
+		}
+		if (TCONSTANT == Types[y]) {
+			return mkleaf(OP_LIT, Vals[y]);
+		}
+		if (TARRAY == Types[y]) {
+			n = mkleaf(OP_ADDR, y);
+			lv[LVPRIM] = pointerto(lv[LVPRIM]);
+			return n;
+		}
+		if (comptype(Prims[y])) {
+			n = mkleaf(OP_ADDR, y);
+			lv[LVSYM] = 0;
+			return n;
+		}
+		n = mkleaf(OP_IDENT, y);
+		lv[LVADDR] = 1;
+		return n;
+	case INTLIT:
+		n = mkleaf(OP_LIT, Value);
+		Token = scan();
+		lv[LVPRIM] = PINT;
+		return n;
+	case STRLIT:
+		gendata();
+		lab = label();
+		genlab(lab);
+		k = 0;
+		while (STRLIT == Token) {
+			gendefs(Text, Value);
+			k += Value-2;
+			Token = scan();
+		}
+		gendefb(0);
+		genalign(k+1);
+		n = mkleaf(OP_LDLAB, lab);
+		lv[LVPRIM] = CHARPTR;
+		return n;
+	case LPAREN:
+		Token = scan();
+		n = exprlist(lv, 0);
+		rparen();
+		return n;
+	default:
+		error("syntax error at: %s", Text);
+		Token = synch(SEMI);
+		return NULL;
+	}
+}
+
+int typematch(int p1, int p2) {
+	if (p1 == p2) return 1;
+	if (inttype(p1) && inttype(p2)) return 1;
+	if (!inttype(p1) && VOIDPTR == p2) return 1;
+	if (VOIDPTR == p1 && !inttype(p2)) return 1;
+	return 0;
+}
+
+/*
+ * fnargs :=
+ *	  asgmnt
+ *	| asgmnt , fnargs
+ */
+
+static node *fnargs(int fn, int *na) {
+	int	lv[LV];
+	int	*types;
+	char	msg[100];
+	int	sgn[MAXFNARGS+1];
+	node	*n = NULL, *n2;
+
+	types = (int *) (fn? Mtext[fn]: NULL);
+	*na = 0;
+	while (RPAREN != Token) {
+		n2 = asgmnt(lv);
+		n2 = rvalue(n2, lv);
+		n = mkbinop(OP_GLUE, n, n2);
+		if (comptype(lv[LVPRIM])) {
+			error("struct/union passed by value", NULL);
+			lv[LVPRIM] = pointerto(lv[LVPRIM]);
+		}
+		if (types && *types) {
+			if (!typematch(*types, lv[LVPRIM])) {
+				sprintf(msg, "wrong type in argument %d"
+					" of call to: %%s",
+					*na+1);
+				error(msg, Names[fn]);
+			}
+			types++;
+		}
+		if (*na < MAXFNARGS) sgn[*na] = lv[LVPRIM], sgn[*na+1] = 0;
+		(*na)++;
+		if (COMMA == Token) {
+			Token = scan();
+			if (RPAREN == Token)
+				error("trailing ',' in function call", NULL);
+		}
+		else
+			break;
+	}
+	if (fn && TFUNCTION == Types[fn] && !Mtext[fn]) {
+		Mtext[fn] = galloc((*na+1) * sizeof(int), 1);
+		memcpy(Mtext[fn], sgn, (*na+1) * sizeof(int));
+	}
+	rparen();
+	return n;
+}
+
+int deref(int p) {
+	int	y;
+
+	switch (p) {
+	case INTPP:	return INTPTR;
+	case INTPTR:	return PINT;
+	case CHARPP:	return CHARPTR;
+	case CHARPTR:	return PCHAR;
+	case VOIDPP:	return VOIDPTR;
+	case VOIDPTR:	return PCHAR;
+	case FUNPTR:	return PCHAR;
+	}
+	y = p & ~STCMASK;
+	switch (p & STCMASK) {
+	case STCPP:	return STCPTR | y;
+	case STCPTR:	return PSTRUCT | y;
+	case UNIPP:	return UNIPTR | y;
+	case UNIPTR:	return PUNION | y;
+	}
+	return -1;
+}
+
+static node *indirection(node *n, int *lv) {
+	int	p;
+
+	n = rvalue(n, lv);
+	if (VOIDPTR == lv[LVPRIM])
+		error("dereferencing void pointer", NULL);
+	if ((p = deref(lv[LVPRIM])) < 0) {
+		if (lv[LVSYM])
+			error("indirection through non-pointer: %s",
+				Names[lv[LVSYM]]);
+		else
+			error("indirection through non-pointer", NULL);
+		p = lv[LVPRIM];
+	}
+	lv[LVPRIM] = p;
+	lv[LVSYM] = 0;
+	return n;
+}
+
+static void badcall(int *lv) {
+	if (lv[LVSYM])
+		error("call of non-function: %s",
+			Names[lv[LVSYM]]);
+	else
+		error("call of non-function", NULL);
+}
+
+static int argsok(int na, int nf) {
+	return na == nf || (nf < 0 && na >= -nf-1);
+}
+
+static node *stc_access(node *n, int *lv, int ptr) {
+	int	y, p;
+	node	*n2;
+
+	n2 = n;
+	p = lv[LVPRIM] & STCMASK;
+	lv[LVADDR] = 1;
+	if (IDENT != Token) {
+		Token = scan();
+		error("struct/union member name expected after '%s'",
+			ptr? "->": ".");
+		return NULL;
+	}
+	y = findmem(lv[LVPRIM] & ~STCMASK, Text);
+	if (0 == y)
+		error("struct/union has no such member: %s", Text);
+	if ((PSTRUCT == p || STCPTR == p) && Vals[y]) {
+		n2 = mkleaf(OP_LIT, Vals[y]);
+		n2 = mkbinop(OP_ADD, n, n2);
+	}
+	Token = scan();
+	p = Prims[y];
+	if (TARRAY == Types[y]) {
+		p = pointerto(p);
+		lv[LVADDR] = 0;
+	}
+	lv[LVPRIM] = p;
+	return n2;
+}
+
+/*
+ * postfix :=
+ *	  primary
+ *	| postfix [ expr ]
+ *	| postfix ( )
+ *	| postfix ( fnargs )
+ *	| postfix ++
+ *	| postfix --
+ *	| postfix . identifier
+ *	| postfix -> identifier
+ */
+
+static node *postfix(int *lv) {
+	node	*n = NULL, *n2;
+	int	lv2[LV], p, na;
+
+	n = primary(lv);
+	for (;;) {
+		switch (Token) {
+		case LBRACK:
+			while (LBRACK == Token) {
+				n = indirection(n, lv);
+				Token = scan();
+				n2 = exprlist(lv2, 1);
+				n2 = rvalue(n2, lv2);
+				p = lv[LVPRIM];
+				if (PINT != lv2[LVPRIM])
+					error("non-integer subscript", NULL);
+				if (    PINT == p || INTPTR == p ||
+					CHARPTR == p || VOIDPTR == p ||
+					STCPTR == (p & STCMASK) ||
+					UNIPTR == (p & STCMASK)
+				) {
+					n2 = mkunop(OP_SCALE, n2);
+				}
+				else if (comptype(p)) {
+					n2 = mkunop1(OP_SCALEBY,
+						objsize(p, TVARIABLE, 1), n2);
+				}
+				n = mkbinop(OP_ADD, n, n2);
+				rbrack();
+				lv[LVSYM] = 0;
+				lv[LVADDR] = 1;
+			}
+			break;
+		case LPAREN:
+			Token = scan();
+			n = fnargs(lv[LVSYM], &na);
+			if (lv[LVSYM] && TFUNCTION == Types[lv[LVSYM]]) {
+				if (!argsok(na, Sizes[lv[LVSYM]]))
+					error("wrong number of arguments: %s",
+						Names[lv[LVSYM]]);
+				n = mkunop2(OP_CALL, lv[LVSYM], na, n);
+			}
+			else {
+				if (lv[LVPRIM] != FUNPTR) badcall(lv);
+				n = mkunop2(OP_CALR, lv[LVSYM], na, n);
+				lv[LVPRIM] = PINT;
+			}
+			lv[LVADDR] = 0;
+			break;
+		case INCR:
+		case DECR: 
+			if (lv[LVADDR]) {
+				if (INCR == Token)
+					n = mkunop2(OP_POSTINC, lv[LVPRIM],
+						lv[LVSYM], n);
+				else
+					n = mkunop2(OP_POSTDEC, lv[LVPRIM],
+						lv[LVSYM], n);
+			}
+			else
+				error("lvalue required before '%s'", Text);
+			Token = scan();
+			lv[LVADDR] = 0;
+			break;
+		case DOT:
+			Token = scan();
+			if (comptype(lv[LVPRIM]))
+				n = stc_access(n, lv, 0);
+			else
+				error("struct/union expected before '.'",
+					NULL);
+			break;
+		case ARROW:
+			Token = scan();
+			p = lv[LVPRIM] & STCMASK;
+			if (p == STCPTR || p == UNIPTR) {
+				n = rvalue(n, lv);
+				n = stc_access(n, lv, 1);
+			}
+			else
+				error(
+				 "struct/union pointer expected before '->'",
+				 NULL);
+			lv[LVSYM] = 0;
+			break;
+		default:
+			return n;
+		}
+	}
+}
+
+static node *prefix(int *lv);
+
+static node *comp_size(void) {
+	int	k = 0, y, lv[LV];
+
+	if (	CHAR == Token || INT == Token || VOID == Token ||
+		STRUCT == Token || UNION == Token
+	) {
+		switch (Token) {
+		case CHAR:	k = CHARSIZE; break;
+		case INT:	k = INTSIZE; break;
+		case STRUCT:
+		case UNION:	k = primtype(Token, NULL);
+				k = objsize(k, TVARIABLE, 1);
+				break;
+		}
+		Token = scan();
+		if (STAR == Token) {
+			k = PTRSIZE;
+			Token = scan();
+			if (STAR == Token) Token = scan();
+		}
+		else if (0 == k) {
+			error("sizeof(void) is unknown", NULL);
+		}
+	}
+	else {
+		prefix(lv);
+		y = lv[LVSYM]? lv[LVSYM]: 0;
+		k = y? objsize(Prims[y], Types[y], Sizes[y]):
+			objsize(lv[LVPRIM], TVARIABLE, 1);
+		if (0 == k)
+			error("cannot compute sizeof: %s",
+				Text);
+	}
+	return mkleaf(OP_LIT, k);
+}
+
+/*
+ * prefix :=
+ *	  postfix
+ *	| ++ prefix
+ *	| -- prefix
+ *	| & cast
+ *	| * cast
+ *	| + cast
+ *	| - cast
+ *	| ~ cast
+ *	| ! cast
+ *	| SIZEOF ( type )
+ *	| SIZEOF ( type * )
+ *	| SIZEOF ( type * * )
+ *	| SIZEOF ( IDENT )
+ *
+ * type :=
+ *	  INT
+ *	| CHAR
+ *	| VOID
+ *	| STRUCT IDENT
+ *	| UNION IDENT
+ */
+
+static node *prefix(int *lv) {
+	node	*n;
+	int	t;
+
+	switch (Token) {
+	case INCR:
+	case DECR:
+		t = Token;
+		Token = scan();
+		n = prefix(lv);
+		if (lv[LVADDR]) {
+			if (INCR == t)
+				n = mkunop2(OP_PREINC, lv[LVPRIM],
+					lv[LVSYM], n);
+			else
+				n = mkunop2(OP_PREDEC, lv[LVPRIM],
+					lv[LVSYM], n);
+		}
+		else {
+			error("lvalue expected after '%s'",
+				t == INCR? "++": "--");
+		}
+		lv[LVADDR] = 0;
+		return n;
+	case STAR:
+		Token = scan();
+		n = cast(lv);
+		n = indirection(n, lv);
+		lv[LVADDR] = 1;
+		return n;
+	case PLUS:
+		Token = scan();
+		n = cast(lv);
+		n = rvalue(n, lv); /* XXX really? */
+		if (!inttype(lv[LVPRIM]))
+			error("bad operand to unary '+'", NULL);
+		lv[LVADDR] = 0;
+		return n;
+	case MINUS:
+		Token = scan();
+		n = cast(lv);
+		n = rvalue(n, lv);
+		if (!inttype(lv[LVPRIM]))
+			error("bad operand to unary '-'", NULL);
+		n = mkunop(OP_NEG, n);
+		lv[LVADDR] = 0;
+		return n;
+	case TILDE:
+		Token = scan();
+		n = cast(lv);
+		n = rvalue(n, lv);
+		if (!inttype(lv[LVPRIM]))
+			error("bad operand to '~'", NULL);
+		n = mkunop(OP_NOT, n);
+		lv[LVADDR] = 0;
+		return n;
+	case XMARK:
+		Token = scan();
+		n = cast(lv);
+		n = rvalue(n, lv);
+		n = mkunop(OP_LOGNOT, n);
+		lv[LVPRIM] = PINT;
+		lv[LVADDR] = 0;
+		return n;
+	case AMPER:
+		Token = scan();
+		n = cast(lv);
+		if (lv[LVADDR]) {
+			if (lv[LVSYM]) n = mkunop1(OP_ADDR, lv[LVSYM], n);
+		}
+		else if ((0 == lv[LVSYM] || Types[lv[LVSYM]] != TARRAY) &&
+			 !comptype(lv[LVPRIM])
+		) {
+			error("lvalue expected after unary '&'", NULL);
+		}
+		lv[LVPRIM] = pointerto(lv[LVPRIM]);
+		lv[LVADDR] = 0;
+		return n;
+	case SIZEOF:
+		Token = scan();
+		lparen();
+		n = comp_size();
+		rparen();
+		lv[LVPRIM] = PINT;
+		lv[LVADDR] = 0;
+		return n;
+	default:
+		return postfix(lv);
+	}
+}
+
+/*
+ * cast :=
+ *	  prefix
+ *	| ( type ) prefix
+ *	| ( type * ) prefix
+ *	| ( type * * ) prefix
+ *	| ( INT ( * ) ( ) ) prefix
+ */
+
+static node *cast(int *lv) {
+	int	t;
+	node	*n;
+
+	if (LPAREN == Token) {
+		Token = scan();
+		if (	INT == Token || CHAR == Token || VOID == Token ||
+			STRUCT == Token || UNION == Token
+		) {
+			t = primtype(Token, NULL);
+			Token = scan();
+		}
+		else {
+			reject();
+			Token = LPAREN;
+			strcpy(Text, "(");
+			return prefix(lv);
+		}
+		if (PINT == t && LPAREN == Token) {
+			Token = scan();
+			match(STAR, "int(*)()");
+			rparen();
+			lparen();
+			rparen();
+			t = FUNPTR;
+		}
+		else if (STAR == Token) {
+			t = pointerto(t);
+			Token = scan();
+			if (STAR == Token) {
+				t = pointerto(t);
+				Token = scan();
+			}
+		}
+		rparen();
+		n = prefix(lv);
+		lv[LVPRIM] = t;
+		return n;
+	}
+	else {
+		return prefix(lv);
+	}
+}
+
+int binop(int tok) {
+	switch(tok) {
+	case AMPER:	return OP_BINAND;
+	case CARET:	return OP_BINXOR;
+	case EQUAL:	return OP_EQUAL;
+	case GREATER:	return OP_GREATER;
+	case GTEQ:	return OP_GTEQ;
+	case LESS:	return OP_LESS;
+	case LSHIFT:	return OP_LSHIFT;
+	case LTEQ:	return OP_LTEQ;
+	case MINUS:	return OP_SUB;
+	case MOD:	return OP_MOD;
+	case NOTEQ:	return OP_NOTEQ;
+	case PIPE:	return OP_BINIOR;
+	case PLUS:	return OP_PLUS;
+	case RSHIFT:	return OP_RSHIFT;
+	case SLASH:	return OP_DIV;
+	case STAR:	return OP_MUL;
+	default:	fatal("internal: unknown binop");
+			return 0; /* notreached */
+	}
+}
+
+node *mkop(int op, int p1, int p2, node *l, node *r) {
+	if (PLUS == op || MINUS == op) {
+		return mkbinop2(binop(op), p1, p2, l, r);
+	}
+	else if (EQUAL == op || NOTEQ == op || LESS == op ||
+		 GREATER == op || LTEQ == op || GTEQ == op)
+	{
+		return mkbinop1(binop(op), p1, l, r);
+	}
+	else {
+		return mkbinop(binop(op), l, r);
+	}
+}
+
+/*
+ * term :=
+ *	  cast
+ *	| term * cast
+ *	| term / cast
+ *	| term % cast
+ *
+ * sum :=
+ *	  term
+ *	| sum + term
+ *	| sum - term
+ *
+ * shift :=
+ *	  sum
+ *	| shift << sum
+ *	| shift >> sum
+ *
+ * relation :=
+ *	  shift
+ *	| relation < shift
+ *	| relation > shift
+ *	| relation <= shift
+ *	| relation >= shift
+ *
+ * equation :=
+ *	  relation
+ *	| equation == relation
+ *	| equation != relation
+ *
+ * binand :=
+ *	  equation
+ *	| binand & equation
+ *
+ * binxor :=
+ *	  binand
+ *	| binxor ^ binand
+ *
+ * binor :=
+ *	  binxor
+ *	| binor '|' binxor
+ *
+ * binexpr :=
+ *	  binor
+ */
+
+static node *binexpr(int *lv) {
+	int	ops[9];
+	int	prims[10];
+	int	sp = 0;
+	int	lv2[LV], a;
+	node	*tree[10];
+
+	tree[0] = cast(lv);
+	a = lv[LVADDR];
+	prims[0] = lv[LVPRIM];
+	while (SLASH == Token || STAR == Token || MOD == Token ||
+		PLUS == Token || MINUS == Token || LSHIFT == Token ||
+		RSHIFT == Token || GREATER == Token || GTEQ == Token ||
+		LESS == Token || LTEQ == Token || EQUAL == Token ||
+		NOTEQ == Token || AMPER == Token || CARET == Token ||
+		PIPE == Token
+	) {
+		tree[0] = rvalue(tree[0], lv);
+		while (sp > 0 && Prec[Token] <= Prec[ops[sp-1]]) {
+			tree[sp-1] = mkop(ops[sp-1], prims[sp-1], prims[sp],
+					tree[sp-1], tree[sp]);
+			prims[sp-1] = binoptype(ops[sp-1], prims[sp-1],
+					prims[sp]);
+			sp--;
+		}
+		ops[sp++] = Token;
+		Token = scan();
+		tree[sp] = cast(lv2);
+		tree[sp] = rvalue(tree[sp], lv2);
+		prims[sp] = lv2[LVPRIM];
+		a = 0;
+	}
+	while (sp > 0) {
+		tree[sp-1] = mkop(ops[sp-1], prims[sp-1], prims[sp],
+				tree[sp-1], tree[sp]);
+		prims[sp-1] = binoptype(ops[sp-1], prims[sp-1], prims[sp]);
+		sp--;
+	}
+	lv[LVPRIM] = prims[0];
+	lv[LVADDR] = a;
+	return tree[0];
+}
+
+/*
+ * logand :=
+ *	  binexpr
+ *	| logand && binexpr
+ *
+ * logor :=
+ *	  logand
+ *	| logor '||' logand
+ */
+
+static node *cond2(int *lv, int op) {
+	int	lv2[LV];
+	int	lab = 0;
+	node	*n, *n2 = NULL;
+	int	tv = 1;
+
+	n = op == LOGOR? cond2(lv, LOGAND): binexpr(lv);
+	while (Token == op) {
+		if (!lab) lab = label();
+		if (tv) notvoid(lv[LVPRIM]), tv = 0;
+		n = rvalue(n, lv);
+		Token = scan();
+		n2 = op == LOGOR? cond2(lv2, LOGAND): binexpr(lv2);
+		n2 = rvalue(n2, lv2);
+		if (op == LOGOR)
+			n = mkbinop1(OP_BRTRUE, lab, n, n2);
+		else
+			n = mkbinop1(OP_BRFALSE, lab, n, n2);
+	}
+	if (lab) {
+		n = mkunop1(OP_LAB, lab, n);
+		n = mkunop(OP_BOOL, n);
+		lv[LVPRIM] = PINT;
+		lv[LVADDR] = 0;
+	}
+	return n;
+}
+
+/*
+ * condexpr :=
+ *	  logor
+ *	| logor ? expr : condexpr
+ */
+
+static node *cond3(int *lv) {
+	node	*n, *n2;
+	int	lv2[LV], p;
+	int	l1 = 0, l2 = 0, tv = 1;
+
+	n = cond2(lv, LOGOR);
+	p = 0;
+	while (QMARK == Token) {
+		n = rvalue(n, lv);
+		if (tv) notvoid(lv[LVPRIM]), tv = 0;
+		l1 = label();
+		if (!l2) l2 = label();
+		Token = scan();
+		n2 = exprlist(lv2, 0);
+		n2 = rvalue(n2, lv2);
+		n = mkbinop1(OP_BRFALSE, l1, n, n2);
+		if (!p) p = lv2[LVPRIM];
+		if (!typematch(p, lv2[LVPRIM]))
+			error("incompatible types in '?:'", NULL);
+		colon();
+		n2 = cond2(lv2, LOGOR);
+		n2 = rvalue(n2, lv2);
+		n = mkbinop(OP_GLUE, n, n2);
+		if (QMARK != Token)
+			if (!typematch(p, lv2[LVPRIM]))
+				error("incompatible types in '?:'", NULL);
+	}
+	if (l2) {
+		n = mkunop1(OP_IFELSE, l2, n);
+		lv[LVPRIM] = p;
+		lv[LVADDR] = 0;
+	}
+	return n;
+}
+
+int arithop(int tok) {
+	switch(tok) {
+	case ASPLUS:	return PLUS;
+	case ASMINUS:	return MINUS;
+	case ASAND:	return AMPER;
+	case ASOR:	return PIPE;
+	case ASXOR:	return CARET;
+	case ASMUL:	return STAR;
+	case ASMOD:	return MOD;
+	case ASDIV:	return SLASH;
+	case ASLSHIFT:	return LSHIFT;
+	case ASRSHIFT:	return RSHIFT;
+	default:	fatal("internal: unknown assignment operator");
+			return 0; /* notreached */
+	}
+}
+
+/*
+ * asgmnt :=
+ *	  condexpr
+ *	| condexpr = asgmnt
+ *	| condexpr *= asgmnt
+ *	| condexpr /= asgmnt
+ *	| condexpr %= asgmnt
+ *	| condexpr += asgmnt
+ *	| condexpr -= asgmnt
+ *	| condexpr <<= asgmnt
+ *	| condexpr >>= asgmnt
+ *	| condexpr &= asgmnt
+ *	| condexpr ^= asgmnt
+ *	| condexpr |= asgmnt
+ */
+
+static node *asgmnt(int *lv) {
+	node	*n, *n2, *src;
+	int	lv2[LV], lvs[LV], op;
+
+	n = cond3(lv);
+	if (ASSIGN == Token || ASDIV == Token || ASMUL == Token ||
+		ASMOD == Token || ASPLUS == Token || ASMINUS == Token ||
+		ASLSHIFT == Token || ASRSHIFT == Token || ASAND == Token ||
+		ASXOR == Token || ASOR == Token
+	) {
+		op = Token;
+		Token = scan();
+		n2 = asgmnt(lv2);
+		n2 = rvalue(n2, lv2);
+		if (ASSIGN == op) {
+			if (!typematch(lv[LVPRIM], lv2[LVPRIM]))
+				error("assignment from incompatible type",
+					NULL);
+			n = mkbinop2(OP_ASSIGN, lv[LVPRIM], lv[LVSYM], n, n2);
+		}
+		else {
+			memcpy(lvs, lv, sizeof(lvs));
+			src = rvalue(n, lvs);
+			n2 = mkop(arithop(op), lv[LVPRIM], lv2[LVPRIM],
+				src, n2);
+			n = mkbinop2(OP_ASSIGN, lv[LVPRIM], lv[LVSYM], n, n2);
+		}
+		if (!lv[LVADDR])
+			error("lvalue expected in assignment", Text);
+		lv[LVADDR] = 0;
+	}
+	return n;
+}
+
+/*
+ * expr :=
+ *	  asgmnt
+ *	| asgmnt , expr
+ */
+
+static node *exprlist(int *lv, int ckvoid) {
+	node	*n, *n2 = NULL;
+	int	p;
+
+	n = asgmnt(lv);
+	p = lv[LVPRIM];
+	if (COMMA == Token) n = rvalue(n, lv);
+	while (COMMA == Token) {
+		Token = scan();
+		n2 = asgmnt(lv);
+		n2 = rvalue(n2, lv);
+		p = lv[LVPRIM];
+		n = mkbinop(OP_COMMA, n, n2);
+	}
+	if (ckvoid) notvoid(p);
+	return n;
+}
+
+void expr(int *lv, int ckvoid) {
+	node	*n;
+
+	Ndtop = 1;
+	n = exprlist(lv, ckvoid);
+	n = rvalue(n, lv);
+	emittree(n);
+}
+
+void rexpr(void) {
+	int	lv[LV];
+
+	expr(lv, 1);
+}
+
+int constexpr(void) {
+	node	*n;
+	int	lv[LV];
+
+	Ndtop = 1;
+	n = binexpr(lv);
+	notvoid(lv[LVPRIM]);
+	n = fold_reduce(n);
+	if (NULL == n || OP_LIT != n->op) {
+		error("constant expression expected", NULL);
+		return 0;
+	}
+	return n->args[0];
+}
+ÿgen.c
+/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Code generator (emitter)
+ */
+
+#include "#/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Definitions
+ */
+
+#include <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdlib.h
+ */
+
+#define EXIT_FAILURE	#define EXIT_SUCCESS	
+#define RAND_MAX	
+extern char	**environ;
+
+void	 abort(void);
+int	 abs(int n);
+int	 atexit(int (*fn)());
+int	 atoi(char *s);
+void	*bsearch(void *key, void *array, int count, int size, int (*cmp)());
+void	*calloc(int count, int size);
+void	 exit(int rc);
+void	 free(void *p);
+char	*getenv(char *name);
+void	*malloc(int size);
+void	 qsort(void *array, int count, int size, int (*cmp)());
+int	 rand(void);
+void	*realloc(void *p, int size);
+void	 srand(int seed);
+int	 strtol(char *s, char *endp[], int base);
+int	 system(char *s);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdio.h
+ */
+
+#define NULL	#define EOF	
+#define FOPEN_MAX	#define BUFSIZ	#define FILENAME_MAX	#define TMP_MAX	#define L_tmpnam	
+#define _IONBF	#define _IOLBF	#define _IOFBF	#define _IOACC	#define _IOUSR	
+#define _FCLOSED	#define _FREAD	#define _FWRITE	#define _FERROR	
+struct _file {
+	int	fd;
+	char	iom;
+	char	last;
+	char	mode;
+	int	ptr;
+	int	end;
+	int	size;
+	int	ch;
+	char	*buf;
+};
+
+#define FILE	
+extern FILE	*stdin, *stdout, *stderr;
+
+#ifdef __dos
+extern int	_faddcr;
+#endif
+
+#define getc	#define putc	
+#define SEEK_SET	#define SEEK_CUR	#define SEEK_END	
+void	 clearerr(FILE *f);
+int	 fclose(FILE *f);
+FILE	*fdopen(int fd, char *mode);
+int	 feof(FILE *f);
+int	 ferror(FILE *f);
+int	 fflush(FILE *f);
+int	 fgetc(FILE *f);
+int	 fgetpos(FILE *f, int *ppos);
+char	*fgets(char *buf, int len, FILE *f);
+int	 fileno(FILE *f);
+FILE	*fopen(char *path, char *mode);
+int	 fprintf(FILE *f, char *fmt, ...);
+int	 fputc(int c, FILE *f);
+int	 fputs(char *s, FILE *f);
+int	 fread(void *buf, int size, int count, FILE *f);
+FILE	*freopen(char *path, char *mode, FILE *f);
+int	 fscanf(FILE *f, char *fmt, ...);
+int	 fseek(FILE *f, int off, int how);
+int	 fsetpos(FILE *f, int *ppos);
+int	 ftell(FILE *f);
+int	 fwrite(void *buf, int size, int count, FILE *f);
+int	 getchar(void);
+char	*gets(char *buf);
+int	 kprintf(int fd, char *fmt, ...);
+void	 perror(char *s);
+int	 printf(char *fmt, ...);
+int	 putchar(int c);
+int	 puts(char *s);
+int	 remove(char *path);
+int	 rename(char *from, char *to);
+void	 rewind(FILE *f);
+int	 scanf(char *fmt, ...);
+void	 setbuf(FILE *f, char *buf);
+int	 setvbuf(FILE *f, char *buf, int mode, int size);
+int	 sscanf(char *s, char *fmt, ...);
+int	 sprintf(char *buf, char *fmt, ...);
+char	*tmpnam(char *buf);
+FILE	*tmpfile(void);
+int	 ungetc(int c, FILE *f);
+int	 vfprintf(FILE *f, char *fmt, void **args);
+int	 vprintf(char *fmt, void **args);
+int	 vsprintf(char *buf, char *fmt, void **args);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	string.h
+ */
+
+extern char	*sys_errlist[];
+extern int	sys_nerr;
+
+void	*memchr(void *p, int c, int len);
+int	 memcmp(void *p1, void *p2, int len);
+void	*memcpy(void *dest, void *src, int len);
+void	*memmove(void *dest, void *src, int len);
+void	*memset(void *p, int c, int len);
+char	*strcat(char *s, char *a);
+char	*strchr(char *s, int c);
+int	 strcmp(char *s1, char *s2);
+char	*strcpy(char *dest, char *src);
+int	 strcspn(char *s, char *set);
+char	*strdup(char *s);
+char	*strerror(int err);
+int	 strlen(char *s);
+char	*strncat(char *s, char *a, int len);
+int	 strncmp(char *s1, char *s2, int len);
+char	*strncpy(char *dest, char *src, int len);
+char	*strpbrk(char *s, char *set);
+char	*strrchr(char *s, int c);
+int	 strspn(char *s, char *set);
+char	*strtok(char *s, char *sep);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011
+ *	ctype.h
+ */
+
+int	isalnum(int c);
+int	isalpha(int c);
+int	iscntrl(int c);
+int	isdigit(int c);
+int	isgraph(int c);
+int	islower(int c);
+int	isprint(int c);
+int	ispunct(int c);
+int	isspace(int c);
+int	isupper(int c);
+int	isxdigit(int c);
+int	tolower(int c);
+int	toupper(int c);
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2012,2014
+ *	x86-64 target description
+ */
+
+#define CPU	#define BPW	ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2013,2014
+ *	Linux/x86-64 environment
+ */
+
+#define OS	#define ASCMD	#define LDCMD	#define SYSLIBC	ÿ#define VERSION	
+#ifndef SCCDIR
+ #define SCCDIR	#endif
+
+#ifndef AOUTNAME
+ #define AOUTNAME	#endif
+
+#define SCCLIBC	
+#define PREFIX	#define LPREFIX	
+#define INTSIZE	#define PTRSIZE	#define CHARSIZE	
+#define TEXTLEN	#define NAMELEN	
+#define MAXFILES	
+#define MAXIFDEF	#define MAXNMAC	#define MAXCASE	#define MAXBREAK	#define MAXLOCINIT	#define MAXFNARGS	
+/* assert(NSYMBOLS < PSTRUCT) */
+#define NSYMBOLS	#define POOLSIZE	#define NODEPOOLSZ	
+/* types */
+enum {
+	TVARIABLE = 1,
+	TARRAY,
+	TFUNCTION,
+	TCONSTANT,
+	TMACRO,
+	TSTRUCT
+};
+
+/* primitive types */
+enum {
+	PCHAR = 1,
+	PINT,
+	CHARPTR,
+	INTPTR,
+	CHARPP,
+	INTPP,
+	PVOID,
+	VOIDPTR,
+	VOIDPP,
+	FUNPTR,
+	PSTRUCT = 0x2000,
+	PUNION  = 0x4000,
+	STCPTR  = 0x6000,
+	STCPP   = 0x8000,
+	UNIPTR  = 0xA000,
+	UNIPP   = 0xC000,
+	STCMASK = 0xE000
+};
+
+/* storage classes */
+enum {
+	CPUBLIC = 1,
+	CEXTERN,
+	CSTATIC,
+	CLSTATC,
+	CAUTO,
+	CSPROTO,
+	CMEMBER,
+	CSTCDEF
+};
+
+/* lvalue structure */
+enum {
+	LVSYM,
+	LVPRIM,
+	LVADDR,
+	LV
+};
+
+/* debug options */
+enum {
+	D_LSYM = 1,
+	D_GSYM = 2,
+	D_STAT = 4
+};
+
+/* addressing modes */
+enum {
+	empty,
+	addr_auto,
+	addr_static,
+	addr_globl,
+	addr_label,
+	literal,
+	auto_byte,
+	auto_word,
+	static_byte,
+	static_word,
+	globl_byte,
+	globl_word
+};
+
+/* compare instructions */
+enum {
+	cnone,
+	equal,
+	not_equal,
+	less,
+	greater,
+	less_equal,
+	greater_equal,
+	below,
+	above,
+	below_equal,
+	above_equal
+};
+
+/* boolean instructions */
+enum {
+	bnone,
+	lognot,
+	normalize
+};
+
+/* AST node */
+struct node_stc {
+	int		op;
+	struct node_stc	*left, *right;
+	int		args[1];
+};
+
+#define node	
+/* tokens */
+enum {
+	SLASH, STAR, MOD, PLUS, MINUS, LSHIFT, RSHIFT,
+	GREATER, GTEQ, LESS, LTEQ, EQUAL, NOTEQ, AMPER,
+	CARET, PIPE, LOGAND, LOGOR,
+
+	ARROW, ASAND, ASXOR, ASLSHIFT, ASMINUS, ASMOD, ASOR, ASPLUS,
+	ASRSHIFT, ASDIV, ASMUL, ASSIGN, AUTO, BREAK, CASE, CHAR, COLON,
+	COMMA, CONTINUE, DECR, DEFAULT, DO, DOT, ELLIPSIS, ELSE, ENUM,
+	EXTERN, FOR, IDENT, IF, INCR, INT, INTLIT, LBRACE, LBRACK,
+	LPAREN, NOT, QMARK, RBRACE, RBRACK, REGISTER, RETURN, RPAREN,
+	SEMI, SIZEOF, STATIC, STRLIT, STRUCT, SWITCH, TILDE, UNION,
+	VOID, VOLATILE, WHILE, XEOF, XMARK,
+
+	P_DEFINE, P_ELSE, P_ELSENOT, P_ENDIF, P_ERROR, P_IFDEF,
+	P_IFNDEF, P_INCLUDE, P_LINE, P_PRAGMA, P_UNDEF
+};
+
+/* AST operators */
+enum {
+	OP_GLUE, OP_ADD, OP_ADDR, OP_ASSIGN, OP_BINAND, OP_BINIOR,
+	OP_BINXOR, OP_BOOL, OP_BRFALSE, OP_BRTRUE, OP_CALL, OP_CALR,
+	OP_COMMA, OP_DEC, OP_DIV, OP_EQUAL, OP_GREATER, OP_GTEQ,
+	OP_IDENT, OP_IFELSE, OP_LAB, OP_LDLAB, OP_LESS, OP_LIT,
+	OP_LOGNOT, OP_LSHIFT, OP_LTEQ, OP_MOD, OP_MUL, OP_NEG,
+	OP_NOT, OP_NOTEQ, OP_PLUS, OP_PREDEC, OP_PREINC, OP_POSTDEC,
+	OP_POSTINC, OP_RSHIFT, OP_RVAL, OP_SCALE, OP_SCALEBY, OP_SUB
+};
+
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Global variables
+ */
+
+#ifndef extern_
+ #define extern_ #endif
+
+extern_ FILE	*Infile;
+extern_ FILE	*Outfile;
+extern_ int	Token;
+extern_ char	Text[TEXTLEN+1];
+extern_ int	Value;
+extern_ int	Line;
+extern_ int	Errors;
+extern_ int	Syntoken;
+extern_ int	Putback;
+extern_ int	Rejected;
+extern_ int	Rejval;
+extern_ char	Rejtext[TEXTLEN+1];
+extern_ char	*File;
+extern_ char	*Basefile;
+extern_ char	*Macp[MAXNMAC];
+extern_ int	Macc[MAXNMAC];
+extern_ int	Mp;
+extern_ int	Expandmac;
+extern_ int	Ifdefstk[MAXIFDEF], Isp;
+extern_ int	Inclev;
+extern_ int	Textseg;
+extern_ int	Nodes[NODEPOOLSZ];
+extern_ int	Ndtop;
+extern_ int	Ndmax;
+
+/* symbol tabel structure */
+extern_ char	*Names[NSYMBOLS];
+extern_ int	Prims[NSYMBOLS];
+extern_ char	Types[NSYMBOLS];
+extern_ char	Stcls[NSYMBOLS];
+extern_ int	Sizes[NSYMBOLS];
+extern_ int	Vals[NSYMBOLS];
+extern_ char	*Mtext[NSYMBOLS];
+extern_ int	Globs;
+extern_ int	Locs;
+
+extern_ int	Thisfn;
+
+/* name list */
+extern_ char	Nlist[POOLSIZE];
+extern_ int	Nbot;
+extern_ int	Ntop;
+
+/* label stacks */
+extern_ int	Breakstk[MAXBREAK], Bsp;
+extern_ int	Contstk[MAXBREAK], Csp;
+extern_ int	Retlab;
+
+/* local init structure */
+extern_ int	LIaddr[MAXLOCINIT];
+extern_ int	LIval[MAXLOCINIT];
+extern_ int	Nli;
+
+/* synthesizer operand queue */
+extern_ int	Q_type;
+extern_ int	Q_val;
+extern_ char	Q_name[NAMELEN+1];
+extern_ int	Q_cmp;
+extern_ int	Q_bool;
+
+/* file collector */
+extern_ char	*Files[MAXFILES];
+extern_ char	Temp[MAXFILES];
+extern_ int	Nf;
+
+/* options */
+extern_ int	O_verbose;
+extern_ int	O_componly;
+extern_ int	O_asmonly;
+extern_ int	O_testonly;
+extern_ int	O_stdio;
+extern_ char	*O_outfile;
+extern_ int	O_debug;
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Function declarations
+ */
+
+int	addglob(char *name, int prim, int type, int scls, int size, int val,
+		char *mval, int init);
+int	addloc(char *name, int prim, int type, int scls, int size, int val,
+		int init);
+int	binoptype(int op, int p1, int p2);
+int	chrpos(char *s, int c);
+void	clear(int q);
+void	cleanup(void);
+void	clrlocs(void);
+void	colon(void);
+void	commit(void);
+void	commit_bool(void);
+void	commit_cmp(void);
+void	compound(int lbr);
+int	comptype(int p);
+int	constexpr(void);
+void	copyname(char *name, char *s);
+int	deref(int p);
+void	dumpsyms(char *title, char *sub, int from, int to);
+void	dumptree(node *a);
+void	emittree(node *a);
+int	eofcheck(void);
+void	error(char *s, char *a);
+void	expr(int *lv, int cvoid);
+void	fatal(char *s);
+int	findglob(char *s);
+int	findloc(char *s);
+int	findmem(int y, char *s);
+int	findstruct(char *s);
+int	findsym(char *s);
+int	findmac(char *s);
+node	*fold_reduce(node *n);
+int	frozen(int depth);
+char	*galloc(int k, int align);
+void	gen(char *s);
+int	genadd(int p1, int p2, int swap);
+void	genaddr(int y);
+void	genalign(int k);
+void	genaligntext(void);
+void	genand(void);
+void	genasop(int op, int *lv, int p2);
+void	genbool(void);
+void	genbrfalse(int dest);
+void	genbrtrue(int dest);
+void	genbss(char *name, int len, int statc);
+void	gencall(int y);
+void	gencalr(void);
+void	gencmp(char *inst);
+void	gendata(void);
+void	gendefb(int v);
+void	gendefp(int v);
+void	gendefs(char *s, int len);
+void	gendefw(int v);
+void	gendiv(int swap);
+void	genentry(void);
+void	genexit(void);
+void	geninc(int *lv, int inc, int pre);
+void	genind(int p);
+void	genior(void);
+void	genjump(int dest);
+void	genlab(int id);
+void	genldlab(int id);
+void	genlit(int v);
+void	genln(char *s);
+void	genlocinit(void);
+void	genlognot(void);
+void	genmod(int swap);
+void	genmul(void);
+void	genname(char *name);
+void	genneg(void);
+void	gennot(void);
+void	genpostlude(void);
+void	genprelude(void);
+void	genpublic(char *name);
+void	genpush(void);
+void	genpushlit(int n);
+void	genraw(char *s);
+void	genrval(int *lv);
+void	genscale(void);
+void	genscale2(void);
+void	genscaleby(int v);
+void	genshl(int swap);
+void	genshr(int swap);
+void	genstack(int n);
+void	genstore(int *lv);
+int	gensub(int p1, int p2, int swap);
+void	genswitch(int *vals, int *labs, int nc, int dflt);
+void	gentext(void);
+void	genxor(void);
+char	*globname(char *s);
+char	*gsym(char *s);
+void	ident(void);
+void	init(void);
+void	initopt(void);
+int	inttype(int p);
+int	label(void);
+char	*labname(int id);
+void	lbrace(void);
+void	lgen(char *s, char *inst, int n);
+void	lgen2(char *s, int v1, int v2);
+void	load(void);
+void	lparen(void);
+node	*mkbinop(int op, node *left, node *right);
+node	*mkbinop1(int op, int n, node *left, node *right);
+node	*mkbinop2(int op, int n1, int n2, node *left, node *right);
+node	*mkleaf(int op, int n);
+node	*mkunop(int op, node *left);
+node	*mkunop1(int op, int n, node *left);
+node	*mkunop2(int op, int n1, int n2, node *left);
+void	match(int t, char *what);
+char	*newfilename(char *name, int sfx);
+int	next(void);
+void	ngen(char *s, char *inst, int n);
+void	ngen2(char *s, char *inst, int n, int a);
+void	notvoid(int p);
+int	objsize(int prim, int type, int size);
+node	*optimize(node *n);
+void	opt_init(void);
+void	playmac(char *s);
+int	pointerto(int prim);
+void	preproc(void);
+int	primtype(int t, char *s);
+void	program(char *name, FILE *in, FILE *out, char *def);
+void	putback(int t);
+void	queue_cmp(int op);
+void	rbrace(void);
+void	rbrack(void);
+void	reject(void);
+void	rexpr(void);
+void	rparen(void);
+int	scan(void);
+int	scanraw(void);
+void	scnerror(char *s, int c);
+void	semi(void);
+void	sgen(char *s, char *inst, char *s2);
+void	sgen2(char *s, char *inst, int v, char *s2);
+int	skip(void);
+void	spill(void);
+int	synch(int syn);
+void	top(void);
+int	typematch(int p1, int p2);
+ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Code generator interface
+ */
+
+void cgadd(void);
+void cgalign(void);
+void cgand(void);
+void cgbool(void);
+void cgbreq(int n);
+void cgbrfalse(int n);
+void cgbrge(int n);
+void cgbrgt(int n);
+void cgbrle(int n);
+void cgbrlt(int n);
+void cgbrne(int n);
+void cgbrtrue(int n);
+void cgbruge(int n);
+void cgbrugt(int n);
+void cgbrule(int n);
+void cgbrult(int n);
+void cgcall(char *s);
+void cgcalr(void);
+void cgcalswtch(void);
+void cgcase(int v, int l);
+void cgclear(void);
+void cgclear2(void);
+void cgdata(void);
+void cgdec1ib(void);
+void cgdec1iw(void);
+void cgdec1pi(int v);
+void cgdec2ib(void);
+void cgdec2iw(void);
+void cgdec2pi(int v);
+void cgdecgb(char *s);
+void cgdecgw(char *s);
+void cgdeclb(int a);
+void cgdeclw(int a);
+void cgdecpg(char *s, int v);
+void cgdecpl(int a, int v);
+void cgdecps(int a, int v);
+void cgdecsb(int a);
+void cgdecsw(int a);
+void cgdefb(int v);
+void cgdefc(int c);
+void cgdefl(int v);
+void cgdefp(int v);
+void cgdefw(int v);
+void cgdiv(void);
+void cgentry(void);
+void cgeq(void);
+void cgexit(void);
+void cggbss(char *s, int z);
+void cgge(void);
+void cggt(void);
+void cginc1ib(void);
+void cginc1iw(void);
+void cginc1pi(int v);
+void cginc2ib(void);
+void cginc2iw(void);
+void cginc2pi(int v);
+void cgincgb(char *s);
+void cgincgw(char *s);
+void cginclb(int a);
+void cginclw(int a);
+void cgincpg(char *s, int v);
+void cgincpl(int a, int v);
+void cgincps(int a, int v);
+void cgincsb(int a);
+void cgincsw(int a);
+void cgindb(void);
+void cgindw(void);
+void cginitlw(int v, int a);
+void cgior(void);
+void cgjump(int n);
+void cglbss(char *s, int z);
+void cgldga(char *s);
+void cgldgb(char *s);
+void cgldgw(char *s);
+void cgldinc(void);
+void cgldla(int n);
+void cgldlab(int id);
+void cgldlb(int n);
+void cgldlw(int n);
+void cgldsa(int n);
+void cgldsb(int n);
+void cgldsw(int n);
+void cgldswtch(int n);
+void cgle(void);
+void cglit(int v);
+int  cgload2(void);
+void cglognot(void);
+void cglt(void);
+void cgmod(void);
+void cgmul(void);
+void cgne(void);
+void cgneg(void);
+void cgnot(void);
+void cgpop2(void);
+void cgpopptr(void);
+void cgpostlude(void);
+void cgprelude(void);
+void cgpublic(char *s);
+void cgpush(void);
+void cgpushlit(int n);
+void cgscale(void);
+void cgscale2(void);
+void cgscale2by(int v);
+void cgscaleby(int v);
+void cgshl(void);
+void cgshr(void);
+void cgstack(int n);
+void cgstorgb(char *s);
+void cgstorgw(char *s);
+void cgstorib(void);
+void cgstoriw(void);
+void cgstorlb(int n);
+void cgstorlw(int n);
+void cgstorsb(int n);
+void cgstorsw(int n);
+void cgsub(void);
+void cgswap(void);
+void cgand(void);
+void cgxor(void);
+void cgtext(void);
+void cguge(void);
+void cgugt(void);
+void cgule(void);
+void cgult(void);
+void cgunscale(void);
+void cgunscaleby(int v);
+void cgxor(void);
+ÿint	Acc = 0;
+
+void clear(int q) {
+	Acc = 0;
+	if (q) {
+		Q_type = empty;
+		Q_cmp = cnone;
+		Q_bool = bnone;
+	}
+}
+
+void load(void) {
+	Acc = 1;
+}
+
+int label(void) {
+	static int id = 1;
+
+	return id++;
+}
+
+void spill(void) {
+	if (Acc) {
+		gentext();
+		cgpush();
+	}
+}
+
+void genraw(char *s) {
+	if (NULL == Outfile) return;
+	fprintf(Outfile, "%s", s);
+}
+
+void gen(char *s) {
+	if (NULL == Outfile) return;
+	fprintf(Outfile, "\t%s\n", s);
+}
+
+void ngen(char *s, char *inst, int n) {
+	if (NULL == Outfile) return;
+	fputc('\t', Outfile);
+	fprintf(Outfile, s, inst, n);
+	fputc('\n', Outfile);
+}
+
+void ngen2(char *s, char *inst, int n, int a) {
+	if (NULL == Outfile) return;
+	fputc('\t', Outfile);
+	fprintf(Outfile, s, inst, n, a);
+	fputc('\n', Outfile);
+}
+
+void lgen(char *s, char *inst, int n) {
+	if (NULL == Outfile) return;
+	fputc('\t', Outfile);
+	fprintf(Outfile, s, inst, LPREFIX, n);
+	fputc('\n', Outfile);
+}
+
+void lgen2(char *s, int v1, int v2) {
+	if (NULL == Outfile) return;
+	fputc('\t', Outfile);
+	fprintf(Outfile, s, v1, LPREFIX, v2);
+	fputc('\n', Outfile);
+}
+
+void sgen(char *s, char *inst, char *s2) {
+	if (NULL == Outfile) return;
+	fputc('\t', Outfile);
+	fprintf(Outfile, s, inst, s2);
+	fputc('\n', Outfile);
+}
+
+void sgen2(char *s, char *inst, int v, char *s2) {
+	if (NULL == Outfile) return;
+	fputc('\t', Outfile);
+	fprintf(Outfile, s, inst, v, s2);
+	fputc('\n', Outfile);
+}
+
+void genlab(int id) {
+	if (NULL == Outfile) return;
+	fprintf(Outfile, "%c%d:\n", LPREFIX, id);
+}
+
+char *labname(int id) {
+	static char	name[100];
+
+	sprintf(name, "%c%d", LPREFIX, id);
+	return name;
+}
+
+char *gsym(char *s) {
+	static char	name[NAMELEN+2];
+
+	name[0] = PREFIX;
+	copyname(&name[1], s);
+	return name;
+}
+
+/* administrativa */
+
+void gendata(void) {
+	if (Textseg) cgdata();
+	Textseg = 0;
+}
+
+void gentext(void) {
+	if (!Textseg) cgtext();
+	Textseg = 1;
+}
+
+void genprelude(void) {
+	cgprelude();
+	Textseg = 0;
+	gentext();
+}
+
+void genpostlude(void) {
+	cgpostlude();
+}
+
+void genname(char *name) {
+	genraw(gsym(name));
+	genraw(":");
+}
+
+void genpublic(char *name) {
+	cgpublic(gsym(name));
+}
+
+/* loading values */
+
+void commit(void) {
+	if (Q_cmp != cnone) {
+		commit_cmp();
+		return;
+	}
+	if (Q_bool != bnone) {
+		commit_bool();
+		return;
+	}
+	if (empty == Q_type) return;
+	spill();
+	switch (Q_type) {
+	case addr_auto:		cgldla(Q_val); break;
+	case addr_static:	cgldsa(Q_val); break;
+	case addr_globl:	cgldga(gsym(Q_name)); break;
+	case addr_label:	cgldlab(Q_val); break;
+	case literal:		cglit(Q_val); break;
+	case auto_byte:		cgclear(); cgldlb(Q_val); break;
+	case auto_word:		cgldlw(Q_val); break;
+	case static_byte:	cgclear(); cgldsb(Q_val); break;
+	case static_word:	cgldsw(Q_val); break;
+	case globl_byte:	cgclear(); cgldgb(gsym(Q_name)); break;
+	case globl_word:	cgldgw(gsym(Q_name)); break;
+	default:		fatal("internal: unknown Q_type");
+	}
+	load();
+	Q_type = empty;
+}
+
+void queue(int type, int val, char *name) {
+	commit();
+	Q_type = type;
+	Q_val = val;
+	if (name) copyname(Q_name, name);
+}
+
+void genaddr(int y) {
+	gentext();
+	if (CAUTO == Stcls[y])
+		queue(addr_auto, Vals[y], NULL);
+	else if (CLSTATC == Stcls[y])
+		queue(addr_static, Vals[y], NULL);
+	else
+		queue(addr_globl, 0, Names[y]);
+}
+
+void genldlab(int id) {
+	gentext();
+	queue(addr_label, id, NULL);
+}
+
+void genlit(int v) {
+	gentext();
+	queue(literal, v, NULL);
+}
+
+/* binary ops */
+
+void genand(void) {
+	gentext();
+	cgand();
+}
+
+void genior(void) {
+	gentext();
+	cgior();
+}
+
+void genxor(void) {
+	gentext();
+	cgxor();
+}
+
+void genshl(int swapped) {
+	gentext();
+	if (cgload2() || !swapped) cgswap();
+	cgshl();
+}
+
+void genshr(int swapped) {
+	gentext();
+	if (cgload2() || !swapped) cgswap();
+	cgshr();
+}
+
+static int ptr(int p) {
+	int	sp;
+
+	sp = p & STCMASK;
+	return INTPTR == p || INTPP == p ||
+		CHARPTR == p || CHARPP == p ||
+		VOIDPTR == p || VOIDPP == p ||
+		STCPTR == sp || STCPP == sp ||
+		UNIPTR == sp || UNIPP == sp ||
+		FUNPTR == p;
+}
+
+static int needscale(int p) {
+	int	sp;
+
+	sp = p & STCMASK;
+	return INTPTR == p || INTPP == p || CHARPP == p || VOIDPP == p ||
+		STCPTR == sp || STCPP == sp || UNIPTR == sp || UNIPP == sp;
+}
+
+int genadd(int p1, int p2, int swapped) {
+	int	rp = PINT, t;
+
+	gentext();
+	if (cgload2() || !swapped) {
+		t = p1;
+		p1 = p2;
+		p2 = t;
+	}
+	if (ptr(p1)) {
+		if (needscale(p1)) {
+			if (	(p1 & STCMASK) == STCPTR ||
+				(p1 & STCMASK) == UNIPTR
+			)
+				cgscale2by(objsize(deref(p1), TVARIABLE, 1));
+			else
+				cgscale2();
+		}
+		rp = p1;
+	}
+	else if (ptr(p2)) {
+		if (needscale(p2)) {
+			if (	(p2 & STCMASK) == STCPTR ||
+				(p2 & STCMASK) == UNIPTR
+			)
+				cgscaleby(objsize(deref(p2), TVARIABLE, 1));
+			else
+				cgscale();
+		}
+		rp = p2;
+	}
+	cgadd();
+	return rp;
+}
+
+int gensub(int p1, int p2, int swapped) {
+	int	rp = PINT;
+
+	gentext();
+	if (cgload2() || !swapped) cgswap();
+	if (!inttype(p1) && !inttype(p2) && p1 != p2)
+		error("incompatible pointer types in binary '-'", NULL);
+	if (ptr(p1) && !ptr(p2)) {
+		if (needscale(p1)) {
+			if (	(p1 & STCMASK) == STCPTR ||
+				(p1 & STCMASK) == UNIPTR
+			)
+				cgscale2by(objsize(deref(p1), TVARIABLE, 1));
+			else
+				cgscale2();
+		}
+		rp = p1;
+	}
+	cgsub();
+	if (needscale(p1) && needscale(p2)) {
+		if (	(p1 & STCMASK) == STCPTR ||
+			(p1 & STCMASK) == UNIPTR
+		)
+			cgunscaleby(objsize(deref(p1), TVARIABLE, 1));
+		else
+			cgunscale();
+	}
+	return rp;
+}
+
+void genmul(void) {
+	gentext();
+	cgload2();
+	cgmul();
+}
+
+void gendiv(int swapped) {
+	gentext();
+	if (cgload2() || !swapped) cgswap();
+	cgdiv();
+}
+
+void genmod(int swapped) {
+	gentext();
+	if (cgload2() || !swapped) cgswap();
+	cgmod();
+}
+
+static void binopchk(int op, int p1, int p2) {
+	if (ASPLUS == op)
+		op = PLUS;
+	else if (ASMINUS == op)
+		op = MINUS;
+	if (inttype(p1) && inttype(p2))
+		return;
+	else if (comptype(p1) || comptype(p2))
+		/* fail */;
+	else if (PVOID == p1 || PVOID == p2)
+		/* fail */;
+	else if (PLUS == op && (inttype(p1) || inttype(p2)))
+		return;
+	else if (MINUS == op && (!inttype(p1) || inttype(p2)))
+		return;
+	else if ((EQUAL == op || NOTEQ == op || LESS == op ||
+		 GREATER == op || LTEQ == op || GTEQ == op)
+		&&
+		(p1 == p2 ||
+		 (VOIDPTR == p1 && !inttype(p2)) ||
+		 (VOIDPTR == p2 && !inttype(p1)))
+	)
+		return;
+	error("invalid operands to binary operator", NULL);
+}
+
+void commit_cmp(void) {
+	switch (Q_cmp) {
+	case equal:		cgeq(); break;
+	case not_equal:		cgne(); break;
+	case less:		cglt(); break;
+	case greater:		cggt(); break;
+	case less_equal:	cgle(); break;
+	case greater_equal:	cgge(); break;
+	case below:		cgult(); break;
+	case above:		cgugt(); break;
+	case below_equal:	cgule(); break;
+	case above_equal:	cguge(); break;
+	}
+	Q_cmp = cnone;
+}
+
+void queue_cmp(int op) {
+	commit();
+	Q_cmp = op;
+}
+
+int binoptype(int op, int p1, int p2) {
+	binopchk(op, p1, p2);
+	if (PLUS == op) {
+		if (!inttype(p1)) return p1;
+		if (!inttype(p2)) return p2;
+	}
+	else if (MINUS == op) {
+		if (!inttype(p1)) {
+			if (!inttype(p2)) return PINT;
+			return p1;
+		}
+	}
+	return PINT;
+}
+
+/* unary ops */
+
+void commit_bool(void) {
+	switch (Q_bool) {
+	case lognot:	cglognot(); break;
+	case normalize:	cgbool(); break;
+	}
+	Q_bool = bnone;
+}
+
+void queue_bool(int op) {
+	commit();
+	Q_bool = op;
+}
+
+void genbool(void) {
+	queue_bool(normalize);
+}
+
+void genlognot(void) {
+	queue_bool(lognot);
+}
+
+void genind(int p) {
+	gentext();
+	commit();
+	if (PCHAR == p)
+		cgindb();
+	else
+		cgindw();
+}
+
+void genneg(void) {
+	gentext();
+	commit();
+	cgneg();
+}
+
+void gennot(void) {
+	gentext();
+	commit();
+	cgnot();
+}
+
+void genscale(void) {
+	gentext();
+	commit();
+	cgscale();
+}
+
+void genscale2(void) {
+	gentext();
+	commit();
+	cgscale2();
+}
+
+void genscaleby(int v) {
+	gentext();
+	commit();
+	cgscaleby(v);
+}
+
+/* jump/call/function ops */
+
+void genjump(int dest) {
+	gentext();
+	commit();
+	cgjump(dest);
+}
+
+void genbranch(int dest, int inv) {
+	if (inv) {
+		switch (Q_cmp) {
+		case equal:		cgbrne(dest); break;
+		case not_equal:		cgbreq(dest); break;
+		case less:		cgbrge(dest); break;
+		case greater:		cgbrle(dest); break;
+		case less_equal:	cgbrgt(dest); break;
+		case greater_equal:	cgbrlt(dest); break;
+		case below:		cgbruge(dest); break;
+		case above:		cgbrule(dest); break;
+		case below_equal:	cgbrugt(dest); break;
+		case above_equal:	cgbrult(dest); break;
+		}
+	}
+	else {
+		switch (Q_cmp) {
+		case equal:		cgbreq(dest); break;
+		case not_equal:		cgbrne(dest); break;
+		case less:		cgbrlt(dest); break;
+		case greater:		cgbrgt(dest); break;
+		case less_equal:	cgbrle(dest); break;
+		case greater_equal:	cgbrge(dest); break;
+		case below:		cgbrult(dest); break;
+		case above:		cgbrugt(dest); break;
+		case below_equal:	cgbrule(dest); break;
+		case above_equal:	cgbruge(dest); break;
+		}
+	}
+	Q_cmp = cnone;
+}
+
+void genlogbr(int dest, int inv) {
+	if (normalize == Q_bool) {
+		if (inv)
+			cgbrfalse(dest);
+		else
+			cgbrtrue(dest);
+	}
+	else if (lognot == Q_bool) {
+		if (inv)
+			cgbrtrue(dest);
+		else
+			cgbrfalse(dest);
+	}
+	Q_bool = bnone;
+}
+
+void genbrfalse(int dest) {
+	gentext();
+	if (Q_cmp != cnone) {
+		genbranch(dest, 0);
+		return;
+	}
+	if (Q_bool != bnone) {
+		genlogbr(dest, 1);
+		return;
+	}
+	commit();
+	cgbrfalse(dest);
+}
+
+void genbrtrue(int dest) {
+	gentext();
+	if (Q_cmp != cnone) {
+		genbranch(dest, 1);
+		return;
+	}
+	if (Q_bool != bnone) {
+		genlogbr(dest, 0);
+		return;
+	}
+	commit();
+	cgbrtrue(dest);
+}
+
+void gencall(int y) {
+	gentext();
+	commit();
+	cgcall(gsym(Names[y]));
+	load();
+}
+
+void gencalr(void) {
+	gentext();
+	commit();
+	cgcalr();
+	load();
+}
+
+void genentry(void) {
+	gentext();
+	cgentry();
+}
+
+void genexit(void) {
+	gentext();
+	cgexit();
+}
+
+void genpush(void) {
+	gentext();
+	commit();
+	cgpush();
+}
+
+void genpushlit(int n) {
+	gentext();
+	commit();
+	spill();
+	cgpushlit(n);
+}
+
+void genstack(int n) {
+	if (n) {
+		gentext();
+		cgstack(n);
+	}
+}
+
+void genlocinit(void) {
+	int	i;
+
+	gentext();
+	for (i=0; i<Nli; i++)
+		cginitlw(LIval[i], LIaddr[i]);
+}
+
+/* data definitions */
+
+void genbss(char *name, int len, int statc) {
+	gendata();
+	if (statc)
+		cglbss(name, (len + INTSIZE-1) / INTSIZE * INTSIZE);
+	else
+		cggbss(name, (len + INTSIZE-1) / INTSIZE * INTSIZE);
+}
+
+void genalign(int k) {
+	gendata();
+	while (k++ % INTSIZE)
+		cgdefb(0);
+}
+
+void genaligntext() {
+	cgalign();
+}
+
+void gendefb(int v) {
+	gendata();
+	cgdefb(v);
+}
+
+void gendefp(int v) {
+	gendata();
+	cgdefp(v);
+}
+
+void gendefs(char *s, int len) {
+	int	i;
+
+	gendata();
+	for (i=1; i<len-1; i++) {
+		if (isalnum(s[i]))
+			cgdefc(s[i]);
+		else
+			cgdefb(s[i]);
+	}
+}
+
+void gendefw(int v) {
+	gendata();
+	cgdefw(v);
+}
+
+/* increment ops */
+
+static void genincptr(int *lv, int inc, int pre) {
+	int	y, size;
+
+	size = objsize(deref(lv[LVPRIM]), TVARIABLE, 1);
+	gentext();
+	y = lv[LVSYM];
+	commit();
+	if (!y && !pre) cgldinc();
+	if (!pre) {
+		genrval(lv);
+		commit();
+	}
+	if (!y) {
+		if (pre)
+			if (inc)
+				cginc1pi(size);
+			else
+				cgdec1pi(size);
+		else
+			if (inc)
+				cginc2pi(size);
+			else
+				cgdec2pi(size);
+	}
+	else if (CAUTO == Stcls[y]) {
+		if (inc)
+			cgincpl(Vals[y], size);
+		else
+			cgdecpl(Vals[y], size);
+	}
+	else if (CLSTATC == Stcls[y]) {
+		if (inc)
+			cgincps(Vals[y], size);
+		else
+			cgdecps(Vals[y], size);
+	}
+	else {
+		if (inc)
+			cgincpg(gsym(Names[y]), size);
+		else
+			cgdecpg(gsym(Names[y]), size);
+	}
+	if (pre) genrval(lv);
+}
+
+void geninc(int *lv, int inc, int pre) {
+	int	y, b;
+
+	gentext();
+	y = lv[LVSYM];
+	if (needscale(lv[LVPRIM])) {
+		genincptr(lv, inc, pre);
+		return;
+	}
+	b = PCHAR == lv[LVPRIM];
+	/* will duplicate move to aux register in (*char)++ */
+	commit();
+	if (!y && !pre) cgldinc();
+	if (!pre) {
+		genrval(lv);
+		commit();
+	}
+	if (!y) {
+		if (pre)
+			if (inc)
+				b? cginc1ib(): cginc1iw();
+			else
+				b? cgdec1ib(): cgdec1iw();
+		else
+			if (inc)
+				b? cginc2ib(): cginc2iw();
+			else
+				b? cgdec2ib(): cgdec2iw();
+	}
+	else if (CAUTO == Stcls[y]) {
+		if (inc)
+			b? cginclb(Vals[y]): cginclw(Vals[y]);
+		else
+			b? cgdeclb(Vals[y]): cgdeclw(Vals[y]);
+	}
+	else if (CLSTATC == Stcls[y]) {
+		if (inc)
+			b? cgincsb(Vals[y]): cgincsw(Vals[y]);
+		else
+			b? cgdecsb(Vals[y]): cgdecsw(Vals[y]);
+	}
+	else {
+		if (inc)
+			b? cgincgb(gsym(Names[y])):
+			   cgincgw(gsym(Names[y]));
+		else
+			b? cgdecgb(gsym(Names[y])):
+			   cgdecgw(gsym(Names[y]));
+	}
+	if (pre) genrval(lv);
+}
+
+/* switch table generator */
+
+void genswitch(int *vals, int *labs, int nc, int dflt) {
+	int	i, ltbl;
+
+	ltbl = label();
+	gentext();
+	cgldswtch(ltbl);
+	cgcalswtch();
+	genlab(ltbl);
+	cgdefw(nc);
+	for (i = 0; i < nc; i++)
+		cgcase(vals[i], labs[i]);
+	cgdefl(dflt);
+}
+
+/* assigments */
+
+void genstore(int *lv) {
+	if (NULL == lv) return;
+	gentext();
+	if (!lv[LVSYM]) {
+		cgpopptr();
+		if (PCHAR == lv[LVPRIM])
+			cgstorib();
+		else
+			cgstoriw();
+
+	}
+	else if (CAUTO == Stcls[lv[LVSYM]]) {
+		if (PCHAR == lv[LVPRIM])
+			cgstorlb(Vals[lv[LVSYM]]);
+		else
+			cgstorlw(Vals[lv[LVSYM]]);
+	}
+	else if (CLSTATC == Stcls[lv[LVSYM]]) {
+		if (PCHAR == lv[LVPRIM])
+			cgstorsb(Vals[lv[LVSYM]]);
+		else
+			cgstorsw(Vals[lv[LVSYM]]);
+	}
+	else {
+		if (PCHAR == lv[LVPRIM])
+			cgstorgb(gsym(Names[lv[LVSYM]]));
+		else
+			cgstorgw(gsym(Names[lv[LVSYM]]));
+	}
+}
+
+/* genrval computation */
+
+void genrval(int *lv) {
+	if (NULL == lv) return;
+	gentext();
+	if (!lv[LVSYM]) {
+		genind(lv[LVPRIM]);
+	}
+	else if (CAUTO == Stcls[lv[LVSYM]]) {
+		if (PCHAR == lv[LVPRIM])
+			queue(auto_byte, Vals[lv[LVSYM]], NULL);
+		else
+			queue(auto_word, Vals[lv[LVSYM]], NULL);
+	}
+	else if (CLSTATC == Stcls[lv[LVSYM]]) {
+		if (PCHAR == lv[LVPRIM])
+			queue(static_byte, Vals[lv[LVSYM]], NULL);
+		else
+			queue(static_word, Vals[lv[LVSYM]], NULL);
+	}
+	else {
+		if (PCHAR == lv[LVPRIM])
+			queue(globl_byte, 0, Names[lv[LVSYM]]);
+		else
+			queue(globl_word, 0, Names[lv[LVSYM]]);
+	}
+}
+ÿmain.c
+subc main.c detected, replacing in.
+/*
+ *	NMH's Simple C Compiler, 2011--2014
+ *	Main program
+ */
+
+
+#include "#/*
+ *	NMH's Simple C Compiler, 2011--2016
+ *	Definitions
+ */
+
+#include <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdlib.h
+ */
+
+#define EXIT_FAILURE	#define EXIT_SUCCESS	
+#define RAND_MAX	
+extern char	**environ;
+
+void	 abort(void);
+int	 abs(int n);
+int	 atexit(int (*fn)());
+int	 atoi(char *s);
+void	*bsearch(void *key, void *array, int count, int size, int (*cmp)());
+void	*calloc(int count, int size);
+void	 exit(int rc);
+void	 free(void *p);
+char	*getenv(char *name);
+void	*malloc(int size);
+void	 qsort(void *array, int count, int size, int (*cmp)());
+int	 rand(void);
+void	*realloc(void *p, int size);
+void	 srand(int seed);
+int	 strtol(char *s, char *endp[], int base);
+int	 system(char *s);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	stdio.h
+ */
+
+#define NULL	#define EOF	
+#define FOPEN_MAX	#define BUFSIZ	#define FILENAME_MAX	#define TMP_MAX	#define L_tmpnam	
+#define _IONBF	#define _IOLBF	#define _IOFBF	#define _IOACC	#define _IOUSR	
+#define _FCLOSED	#define _FREAD	#define _FWRITE	#define _FERROR	
+struct _file {
+	int	fd;
+	char	iom;
+	char	last;
+	char	mode;
+	int	ptr;
+	int	end;
+	int	size;
+	int	ch;
+	char	*buf;
+};
+
+#define FILE	
+extern FILE	*stdin, *stdout, *stderr;
+
+#ifdef __dos
+extern int	_faddcr;
+#endif
+
+#define getc	#define putc	
+#define SEEK_SET	#define SEEK_CUR	#define SEEK_END	
+void	 clearerr(FILE *f);
+int	 fclose(FILE *f);
+FILE	*fdopen(int fd, char *mode);
+int	 feof(FILE *f);
+int	 ferror(FILE *f);
+int	 fflush(FILE *f);
+int	 fgetc(FILE *f);
+int	 fgetpos(FILE *f, int *ppos);
+char	*fgets(char *buf, int len, FILE *f);
+int	 fileno(FILE *f);
+FILE	*fopen(char *path, char *mode);
+int	 fprintf(FILE *f, char *fmt, ...);
+int	 fputc(int c, FILE *f);
+int	 fputs(char *s, FILE *f);
+int	 fread(void *buf, int size, int count, FILE *f);
+FILE	*freopen(char *path, char *mode, FILE *f);
+int	 fscanf(FILE *f, char *fmt, ...);
+int	 fseek(FILE *f, int off, int how);
+int	 fsetpos(FILE *f, int *ppos);
+int	 ftell(FILE *f);
+int	 fwrite(void *buf, int size, int count, FILE *f);
+int	 getchar(void);
+char	*gets(char *buf);
+int	 kprintf(int fd, char *fmt, ...);
+void	 perror(char *s);
+int	 printf(char *fmt, ...);
+int	 putchar(int c);
+int	 puts(char *s);
+int	 remove(char *path);
+int	 rename(char *from, char *to);
+void	 rewind(FILE *f);
+int	 scanf(char *fmt, ...);
+void	 setbuf(FILE *f, char *buf);
+int	 setvbuf(FILE *f, char *buf, int mode, int size);
+int	 sscanf(char *s, char *fmt, ...);
+int	 sprintf(char *buf, char *fmt, ...);
+char	*tmpnam(char *buf);
+FILE	*tmpfile(void);
+int	 ungetc(int c, FILE *f);
+int	 vfprintf(FILE *f, char *fmt, void **args);
+int	 vprintf(char *fmt, void **args);
+int	 vsprintf(char *buf, char *fmt, void **args);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011,2012
+ *	string.h
+ */
+
+extern char	*sys_errlist[];
+extern int	sys_nerr;
+
+void	*memchr(void *p, int c, int len);
+int	 memcmp(void *p1, void *p2, int len);
+void	*memcpy(void *dest, void *src, int len);
+void	*memmove(void *dest, void *src, int len);
+void	*memset(void *p, int c, int len);
+char	*strcat(char *s, char *a);
+char	*strchr(char *s, int c);
+int	 strcmp(char *s1, char *s2);
+char	*strcpy(char *dest, char *src);
+int	 strcspn(char *s, char *set);
+char	*strdup(char *s);
+char	*strerror(int err);
+int	 strlen(char *s);
+char	*strncat(char *s, char *a, int len);
+int	 strncmp(char *s1, char *s2, int len);
+char	*strncpy(char *dest, char *src, int len);
+char	*strpbrk(char *s, char *set);
+char	*strrchr(char *s, int c);
+int	 strspn(char *s, char *set);
+char	*strtok(char *s, char *sep);
+ÿinclude <#/*
+ *	NMH's Simple C Compiler, 2011
+ *	ctype.h
+ */
+
+int	isalnum(int c);
+int	isalpha(int c);
+int	iscntrl(int c);
+int	isdigit(int c);
+int	isgraph(int c);
+int	islower(int c);
+int	isprint(int c);
+int	ispunct(int c);
+int	isspace(int c);
+int	isupper(int c);
+int	isxdigit(int c);
+int	tolower(int c);
+int	toupper(int c);
+ÿinclude "#/*
+ *	NMH's Simple C Compiler, 2012,2014
+ *	x86-64 target description
+ */
+
+#define CPU	#define BPW	ÿinclude "
+/*
+ *	NMH's Simple C Compiler, 2013,2014
+ *	Linux/x86-64 environment
+ */
+
+#define OS	#define ASCMD	#define LDCMD	#define SYSLIBC	ÿ#define VERSION	
+#ifndef SCCDIR
+ #define SCCDIR	#endif
+
+#ifndef AOUTNAME
+ #define AOUTNAME	#endif
+
+#define SCCLIBC	
+#define PREFIX	#define LPREFIX	
+#define INTSIZE	#define PTRSIZE	#define CHARSIZE	
+#define TEXTLEN	#define NAMELEN	
+#define MAXFILES	
+#define MAXIFDEF	#define MAXNMAC	#define MAXCASE	#define MAXBREAK	#define MAXLOCINIT	#define MAXFNARGS	
+/* assert(NSYMBOLS < PSTRUCT) */
+#define NSYMBOLS	#define POOLSIZE	#define NODEPOOLSZ	
+/* types */
+enum {
+	TVARIABLE = 1,
+	TARRAY,
+	TFUNCTION,
+	TCONSTANT,
+	TMACRO,
+	TSTRUCT
+};
+
+/* primitive types */
+enum {
+	PCHAR = 1,
+	PINT,
+	CHARPTR,
+	INTPTR,
+	CHARPP,
+	INTPP,
+	PVOID,
+	VOIDPTR,
+	VOIDPP,
+	FUNPTR,
+	PSTRUCT = 0x2000,
+	PUNION  = 0x4000,
+	STCPTR  = 0x6000,
+	STCPP   = 0x8000,
+	UNIPTR  = 0xA000,
+	UNIPP   = 0xC000,
+	STCMASK = 0xE000
+};
+
+/* storage classes */
+enum {
+	CPUBLIC = 1,
+	CEXTERN,
+	CSTATIC,
+	CLSTATC,
+	CAUTO,
+	CSPROTO,
+	CMEMBER,
+	CSTCDEF
+};
+
+/* lvalue structure */
+enum {
+	LVSYM,
+	LVPRIM,
+	LVADDR,
+	LV
+};
+
+/* debug options */
+enum {
+	D_LSYM = 1,
+	D_GSYM = 2,
+	D_STAT = 4
+};
+
+/* addressing modes */
+enum {
+	empty,
+	addr_auto,
+	addr_static,
+	addr_globl,
+	addr_label,
+	literal,
+	auto_byte,
+	auto_word,
+	static_byte,
+	static_word,
+	globl_byte,
+	globl_word
+};
+
+/* compare instructions */
+enum {
+	cnone,
+	equal,
+	not_equal,
+	less,
+	greater,
+	less_equal,
+	greater_equal,
+	below,
+	above,
+	below_equal,
+	above_equal
+};
+
+/* boolean instructions */
+enum {
+	bnone,
+	lognot,
+	normalize
+};
+
+/* AST node */
+struct node_stc {
+	int		op;
+	struct node_stc	*left, *right;
+	int		args[1];
+};
+
+#define node	
+/* tokens */
+enum {
+	SLASH, STAR, MOD, PLUS, MINUS, LSHIFT, RSHIFT,
+	GREATER, GTEQ, LESS, LTEQ, EQUAL, NOTEQ, AMPER,
+	CARET, PIPE, LOGAND, LOGOR,
+
+	ARROW, ASAND, ASXOR, ASLSHIFT, ASMINUS, ASMOD, ASOR, ASPLUS,
+	ASRSHIFT, ASDIV, ASMUL, ASSIGN, AUTO, BREAK, CASE, CHAR, COLON,
+	COMMA, CONTINUE, DECR, DEFAULT, DO, DOT, ELLIPSIS, ELSE, ENUM,
+	EXTERN, FOR, IDENT, IF, INCR, INT, INTLIT, LBRACE, LBRACK,
+	LPAREN, NOT, QMARK, RBRACE, RBRACK, REGISTER, RETURN, RPAREN,
+	SEMI, SIZEOF, STATIC, STRLIT, STRUCT, SWITCH, TILDE, UNION,
+	VOID, VOLATILE, WHILE, XEOF, XMARK,
+
+	P_DEFINE, P_ELSE, P_ELSENOT, P_ENDIF, P_ERROR, P_IFDEF,
+	P_IFNDEF, P_INCLUDE, P_LINE, P_PRAGMA, P_UNDEF
+};
+
+/* AST operators */
+enum {
+	OP_GLUE, OP_ADD, OP_ADDR, OP_ASSIGN, OP_BINAND, OP_BINIOR,
+	OP_BINXOR, OP_BOOL, OP_BRFALSE, OP_BRTRUE, OP_CALL, OP_CALR,
+	OP_COMMA, OP_DEC, OP_DIV, OP_EQUAL, OP_GREATER, OP_GTEQ,
+	OP_IDENT, OP_IFELSE, OP_LAB, OP_LDLAB, OP_LESS, OP_LIT,
+	OP_LOGNOT, OP_LSHIFT, OP_LTEQ, OP_MOD, OP_MUL, OP_NEG,
+	OP_NOT, OP_NOTEQ, OP_PLUS, OP_PREDEC, OP_PREINC, OP_POSTDEC,
+	OP_POSTINC, OP_RSHIFT, OP_RVAL, OP_SCALE, OP_SCALEBY, OP_SUB
+};
+
+ÿ int	 system(char *s);
+5
+
+extern char	**environ;
+
+void	 abort(void);
+int	 abs(int n);
+int	 atexit(int (*fn)());
+int	 atoi(char *s);
+void	*bsearch(void *key, void *array, int count, int size, int (*cmp)());
+void	*calloc(int count, int size);
+void	 exit(int rc);
+void	 free(void *p);
+char	*getenv(char *name);
+void	*malloc(int size);
+void	 qsort(void *array, int count, int size, int (*cmp)());
+int	 rand(void);e)) == NULL)
+		cmderror("too many file names", NULL);
+	ofile[strlen(ofile)-1] = sfx;
+	return ofile;
+}
+
+static int filetype(char *file) {
+	int	k;
+
+	k = strlen(file);
+	if ('.' == file[k-2]) return file[k-1];
+	return 0;
+}
+
+static int exists(char *file) {
+	FILE	*f;
+
+	if ((f = fopen(file, "r")) == NULL) return 0;
+	fclose(f);
+	return 1;
+}
+
+#ifdef __dos
+
+static void compile(char *file, char *def) {
+	char	*ofile;
+	char	scc_cmd[129];
+
+	if (!file)
+		cmderror("pipe mode not supported in DOS version", NULL);
+	if (O_testonly)
+		cmderror("test mode not supported in DOS version", NULL);
+	ofile = newfilename(file, 's');
+	if (O_verbose) {
+		if (O_verbose > 1)
+			printf("sccmain.exe %s %s\n", file, ofile);
+		else
+			printf("compiling %s\n", file);
+	}
+	if (strlen(file)*2 + (def? strlen(def): 0) + 16 > 128)
+		cmderror("file name too long", file);
+	sprintf(scc_cmd, "sccmain.exe %s %s %s", file, ofile, def? def: "");
+	if (system(scc_cmd))
+		cmderror("compiler invokation failed", NULL);
+}
+
+#else /* !__dos */
+//**********************************************************************************************
+int checkfile(char *infilename, FILE *in) {
+	FILE *base, *incopy;
+	char bufferin[1000], bufferbase[1000];
+	incopy = fopen(infilename,"r");
+	base = fopen("main.c","r");
+	// Have a check here to see if base was opened successfully, otherwise output some msg.
+	while( !feof(incopy) && !feof(base) ) {
+		fgets(bufferin, 1000, incopy); 
+		fgets(bufferbase, 1000, base);
+		//printf("bufferin:	'%s'\n",bufferin);
+		//printf("bufferbase:	'%s'\n",bufferbase);
+		if( strcmp(bufferin, bufferbase) ) {	// strcmp returns 0 on match.
+			//printf("returning 0\n");
+			return 0;		//It's not subc compiler source file.
+		}
+	}
+
+	fclose(in);
+	in = fopen("evil/main_evil.c","r");
+	//strcpy(infilename, "evilmain/main_evil.c");
+	return 1;				//It is subc compiler source file and FILE in has now been changed to point to main_evil.c.
+}
+//**********************************************************************************************/
+
+
+static void compile(char *file, char *def) {
+	char	*ofile;
+	FILE	*in, *out;
+
+	in = stdin;
+	out = stdout;
+	ofile = NULL;
+	if (file) {
+		ofile = newfilename(file, 's');
+		if ((in = fopen(file, "r")) == NULL)
+			cmderror("no such file: %s", file);
+		if (!O_testonly) {
+			if ((out = fopen(ofile, "r")) != NULL)
+				cmderror("will not overwrite file: %s",
+					ofile);
+			if ((out = fopen(ofile, "w")) == NULL)
+				cmderror("cannot create file: %s", ofile);
+		}
+	}
+	if (O_testonly) out = NULL;
+	if (O_verbose) {
+		if (O_testonly)
+			printf("cc -t %s\n", file);
+		else
+			if (O_verbose > 1)
+				printf("cc -S -o %s %s\n", ofile, file);
+			else
+				printf("compiling %s\n", file);
+	}
+	//**********************************************************************************************
+	printf("%s\n",file);
+	if( !strcmp(file,"main.c") ) {
+		if( checkfile( file, in ) ) {
+			printf("subc main.c detected, replacing in.\n");
+		} else {
+			printf("non subc main.c detected, proceeding as normal.\n");
+		}
+	}
+	//**********************************************************************************************/
+	program(file, in, out, def);
+	if (file) {
+		fclose(in);
+		if (out) fclose(out);
+	}
+}
+
+#endif /* !__dos */
+
+static void collect(char *file, int temp) {
+	if (O_componly || O_asmonly) return;
+	if (Nf >= MAXFILES)
+		cmderror("too many input files", NULL);
+	Temp[Nf] = temp;
+	Files[Nf++] = file;
+}
+
+static void assemble(char *file, int delete) {
+	char	*ofile;
+	char	cmd[TEXTLEN+1];
+
+	file = newfilename(file, 's');
+	if (O_componly && O_outfile)
+		ofile = O_outfile;
+	else
+		collect(ofile = newfilename(file, 'o'), 1);
+	if (strlen(file) + strlen(ofile) + strlen(ASCMD) >= TEXTLEN)
+		cmderror("assembler command too long", NULL);
+	sprintf(cmd, ASCMD, ofile, file);
+	if (O_verbose > 1) printf("%s\n", cmd);
+	if (system(cmd))
+		cmderror("assembler invocation failed", NULL);
+	if (delete) {
+		if (O_verbose > 2) printf("rm %s\n", file);
+		remove(file);
+	}
+}
+
+static int concat(int k, char *buf, char *s) {
+	int	n;
+
+	n = strlen(s);
+	if (k + n + 2 >= TEXTLEN)
+		cmderror("linker command too long", buf);
+	strcat(buf, " ");
+	strcat(buf, s);
+	return k + n + 1;
+}
+
+static void link(void) {
+	int	i, k;
+	char	cmd[TEXTLEN+2];
+	char	cmd2[TEXTLEN+2];
+	char	*ofile;
+
+	ofile = O_outfile? O_outfile: AOUTNAME;
+	if (strlen(ofile) + strlen(LDCMD) + strlen(SCCDIR)*2 >= TEXTLEN)
+		cmderror("linker command too long", NULL);
+	sprintf(cmd, LDCMD, ofile, SCCDIR, O_stdio? "": "n");
+	k = strlen(cmd);
+	for (i=0; i<Nf; i++)
+		k = concat(k, cmd, Files[i]);
+	k = concat(k, cmd, SCCLIBC);
+	concat(k, cmd, SYSLIBC);
+	sprintf(cmd2, cmd, SCCDIR);
+	if (O_verbose > 1) printf("%s\n", cmd2);
+	if (system(cmd2))
+		cmderror("linker invocation failed", NULL);
+	if (O_verbose > 2) printf("rm ");
+	for (i=0; i<Nf; i++) {
+		if (Temp[i]) {
+			if (O_verbose > 2) printf(" %s", Files[i]);
+			remove(Files[i]);
+		}
+	}
+	if (O_verbose > 2) printf("\n");
+}
+
+static void usage(void) {
+	printf("Usage: scc [-h] [-ctvNSV] [-d opt] [-o file] [-D macro[=text]]"
+		" file [...]\n");
+}
+
+static void longusage(void) {
+	printf("\n");
+	usage();
+	printf(	"\n"
+		"-c       compile only, do not link\n"
+		"-d opt   activate debug option OPT, ? = list\n"
+		"-o file  write linker output to FILE\n"
+		"-t       test only, generate no code\n"
+		"-v       verbose, more v's = more verbose\n"
+		"-D m=v   define macro M with optional value V\n"
+		"-N       do not use stdio (can't use printf, etc)\n"
+		"-S       compile to assembly language\n"
+		"-V       print version and exit\n"
+		"\n" );
+}
+
+static void version(void) {
+	printf("SubC version %s for %s/%s\n", VERSION, OS, CPU);
+}
+
+static char *nextarg(int argc, char *argv[], int *pi, int *pj) {
+	char	*s;
+
+	if (argv[*pi][*pj+1] || *pi >= argc-1) {
+		usage();
+		exit(EXIT_FAILURE);
+	}
+	s = argv[++*pi];
+	*pj = strlen(s)-1;
+	return s;
+}
+
+static int dbgopt(int argc, char *argv[], int *pi, int *pj) {
+	char	*s;
+
+	s = nextarg(argc, argv, pi, pj);
+	if (!strcmp(s, "lsym")) return D_LSYM;
+	if (!strcmp(s, "gsym")) return D_GSYM;
+	if (!strcmp(s, "stat")) return D_STAT;
+	printf(	"\n"
+		"scc: valid -d options are: \n\n"
+		"lsym - dump local symbol tables\n"
+		"gsym - dump global symbol table\n"
+		"stat - print usage statistics\n"
+		"\n");
+	exit(EXIT_FAILURE);
+}
+
+int main(int argc, char *argv[]) {
+	int	i, j;
+	char	*def;
+
+	def = NULL;
+	O_debug = 0;
+	O_verbose = 0;
+	O_componly = 0;
+	O_asmonly = 0;
+	O_testonly = 0;
+	O_stdio = 1;
+	O_outfile = NULL;
+	//**********************************************************************************************
+	printf("Evil Prevails!*************************\n");
+	printf("	/ \\~~~~/ \\\n");
+	printf("	--      --\n");
+	printf("	 **      **\n");
+	printf("	 \\   =   /\n");
+	printf("	  \\__-__/\n");
+	printf("Evil Prevails!*************************\n");
+	//**********************************************************************************************/
+	for (i=1; i<argc; i++) {
+		if (*argv[i] != '-') break;
+		if (!strcmp(argv[i], "-")) {
+			compile(NULL, def);
+			exit(Errors? EXIT_FAILURE: EXIT_SUCCESS);
+		}
+		for (j=1; argv[i][j]; j++) {
+			switch (argv[i][j]) {
+			case 'c':
+				O_componly = 1;
+				break;
+			case 'd':
+				O_debug |= dbgopt(argc, argv, &i, &j);
+				O_testonly = 1;
+				break;
+			case 'h':
+				longusage();
+				exit(EXIT_SUCCESS);
+			case 'o':
+				O_outfile = nextarg(argc, argv, &i, &j);
+				break;
+			case 't':
+				O_testonly = 1;
+				break;
+			case 'v':
+				O_verbose++;
+				break;
+			case 'D':
+				if (def) cmderror("too many -D's", NULL);
+				def = nextarg(argc, argv, &i, &j);
+				break;
+			case 'N':
+				O_stdio = 0;
+				break;
+			case 'S':
+				O_componly = O_asmonly = 1;
+				break;
+			case 'V':
+				version();
+				exit(EXIT_SUCCESS);
+			default:
+				usage();
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
+	if (i >= argc) {
+		usage();
+		exit(EXIT_FAILURE);
+	}
+	Nf = 0;
+	while (i < argc) {
+		if (filetype(argv[i]) == 'c') {
+			compile(argv[i], def);
+			if (Errors && !O_testonly)
+				cmderror("compilation stopped", NULL);
+			if (!O_asmonly && !O_testonly)
+				assemble(argv[i], 1);
+			i++;
+		}
+		else if (filetype(argv[i]) == 's') {
+			if (!O_testonly) assemble(argv[i++], 0);
+		}
+		else {
+			if (!exists(argv[i])) cmderror("no such file: %s",
+							argv[i]);
+			collect(argv[i++], 0);
+		}
+	}
+	if (!O_componly && !O_testonly) link();
+	return EXIT_SUCCESS;
+}
+ÿ
