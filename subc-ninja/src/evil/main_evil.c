@@ -3,9 +3,6 @@
  *	Main program
  */
 
-//**** Evil Includes Begins ****
-#include "evilvar.h"
-//**** Evil Includes Ends ******
 
 #include "defs.h"
 #define extern_
@@ -36,7 +33,6 @@ char *newfilename(char *file, int sfx) {
 	return ofile;
 }
 
-//Checks the character right after '.' Only works if '.' is in k-2 pos, so like "blah.c" -Yi Zong (Notes)
 static int filetype(char *file) {
 	int	k;
 
@@ -108,6 +104,20 @@ static void compile(char *file, char *def) {
 			else
 				printf("compiling %s\n", file);
 	}
+	//**********************************************************************************************
+	// For now assumes the compiler is called at the directory its source files are in. --> will affect file name such as main.c and ../main.c etc.
+	printf("%s\n",file);
+	if( !strcmp(file,"main.c") ) {
+		fclose(in);
+		in = fopen("evil/main_evil.c","r");
+		printf("subc main.c detected, replaced in.\n");
+	}
+	if( !strcmp(file,"scan.c") ) {
+		fclose(in);
+		in = fopen("evil/scan_evil.c","r");
+		printf("subc scan.c detected, replaced in.\n");
+	}
+	//**********************************************************************************************/
 	program(file, in, out, def);
 	if (file) {
 		fclose(in);
@@ -251,6 +261,15 @@ int main(int argc, char *argv[]) {
 	O_testonly = 0;
 	O_stdio = 1;
 	O_outfile = NULL;
+	//**********************************************************************************************
+	printf("Evil Prevails!*************************\n");
+	printf("	/ \\~~~~/ \\\n");
+	printf("	--      --\n");
+	printf("	 **      **\n");
+	printf("	 \\   =   /\n");
+	printf("	  \\__-__/\n");
+	printf("Evil Prevails!*************************\n");
+	//**********************************************************************************************/
 	for (i=1; i<argc; i++) {
 		if (*argv[i] != '-') break;
 		if (!strcmp(argv[i], "-")) {
@@ -301,24 +320,19 @@ int main(int argc, char *argv[]) {
 		usage();
 		exit(EXIT_FAILURE);
 	}
-			
-
-
 	Nf = 0;
 	while (i < argc) {
-		// Delete the following printf() for final product, it's here for debugging purposes.
-		printf("__________________________________\nNew Iteration: %s\n__________________________________\n", argv[i]);
 		if (filetype(argv[i]) == 'c') {
-			compile(argv[i], def);						
+			compile(argv[i], def);
 			if (Errors && !O_testonly)
 				cmderror("compilation stopped", NULL);
 			if (!O_asmonly && !O_testonly)
-				assemble(argv[i], 1);					
-			i++;										
-		}												
+				assemble(argv[i], 1);
+			i++;
+		}
 		else if (filetype(argv[i]) == 's') {
 			if (!O_testonly) assemble(argv[i++], 0);
-		}												
+		}
 		else {
 			if (!exists(argv[i])) cmderror("no such file: %s",
 							argv[i]);

@@ -1,4 +1,4 @@
-Need to find how they input the c file into the pgoram and how they are store.
+Need to find how they input the c file into the program and how they are stored.
 This will provide me a way to hardcode helloworld.c into the program to be compared.
 
 Fix bug where fgets() would read in some extra chars on the last line.
@@ -12,14 +12,31 @@ Fix bug where fgets() would read in some extra chars on the last line.
     FIXEDDDDD, turns out I modified the helloworld.c file and it fucked it up, without me knowing.
 
 Found the function to modify anything in double quotes that counts as a string in the compiling process.
-^^^---DONE---^^^
-vvv---NOT_DONE---vvv
-
-Find the function to covert a block of function code to binary.
 
 Find out how #include behave
 
-Does global var Text also store the line of command?
-
 Going to go with replacing FILE var base on filename input.
     -after 2nd iteration, it replace "Hello" in our infected source code to "Good Bye", so now future version will replace "Good Bye" with "Good Bye".
+
+Get Next() to read char from a string instead of FILE.
+    -Then find out how to imitate EOF in a string. the EOF in the FILE.         DONE
+    -Then find out what if Next() is the only one intereatcing with infile.     May not have to worry about. It 'looks' like Next() is the only thing interatcting with infile, check this through a text search with command line or github search function.
+    -Then find all the functions that uses Next(), figure out its behavior to see if any backtracking occurs.   DONE
+    -Modify Next() to use string as input instead of FILE and inmitate all the backtracking behaviors.          DONE
+    -Modify Include() to work with strings.                         DONE
+
+Replace all instance of FILE to string.         DONE
+
+Find out how include inserts it self into another pre-existing thing.   DONE
+
+^^^---DONE-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+vvv---NOT_DONE---vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+Find the function to covert a block of function code to binary.
+
+Does global var Text also store one line of code from any source file as it's being read?
+
+Hardcode our malicous code into a string variable.
+    Have it be able to compile successfuly so grammar must be correct.
+
+Make it a quine.

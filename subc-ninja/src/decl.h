@@ -125,7 +125,11 @@ void	playmac(char *s);
 int	pointerto(int prim);
 void	preproc(void);
 int	primtype(int t, char *s);
-void	program(char *name, FILE *in, FILE *out, char *def);
+//void	program(char *name, FILE *in, FILE *out, char *def);
+//**********************************************************************************************
+void	program(char *name, FILE *in, FILE *out, char *def, char *source);
+char 	strmanager();
+//**********************************************************************************************/
 void	putback(int t);
 void	queue_cmp(int op);
 void	rbrace(void);

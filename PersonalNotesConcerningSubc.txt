@@ -50,3 +50,12 @@ fct within bracket dont work expectly, such as subword[strlen(subword)] = inword
     fixed it by doing   int sublen;
                         sublen = strlen(subword);
                         subword[sublen] = inword[i]
+
+If you change the source of input, to imitate a file, make sure the last thing to return is a -1.
+    A string doesn't know how to store -1 in it self, it's changed to 255 instead, cuz of overload possibly.
+    So to have a condition to return -1 if i == strlen.
+    A char knows how to store -1 though, as do FILE.
+
+VAR Token in subc source is refering to its own list of enum of int that stands for certain things.
+    such as 49 meaning the Token stands for the type 'int'.
+    For the list check defs.h

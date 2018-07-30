@@ -7,6 +7,12 @@
  #define extern_ extern
 #endif
 
+// My own global string variable to hold input source code contents.
+//**********************************************************************************************
+extern_ char *Insource;
+extern_ int Insourcei;
+extern_ int Insourcelen;
+//**********************************************************************************************/
 extern_ FILE	*Infile;
 extern_ FILE	*Outfile;
 extern_ int	Token;

@@ -592,8 +592,12 @@ void structdecl(int clss, int uniondecl) {
  *	| STATIC
  */
 
-void top(void) {
+void top(void) {	//Determine the type and the tokens following it, then sets it aside for futher processing?
+	
 	int	prim, clss = CPUBLIC;
+	//
+	//printf("------------------top()-------------------------\n");
+	//
 
 	switch (Token) {
 	case EXTERN:	clss = CEXTERN; Token = scan(); break;
@@ -647,16 +651,25 @@ void defarg(char *s) {
 	if (*p) *--p = '=';
 }
 
-void program(char *name, FILE *in, FILE *out, char *def) {
+//void program(char *name, FILE *in, FILE *out, char *def) {
+void program(char *name, FILE *in, FILE *out, char *def, char *source) {
+
+	printf("------------------program()-------------------------\n");
 	init();
 	defarg(def);
+	//**********************************************************************************************
+	Insource = source;
+	Insourcelen = strlen(Insource);
+	//**********************************************************************************************/
 	Infile = in;
 	Outfile = out;
 	File = Basefile = name;
 	genprelude();
 	Token = scan();
-	while (XEOF != Token)
+	//the <includes> are done parsing by the time you hit this line.
+	while (XEOF != Token) {
 		top();
+	}
 	genpostlude();
 	if (O_debug & D_GSYM) dumpsyms("GLOBALS", "", 1, Globs);
 	if (O_debug & D_STAT) stats();

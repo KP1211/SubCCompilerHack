@@ -6,9 +6,17 @@
 #include "defs.h"
 #include "data.h"
 #include "decl.h"
-//*******MYEVIL INCLUDE
-#include "evilvar.h"
-//*******
+
+// An assit function to be used by next().
+//**********************************************************************************************
+//Insource is expected to be a c-string without a EOF in its sequence. strmanager() imitate a return of EOF when it hits string length.
+char strmanager() {	// This is not globally available, future plan, make it so.
+	if(Insourcei == Insourcelen)	//String doesn't know how to store -1, so I have this condition here to control that.
+		return -1;
+	else
+		return Insource[Insourcei];
+}
+//**********************************************************************************************/
 
 int next(void) {
 	int	c;
@@ -27,10 +35,12 @@ int next(void) {
 			return *Macp[Mp-1]++;
 		}
 	}
-	c = fgetc(Infile);
-	//***
-	printf("char: %c --> ascii: %d\n",c,c );
-	//***
+	//c = fgetc(Infile);
+	//**********************************************************************************************
+	c = strmanager();
+	//printf("%c",c);
+	++Insourcei;
+	//**********************************************************************************************/
 	if ('\n' == c) Line++;
 	return c;
 }
@@ -120,33 +130,15 @@ static int scanint(int c) {
 	return val;
 }
 
-// This functions parse anything in double quotes.
-// The return values is the size of the buf, and also what's gonna be counted in the program.
-// The return values also doesn't count the ending double quotes, since it's just here for the format purpose.
 static int scanstr(char *buf) {
 	int	i, c;
-	//***
-	int modi, modl, cmpl;	// modify index, modify length, compare length.
-	char replacement[513], subword[513];	// The current 513 is the max number of char that *buf will take, *buf which is global variable Text[] of size 513.
-	modi = 0; cmpl = 0; 
-	strcpy(replacement, "Good Bye");
-	strcpy(subword, "Hello");
-	modl = strlen(subword);
-	//***
 
 	buf[0] = '"';
 	for (i=1; i<TEXTLEN-2; i++) {
 		if ((c = scanch()) == '"') {
 			buf[i++] = '"';
 			buf[i] = 0;
-			//***
-			// Now I got to change the size of buf, to accomadate the edits I want to insert. The edits are fine, but it's cut off when this fct returns.
-			if(subwordcheck(buf,subword,&modi,&cmpl)) {
-				modstr(buf,modi,modl,replacement);
-			}
-			return Value = (strlen(buf)); 	// Was thinkg it's gonna be strlen(buf) + 1. but I did the math, it's not, it's just strlen(buf)..
-			//***
-			//return Value = i;
+			return Value = i;
 		}
 		buf[i] = c;
 	}
@@ -189,7 +181,9 @@ int skip(void) {
 			c = next();
 		}
 		if (nl && c == '#') {
+			//printf("+++++++++++++++++++++++\n");
 			preproc();
+			//printf("+++++++++++++++++++++++\n");
 			c = next();
 			continue;
 		}
@@ -515,7 +509,7 @@ static int scanpp(void) {
 		case '#':
 			Text[0] = '#';
 			scanident(next(), &Text[1], TEXTLEN-1);
-			if ((t = keyword(Text)) != 0)
+			if ((t = keyword(Text)) != 0) 
 				return t;
 			error("unknown preprocessor command: %s", Text);
 			return IDENT;
@@ -546,6 +540,9 @@ static int scanpp(void) {
 			}
 			else {
 				scnerror("funny input character: %s", c);
+				//
+				scnerror("char form: '%c'",c);
+				//
 				break;
 			}
 		}
