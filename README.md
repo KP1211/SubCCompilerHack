@@ -16,13 +16,13 @@ Me and my team's goal is to hack this compiler to do the following things:
  - Include() changes, temporally, what next() is parsing, and then switching back to the original .c being parsed.
  - Each of the subc .c files have at most 17,270 characters (useful for our String variable to be able to store our source code within the program, currently set at size 20,000).
  - Here are the files that have been modified from its default:
-	- (Look for '//****************', those are the places where I have added on to the default source code, some default codes are commented out near these indication.)*
- 	- 1. 'scan.c'
+	- 1. 'scan.c'
  	- 2. 'prep.c'
  	- 3. 'main.c'
  	- 4. 'decl.c'
  	- 5. 'decl.h'
  	- 6. 'data,h'
+	- (Look for '//****************', those are the places where I have added on to the default source code, some default codes are commented out near these indication.)*
 	
 ## **The idea**
  - Instead of reading character by character from a FILE variable and then compiling, we change it to reading character by charater from a String variable and then compiling.
