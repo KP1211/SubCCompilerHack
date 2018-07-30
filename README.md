@@ -8,7 +8,7 @@ This repository contains modified version of the subc compiler.
 Me and my team's goal is to hack this compiler to do the following things:
     * 
 
-#-----PROGRESS-----
+#PROGRESS
 
 ##*Good things to note*
  - FILE Infile is the variable storing the input .c file that is being read into the program (subc).
