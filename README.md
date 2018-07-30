@@ -41,6 +41,6 @@ Me and my team's goal is to hack this compiler to do the following things:
 
 ## **How I imitate FILE using a String**
  - 1. **char \*Insource** for Holding content - *A String variable to hold content of source files instead of using a FILE variable. The difference being that String has the content internally inside the program in the RAM, while FILE points to contents outside the program such as the HDD/SSD and does not retain a copy of the source file inside the program in the RAM.*
- - 2. **int Insourcei** for keeping track - *A index to keep track of what character to parse next in the String, while FILE variable is a pointer and is able to keep track of it self.*
+ - 2. **int Insourcei** for keeping track - *An index to keep track of what character to parse next in the String, while FILE variable is a pointer and is able to keep track of it self.*
  - 3. **int Insourcelen** for EOF (end of file) signal - *A String length is nesscary to imitate EOF (which is -1 in interger form) in a String, because for some reason, string cannot hold a Ascii value of -1, but a primative type char is able to, so when it parser hits string length, it will return -1 (EOF).*
 
