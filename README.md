@@ -6,7 +6,7 @@ According to the website, it's in public domain, meaning no copy rights.
 
 This repository contains modified version of the subc compiler. 
 Me and my team's goal is to hack this compiler to do the following things:
-    * 
+ - some 
 
 # -----PROGRESS-----
 
