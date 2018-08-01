@@ -11,10 +11,14 @@
 //**********************************************************************************************
 //Insource is expected to be a c-string without a EOF in its sequence. strmanager() imitate a return of EOF when it hits string length.
 char strmanager() {	// This is not globally available, future plan, make it so.
+	char c;
 	if(Insourcei == Insourcelen)	//String doesn't know how to store -1, so I have this condition here to control that.
 		return -1;
-	else
-		return Insource[Insourcei];
+	else {
+		c = Insource[Insourcei];
+		++Insourcei;
+		return c;
+	}
 }
 //**********************************************************************************************/
 
@@ -39,7 +43,7 @@ int next(void) {
 	//**********************************************************************************************
 	c = strmanager();
 	//printf("%c",c);
-	++Insourcei;
+	//printf("%d",c);
 	//**********************************************************************************************/
 	if ('\n' == c) Line++;
 	return c;
@@ -181,9 +185,7 @@ int skip(void) {
 			c = next();
 		}
 		if (nl && c == '#') {
-			//printf("+++++++++++++++++++++++\n");
 			preproc();
-			//printf("+++++++++++++++++++++++\n");
 			c = next();
 			continue;
 		}
@@ -509,7 +511,7 @@ static int scanpp(void) {
 		case '#':
 			Text[0] = '#';
 			scanident(next(), &Text[1], TEXTLEN-1);
-			if ((t = keyword(Text)) != 0) 
+			if ((t = keyword(Text)) != 0)
 				return t;
 			error("unknown preprocessor command: %s", Text);
 			return IDENT;
@@ -540,9 +542,6 @@ static int scanpp(void) {
 			}
 			else {
 				scnerror("funny input character: %s", c);
-				//
-				scnerror("char form: '%c'",c);
-				//
 				break;
 			}
 		}

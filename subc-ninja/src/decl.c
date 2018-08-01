@@ -654,12 +654,14 @@ void defarg(char *s) {
 //void program(char *name, FILE *in, FILE *out, char *def) {
 void program(char *name, FILE *in, FILE *out, char *def, char *source) {
 
-	printf("------------------program()-------------------------\n");
+	printf("------------------program()-------------------------file name: '%s'\n",name);
 	init();
 	defarg(def);
 	//**********************************************************************************************
 	Insource = source;
 	Insourcelen = strlen(Insource);
+	Insourcei = 0;			// THIS, I FORGOT TO RESET IT TO ZERO ON NEW RUN, AND BEEN CAUSING SO MUCHHHH SEGMENT FAULT AND BUGS, WASTE A GOOD WEEK WORTH OF TIME ON THIS BULLSHIT MISTAKE...
+	printf("strlen of main source: '%d' with start index: '%d'\n", strlen(Insource), Insourcei);	//
 	//**********************************************************************************************/
 	Infile = in;
 	Outfile = out;

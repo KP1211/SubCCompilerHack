@@ -115,7 +115,7 @@ static void compile(char *file, char *def) {
 	// Converts FILE to string.
 	//**********************************************************************************************
 	tmp = fopen(file,"r");
-	strcpy("",source);	//format it to be a empty proper c-string.
+	//strcpy("",source);	//format it to be a empty proper c-string. CAUSING SEG FAULT IN WHILE?
 	sourcei = 0;
 	while( (source[sourcei] = fgetc(tmp)) != EOF ) {
 		++sourcei;
@@ -124,6 +124,7 @@ static void compile(char *file, char *def) {
 	//printf("%s",source);
 	fclose(tmp);
 	//**********************************************************************************************/
+	//program(file, in, out, def);
 	program(file, in, out, def, source);
 	if (file) {
 		fclose(in);
@@ -261,6 +262,7 @@ static int dbgopt(int argc, char *argv[], int *pi, int *pj) {
 int main(int argc, char *argv[]) {
 	int	i, j;
 	char	*def;
+	//   ./test-scc -o more-scc cg.c decl.c error.c expr.c gen.c main.c misc.c opt.c prep.c scan.c stmt.c sym.c tree.c 
 
 	def = NULL;
 	O_debug = 0;

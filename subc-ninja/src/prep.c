@@ -22,9 +22,9 @@ int getln(char *buf, int max) {	//For some reason this is not being called in IN
 
 	//if (fgets(buf, max, Infile) == NULL) return 0;
 	//**********************************************************************************************
-	strcpy("",buf);
-	for( i = 0; i < max ; ++i ) {
-		c = next();
+	//strcpy("",buf);		// CAUSE SEG FAULT for going through buf.
+	for( i = 0; i < max - 1 ; ++i ) {
+		c = strmanager();
 		buf[i] = c;
 		if( c == '\n' || c == EOF ) {
 			++i;			// To imitate last increment that would have been done had this condition not run.
@@ -37,6 +37,7 @@ int getln(char *buf, int max) {	//For some reason this is not being called in IN
 	//printf("*************buf:'%s', length:'%d'\n",buf,strlen(buf));
 	//printf("This ran.\n");
 	//**********************************************************************************************/
+	printf("getln buf: '%s' len: %d\n",buf,strlen(buf));	//
 	k = strlen(buf);
 	if (k) buf[--k] = 0;						//Get rids of '/n' and make it a proper c-string with null terminator.
 	if (k && '\r' == buf[k-1]) buf[--k] = 0;	//Get rids of '/r' if there is '\r' and make it a proper c-string with null terminator.	
@@ -89,7 +90,7 @@ static void include(void) {
 	//**********************************************************************************************
 	char incsource[20000]; // Should be able to account for most subc .c files.
 	FILE *inctmp;
-	int incsourcei;
+	int tmpi;
 	char *main_src;
 	int main_src_i, main_src_len;
 	//**********************************************************************************************/
@@ -105,26 +106,21 @@ static void include(void) {
 		strcpy(path, file);
 	else {
 		strcpy(path, SCCDIR);
-		printf("path:'%s'\n",path);
 		strcat(path, "/include/");
-		printf("path:'%s'\n",path);
 		strcat(path, file);
-		printf("path:'%s'\n",path);
 	}
 	if ((inc = fopen(path, "r")) == NULL)
 		error("cannot open include file: '%s'", path);
 	else {
 		// Converts FILE to string.
 		//**********************************************************************************************
-		printf("opening include file: '%s'",path);
 		inctmp = fopen(path,"r");
-		strcpy("",incsource);	//format it to be a empty proper c-string.
-		incsourcei = 0;
-		while( (incsource[incsourcei] = fgetc(inctmp)) != EOF ) {
-			++incsourcei;
+		//strcpy("",incsource);	//format it to be a empty proper c-string.		CAUSING SEG-FAULT FOR while loop that follows this.
+		tmpi = 0;
+		while( (incsource[tmpi] = fgetc(inctmp)) != EOF ) {
+			++tmpi;
 		}
-		incsource[incsourcei] ='\0';	// reenforce it to be a proper c-string and replaces EOF to \0.
-		//printf("%s",incsource);
+		incsource[tmpi] ='\0';	// reenforce it to be a proper c-string and replaces EOF to \0.
 		fclose(inctmp);
 		//**********************************************************************************************/
 		Inclev++;
@@ -139,6 +135,7 @@ static void include(void) {
 		Insource = incsource;
 		Insourcei = 0;
 		Insourcelen = strlen(incsource);
+		//printf("backing up index: %d\n", main_src_i);
 		//**********************************************************************************************/
 		oinfile = Infile;
 		Line = 1;
@@ -156,6 +153,7 @@ static void include(void) {
 		Insource = main_src;
 		Insourcei = main_src_i;
 		Insourcelen = main_src_len;
+		//printf("putting back index: %d\n",Insourcei);
 		//**********************************************************************************************/
 		fclose(inc);
 		putback(oc);
@@ -225,6 +223,9 @@ static void setline(void) {
 static void junkln(void) {
 	while (!feof(Infile) && fgetc(Infile) != '\n')
 		;
+	/**********************************************************************************************
+	while( (Insourcei != Insourcelen) && (strmanager() != '\n') )
+	//**********************************************************************************************/
 	Line++;
 }
 

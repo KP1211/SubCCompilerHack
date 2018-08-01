@@ -30,6 +30,7 @@ Me and my team's goal is to hack this compiler to do the following things:
 
 ## **What's done**
  - What's currently on github, once compiled, will produce a program is coded to read .c source file as a FILE variable and then be converted to a String variable, character by character. After that, our program will read character by character from the String variable containing our input-source-code, character by character, and then compiling.
+  - It's now able to compile it self with no bug.
  - I Have found two places in subc-source-code where FILE Infile is being used or modified, next() in scan.c and Include() in prep.c.
   - next(), originally coded to reading from type FILE, is now edited to read from a String variable.
   - Include(), is purposed to open <include> files and have temporally have FILE Infile points to it, so next() will be parsing any <include> files, and then once that's done, it will point FILE Infile back to the original .c file being parsed.
