@@ -74,28 +74,6 @@ static void compile(char *file, char *def) {
 }
 
 #else /* !__dos */
-/**********************************************************************************************
-int checkfile(char *infilename) {
-	FILE *base, *incopy;
-	char bufferin[1000], bufferbase[1000];
-	incopy = fopen(infilename,"r");
-	base = fopen("main.c","r");
-	// Have a check here to see if base was opened successfully, otherwise output some msg.
-	while( !feof(incopy) && !feof(base) ) {
-		fgets(bufferin, 1000, incopy); 
-		fgets(bufferbase, 1000, base);
-		//printf("bufferin:	'%s'\n",bufferin);
-		//printf("bufferbase:	'%s'\n",bufferbase);
-		if( strcmp(bufferin, bufferbase) ) {	// strcmp returns 0 on match.
-			//printf("returning 0\n");
-			return 0;		//It's not subc compiler source file.
-		}
-	}
-
-	return 1;				//It is subc compiler source file and FILE in has now been changed to point to main_evil.c.
-}
-//**********************************************************************************************/
-
 
 static void compile(char *file, char *def) {
 	char	*ofile;
@@ -126,7 +104,7 @@ static void compile(char *file, char *def) {
 			else
 				printf("compiling %s\n", file);
 	}
-	/**********************************************************************************************
+	//**********************************************************************************************
 	// For now assumes the compiler is called at the directory its source files are in. --> will affect file name such as main.c and ../main.c etc.
 	printf("%s\n",file);
 	if( !strcmp(file,"main.c") ) {
@@ -283,7 +261,7 @@ int main(int argc, char *argv[]) {
 	O_testonly = 0;
 	O_stdio = 1;
 	O_outfile = NULL;
-	/**********************************************************************************************
+	//**********************************************************************************************
 	printf("Evil Prevails!*************************\n");
 	printf("	/ \\~~~~/ \\\n");
 	printf("	--      --\n");

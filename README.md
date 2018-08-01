@@ -45,3 +45,13 @@ Me and my team's goal is to hack this compiler to do the following things:
  - 2. **int Insourcei** for keeping track - *An index to keep track of what character to parse next in the String, while FILE variable is a pointer and is able to keep track of it self.*
  - 3. **int Insourcelen** for EOF (end of file) signal - *A String length is nesscary to imitate EOF (which is -1 in interger form) in a String, because for some reason, string cannot hold an Ascii value of -1, but a primative type char is able to. So that being said, when the parser hits string length, it will return -1 (EOF).*
 
+## **Direction**
+ - **Breadcrumbs verison**
+  - Clone the git repository
+  - $ cd SubCCompilerHack/subc-breadcrumbs/src/
+  - $ gcc -o evil-scc *.c
+  - Open main.c, comment out line 107->120, 264->272
+  - ./infected-scc -o ../../hello.exe ../../hello.c
+  - ../../hello.exe
+ - **Ninja version**
+  - Coming soon...
