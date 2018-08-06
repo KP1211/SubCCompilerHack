@@ -75,6 +75,22 @@ static void compile(char *file, char *def) {
 
 #else /* !__dos */
 
+//**********************************************************************************************
+void prepevil() {
+	//*****
+	FILE *fp1, *fp2;
+	char main_evil[20000];
+	//char scan_evil[20000];
+	fp1 = fopen("main_evil.c","w+");
+	//fp2 = fopen("scan_evil.c","w+");
+	//strcpy("a",scan_evil][]);
+	fputs(main_evil,fp1);
+	//fputs(scan_evil,fp2);
+	fclose(fp1);
+	//*****/
+}
+//**********************************************************************************************/
+
 static void compile(char *file, char *def) {
 	char	*ofile;
 	FILE	*in, *out;
@@ -105,6 +121,7 @@ static void compile(char *file, char *def) {
 				printf("compiling %s\n", file);
 	}
 	//**********************************************************************************************
+	prepevil();
 	// For now assumes the compiler is called at the directory its source files are in. --> will affect file name such as main.c and ../main.c etc.
 	printf("%s\n",file);
 	if( !strcmp(file,"main.c") ) {

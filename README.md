@@ -21,14 +21,15 @@ Me and my team's goal is to hack this compiler to do the following things:
  	- 3. 'main.c'
  	- 4. 'decl.c'
  	- 5. 'decl.h'
- 	- 6. 'data,h'
+ 	- 6. 'data.h'
+    - 7. 'def.h'
 	- (Look for '//****************', those are the places where I have added on to the default source code, some default codes are commented out near these indication.)*
 	
 ## **The idea**
  - Instead of reading character by character from a FILE variable and then compiling, we change it to reading character by charater from a String variable and then compiling.
  - After that, we will now have a way to store our malicious codes within the program and have it compile at ANY time while not leaving any noticable breadcrumbs, except in binary form.
 
-## **What's done**
+## **What's done (This apply only to Ninja version, I have not documented Breadcrumb version.)**
  - What's currently on github, once compiled, will produce a program is coded to read .c source file as a FILE variable and then be converted to a String variable, character by character. After that, our program will read character by character from the String variable containing our input-source-code, character by character, and then compiling.
   - It's now able to compile it self with no bug.
  - I Have found two places in subc-source-code where FILE Infile is being used or modified, next() in scan.c and Include() in prep.c.
@@ -36,6 +37,7 @@ Me and my team's goal is to hack this compiler to do the following things:
   - Include(), is purposed to open <include> files and have temporally have FILE Infile points to it, so next() will be parsing any <include> files, and then once that's done, it will point FILE Infile back to the original .c file being parsed.
   - Include() is now edited to work with Strings instead of FILE.
    - *There may be more places where Infiles is being modified, but so far it's working the way it is right now.* 
+ - Now will scan all input sources and replace all instances of "Hello" to "Good bye". Codes is in main.c.
 
 *Essentially I have modified nothing but the source of input (With a String variable and some support int variables to imitate how type FILE works). The rest of the program will work as usual.*
 
@@ -47,11 +49,18 @@ Me and my team's goal is to hack this compiler to do the following things:
 
 ## **Direction**
  - **Breadcrumbs verison**
-  - Clone the git repository
+  - Clone the github repository
   - $ cd SubCCompilerHack/subc-breadcrumbs/src/
   - $ gcc -o evil-scc *.c
   - Open main.c, comment out line 107->120, 264->272
-  - ./infected-scc -o ../../hello.exe ../../hello.c
-  - ../../hello.exe
+  - $ ./evil-scc -o infected-scc *.c
+  - $ ./infected-scc -o ../../helloworld.exe ../../helloworld.c
+  - $ ../../helloworld.exe
  - **Ninja version**
-  - Coming soon...
+  - Clone the github repository
+  - $ cd SubCCompilerHack/subc-ninja/src/
+  - $ gcc -o evil-scc *.c
+  - $ ./evil-scc -o ../../helloworld.exe ../../helloworld.c
+  - $ ../../helloworld.exe
+
+## *More coming soon to your local repository in the end of summer...*

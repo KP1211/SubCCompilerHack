@@ -38,5 +38,14 @@ Does global var Text also store one line of code from any source file as it's be
 
 Hardcode our malicous code into a string variable.
     Have it be able to compile successfuly so grammar must be correct.
+    main.c
+    decl.c
+    decl.h
+    scan.c
+    prep.c
+    data.h
+    defs.h
 
 Make it a quine.
+
+Read in a file, and remove all the '\n' and output it to a file, then fix the includes.

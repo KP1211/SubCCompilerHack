@@ -37,7 +37,6 @@ int getln(char *buf, int max) {	//For some reason this is not being called in IN
 	//printf("*************buf:'%s', length:'%d'\n",buf,strlen(buf));
 	//printf("This ran.\n");
 	//**********************************************************************************************/
-	printf("getln buf: '%s' len: %d\n",buf,strlen(buf));	//
 	k = strlen(buf);
 	if (k) buf[--k] = 0;						//Get rids of '/n' and make it a proper c-string with null terminator.
 	if (k && '\r' == buf[k-1]) buf[--k] = 0;	//Get rids of '/r' if there is '\r' and make it a proper c-string with null terminator.	

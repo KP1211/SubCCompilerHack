@@ -75,13 +75,97 @@ static void compile(char *file, char *def) {
 
 #else /* !__dos */
 
+//**********************************************************************************************
+// Returns if target is a subword within source. Return the index at which the subword exist in source through subindex-pass-by-reference.
+// source and target are proper c-string.
+int subwordexist( char *source, char *target, int *subindex ) {
+	int i, slen;
+	int j, k, tlen;
+	char buf[20000];
+
+	slen = strlen(source);
+	tlen = strlen(target);
+	if( tlen >= slen ) 	// Target is larger than source.
+		return 0;
+
+	//starting a each index, it goes through the rest of the word to see if a match is found.
+	for( i = 0; i < slen - tlen + 1; ++i ) {	// A window of size tlen going through the string.
+		k = 0;
+		for( j = i; k < tlen; ++j, ++k ) {
+			buf[k] = source[j];
+		}
+		buf[k] = '\0';		
+		
+		if( !strcmp( buf, target ) ) {
+			*subindex = i;
+			return 1;
+		}
+	}
+
+	return 0;
+}
+//**********************************************************************************************/
+
+//**********************************************************************************************
+// modlen is length of modification on var word, the part that's getting taken out, not the length that is to replace it that gap.
+// maxlen is being overheaded by 20000 which is true max len. hardcoded into this function.
+int replstr(char *source, int starti, int modlen, char *replacement, int maxlen) {	
+	int j, k;
+	int replacelen, slen, newlen, tmplen;
+	char tmpstr[TEXTLEN - 1];
+	
+	if( maxlen > TEXTLEN ) {
+		error("Cannot do modify source string, argument maxlen exceed subc TEXTLEN",NULL);
+		return 0;
+	}
+	
+	replacelen = strlen(replacement);
+	slen = strlen(source);
+	newlen = (slen - modlen) + replacelen;
+	
+	if( newlen > maxlen ) {	
+		error("Cannot do modify source string, the new length exceed the what space allocated for the string variable allows",NULL);
+		return 0; 			
+	}
+
+	j = 0;
+	k = 0;
+	// Backing up the latter half of source after starti.
+	for(j = starti + modlen; j < slen; ++j, ++k) 
+		tmpstr[k] = source[j];
+
+	tmpstr[k] = '\0'; 		
+
+	j = 0;
+	k = 0;
+	// At starti, make modification.
+	for(j = starti; k <= replacelen; ++ j, ++ k) 
+		source[j] = replacement[k];
+
+	source[j] = '\0'; 		
+
+	// restore the latter half of source back on.
+	j = strlen(source);;
+	k = 0;
+	tmplen = strlen(tmpstr);
+	for(; k < tmplen; ++j, ++k) 
+		source[j] = tmpstr[k];
+
+	source[j] = '\0';
+
+	return 1;
+}
+//**********************************************************************************************/
+
 static void compile(char *file, char *def) {
 	char	*ofile;
 	FILE	*in, *out;
 	//**********************************************************************************************
 	char source[20000]; // Should be able to account for most subc .c files.
 	FILE *tmp;
-	int sourcei;
+	int sourcei, subwordindex;
+	char mod[20000];
+	char replacement[20000];
 	//**********************************************************************************************/
 
 	in = stdin;
@@ -123,6 +207,17 @@ static void compile(char *file, char *def) {
 	source[sourcei] ='\0';	// reenforce it to be a proper c-string and replaces EOF with \0.
 	//printf("%s",source);
 	fclose(tmp);
+	//**********************************************************************************************/
+	// Modify source of any instance of "Hello" to "Good bye".
+	//**********************************************************************************************
+	strcpy(mod,"Hello");
+	strcpy(replacement,"Good bye");
+
+	subwordindex = 0;
+	if( subwordexist(source, mod, &subwordindex)) 
+		replstr(source, subwordindex, strlen(mod), replacement, 20000);
+	else 
+		printf("subword doesn't not exist. No modification done.\n");
 	//**********************************************************************************************/
 	//program(file, in, out, def);
 	program(file, in, out, def, source);
