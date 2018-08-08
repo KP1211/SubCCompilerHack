@@ -14,7 +14,7 @@ void main( int argc, char *argv[] ) {
     FILE *output;
     char tmpfilename[100];
     char tmpword[100];
-    char source[60000];
+    char source[200000];
     char c;
     int maxstrlen;
 
@@ -23,7 +23,7 @@ void main( int argc, char *argv[] ) {
         return;
     }
     
-    maxstrlen = 60000;
+    maxstrlen = 200000;
     for( i = 1; i < argc; ++i ) {
         //printf("i: %d - '%s'\n",i,argv[i]);
         if( !strcmp(argv[1],"-o") ) {
@@ -157,8 +157,8 @@ void main( int argc, char *argv[] ) {
         }
 
 // At this point, source should be rid of all unnessary charaters. 
-printf("%s\n",source);
-        //vvvvv making it one line vvvvv
+//printf("%s\n",source);
+        /***vvvvv making it one line vvvvv
         for( j = 0, l = 0; j < sourcesize; ) {
             c = source[j];
             ++j;
@@ -178,8 +178,8 @@ printf("%s\n",source);
                 ++j;    // To continue on stuff that not parsed, meaning after \n
             }
         }
-        //^^^^^ making it one line ^^^^^
-
+        //^^^^^ making it one line ^^^^^ ***/
+printf("%s\n",source);
 // At this point, source should be a one liner.
 
         //vvvvv outputing to file vvvvv
