@@ -29,7 +29,10 @@
 #define PTRSIZE		INTSIZE
 #define CHARSIZE	1
 
+/*************
 #define TEXTLEN		512
+//*************/
+#define TEXTLEN		200000
 #define NAMELEN		16
 
 #define MAXFILES	32

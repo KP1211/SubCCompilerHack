@@ -64,3 +64,5 @@ Me and my team's goal is to hack this compiler to do the following things:
   - $ ../../helloworld.exe
 
 ## *More coming soon to your local repository in the end of summer...*
+
+got to make all on src to compile some prerequiste files.
