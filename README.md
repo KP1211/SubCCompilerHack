@@ -50,7 +50,7 @@ Me and my team's goal is to hack this compiler to do the following things:
  - Now will scan all input sources and replace all instances of "Hello" to "Good bye". Codes is in main.c.
  - Maximun string length has been increased to 200,000.
  - Has a string variable to contain the complete source codes of the 7 files that I have modified (specified in section *Good things to note*). 
- - Has a source code that is quine-able, and some for loops to make it a quine.
+ - Ninja is not fully quined, leaving no breadcrumb except in binary form.
 
 *Essentially I have modified nothing but the source of input (With a String variable and some support int variables to imitate how type FILE works). The rest of the program will work as usual.*
 

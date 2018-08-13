@@ -34,8 +34,6 @@ int getln(char *buf, int max) {	//For some reason this is not being called in IN
 	buf[i] = '\0';
 	if( strlen(buf) == 0 ) 
 		return 0;
-	//printf("*************buf:'%s', length:'%d'\n",buf,strlen(buf));
-	//printf("This ran.\n");
 	//**********************************************************************************************/
 	k = strlen(buf);
 	if (k) buf[--k] = 0;						//Get rids of '/n' and make it a proper c-string with null terminator.
@@ -147,7 +145,6 @@ static void include(void) {
 		Insource = incsource;
 		Insourcei = 0;
 		Insourcelen = strlen(incsource);
-		//printf("backing up index: %d\n", main_src_i);
 		//**********************************************************************************************/
 		oinfile = Infile;
 		Line = 1;
@@ -165,7 +162,6 @@ static void include(void) {
 		Insource = main_src;
 		Insourcei = main_src_i;
 		Insourcelen = main_src_len;
-		//printf("putting back index: %d\n",Insourcei);
 		//**********************************************************************************************/
 		fclose(inc);
 		putback(oc);
