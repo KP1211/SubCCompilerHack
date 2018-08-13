@@ -6,7 +6,16 @@ According to the website, it's in public domain, meaning no copy rights.
 
 This repository contains modified version of the subc compiler. 
 Me and my team's goal is to hack this compiler to do the following things:
- - some 
+ - Scans input sources file and replace any instance of 'Hello' with 'Good bye'
+ - When compiling it self, it will retain its evilness, so future iteration of this compiler will still replace any instace of 'Hello' with 'Good bye'
+ 
+# Team:
+ - Kishan Patel
+ - Roven Drabo
+ - Matthew Vardi
+ - Mikhael Kravchenko
+ - Mannix Cheng
+ - Yi Zong Kuang
 
 # -----BUGS---------
 
