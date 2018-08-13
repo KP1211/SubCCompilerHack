@@ -7,7 +7,7 @@
 #include "data.h"
 #include "decl.h"
 
-// An assit function to be used by next().
+// An assit function to be used by 'int next()'.
 //**********************************************************************************************
 //Insource is expected to be a c-string without a EOF in its sequence. strmanager() imitate a return of EOF when it hits string length.
 char strmanager() {	// This is not globally available, future plan, make it so.

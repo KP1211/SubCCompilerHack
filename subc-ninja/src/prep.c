@@ -22,7 +22,6 @@ int getln(char *buf, int max) {	//For some reason this is not being called in IN
 
 	//if (fgets(buf, max, Infile) == NULL) return 0;
 	//**********************************************************************************************
-	//strcpy("",buf);		// CAUSE SEG FAULT for going through buf.
 	for( i = 0; i < max - 1 ; ++i ) {
 		c = strmanager();
 		buf[i] = c;
@@ -113,7 +112,6 @@ static void include(void) {
 		// Converts FILE to string.
 		//**********************************************************************************************
 		inctmp = fopen(path,"r");
-		//strcpy("",incsource);	//format it to be a empty proper c-string.		CAUSING SEG-FAULT FOR while loop that follows this.
 		tmpi = 0;
 		while( (incsource[tmpi] = fgetc(inctmp)) != EOF ) {
 			++tmpi;
