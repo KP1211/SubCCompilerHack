@@ -14,6 +14,7 @@ Me and my team's goal is to hack this compiler to do the following things:
  - $ gcc -o test-scc *.c 
  - $ ./test-scc -o more-scc *.c
  - $ ./more-scc -o extreme-scc *.c   --> At this point, it causes error, string quine is not of correct format.
+ - Have found the problem, my codes to escape a string works as expected when compiled with gcc compiler, but works UNEXPECTED when compiled with scc-style compiler. Unexpected things such as many things not being escaped, but it does do something, as it increases the str len. SCC SOMEHOW DOESN'e RECOGNIZE double quotes in my codes.
 
 # -----PROGRESS-----
 
@@ -21,7 +22,7 @@ Me and my team's goal is to hack this compiler to do the following things:
  - FILE Infile is the variable storing the input .c file that is being read into the program (subc).
  - next() in scan.c is key. It is where parsing the input is done, character by character.
  - Include() changes, temporally, what next() is parsing, and then switching back to the original .c being parsed.
- - Each of the subc .c files have at most 17,270 characters (useful for our String variable to be able to store our source code within the program, currently set at size 20,000).
+ - Each of the subc .c files have at most 17,270 characters (useful for our String variable to be able to store our source code within the program, currently set at size 200,000).
  - Here are the files that have been modified from its default:
 	- 1. 'scan.c'
  	- 2. 'prep.c'
@@ -48,7 +49,7 @@ Me and my team's goal is to hack this compiler to do the following things:
    - *There may be more places where Infiles is being modified, but so far it's working the way it is right now.* 
  - Now will scan all input sources and replace all instances of "Hello" to "Good bye". Codes is in main.c.
  - Maximun string length has been increased to 200,000.
- - Has a string variable to contain the complete source code of the 7 files that I have modified (specified in section *Good things to note*). 
+ - Has a string variable to contain the complete source codes of the 7 files that I have modified (specified in section *Good things to note*). 
  - Has a source code that is quine-able, and some for loops to make it a quine.
 
 *Essentially I have modified nothing but the source of input (With a String variable and some support int variables to imitate how type FILE works). The rest of the program will work as usual.*

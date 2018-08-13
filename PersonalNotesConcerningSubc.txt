@@ -59,3 +59,5 @@ If you change the source of input, to imitate a file, make sure the last thing t
 VAR Token in subc source is refering to its own list of enum of int that stands for certain things.
     such as 49 meaning the Token stands for the type 'int'.
     For the list check defs.h
+
+subc cannot detect escape double quotes, so == '\"' will not work, just use == '"'

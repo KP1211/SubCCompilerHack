@@ -13,7 +13,10 @@ static int maxstrlen;
 void removecomment(char *source, int *sourcesize) {
     int j, l, k;
     
+    //l = 0; j = 0;
+    printf("rmcomment\n");
     for( j = 0, l = 0; j < *sourcesize - 1; ++j ) {
+    //for( ;  j < *sourcesize; ++j) {
         if( source[j] == '/' ) {
             l = j;
             if( source[l+1] == '/' ) {
@@ -38,6 +41,61 @@ void removecomment(char *source, int *sourcesize) {
         }
     }
     *sourcesize = strlen(source);
+    //printf("%s\n",source);
+
+    return;
+}
+/********
+int escapesequence( char *source, int sourcesize , char *filename) {
+    int j, l;
+    char c;
+
+    printf("escape sequence\n");
+    for( j = 0, l = 0; j < sourcesize; ) {
+        c = source[j];
+        ++j;
+
+        if( c == '\\' || c == '\'' || c == '\"' ) {
+            printf("Found some escapables.\n");
+            for( l = sourcesize; (l < maxstrlen) && (l > j-1); --l ) {     
+                if( l == sourcesize ) 
+                    source[l+1] = '\0';     
+                source[l] = source[l-1];
+            }
+            source[l] = '\\';
+            sourcesize = strlen(source);
+            if( strlen(source) >=  maxstrlen ) {
+                printf("In-program-array may not be allocated enough to contain all nesccary new characters. Changed in-program-array to be allocated more space. Skipping '%s'.\n", filename);
+                break;
+            }
+            ++j;    // To continue on stuff that not parsed, meaning after \\ or \' or \"
+        }
+    }
+    //printf("%s\n",source);
+
+    return sourcesize;
+}
+//*******/
+void escapesequence( char *source, int *sourcesize , char *filename) {
+    int j, l;
+
+    for( j = 0, l = 0; j < *sourcesize; ++j ) {
+
+        if( source[j] == '\\' || source[j] == '\'' || source[j] == '"' ) {
+            for( l = *sourcesize; (l < maxstrlen) && (l > j); --l ) {     
+                if( l == *sourcesize ) 
+                    source[l+1] = '\0';     
+                source[l] = source[l-1];
+            }
+            source[l] = '\\';
+            *sourcesize = strlen(source);
+            if( strlen(source) >=  maxstrlen ) {
+                printf("In-program-array may not be allocated enough to contain all nesccary new characters. Changed in-program-array to be allocated more space. Skipping '%s'.\n", filename);
+                break;
+            }
+            ++j;    // To continue on stuff that not parsed, meaning after \\ or \' or \"
+        }
+    }
 
     return;
 }
@@ -45,6 +103,7 @@ void removecomment(char *source, int *sourcesize) {
 void oneline( char *source, int *sourcesize, char *filename ) {
     int i, j;
 
+    printf("one line\n");
     for( i = 0; i < *sourcesize ; ++i ) {
         if( source[i] == '\n' || source[i] == '\t' ) {
             for( j = *sourcesize; (j < maxstrlen) && (j > i); --j ) {     
@@ -69,33 +128,7 @@ void oneline( char *source, int *sourcesize, char *filename ) {
             }
         }
     }
-
-    return;
-}
-
-void escapesequence( char *source, int *sourcesize , char *filename) {
-    int j, l;
-    char c;
-
-    for( j = 0, l = 0; j < *sourcesize; ) {
-        c = source[j];
-        ++j;
-
-        if( c == '\\' || c == '\'' || c == '\"' ) {
-            for( l = *sourcesize; (l < maxstrlen) && (l > j-1); --l ) {     
-                if( l == *sourcesize ) 
-                    source[l+1] = '\0';     
-                source[l] = source[l-1];
-            }
-            source[l] = '\\';
-            *sourcesize = strlen(source);
-            if( strlen(source) >=  maxstrlen ) {
-                printf("In-program-array may not be allocated enough to contain all nesccary new characters. Changed in-program-array to be allocated more space. Skipping '%s'.\n", filename);
-                break;
-            }
-            ++j;    // To continue on stuff that not parsed, meaning after \\ or \' or \"
-        }
-    }
+    //printf("%s\n",source);
 
     return;
 }
@@ -179,7 +212,6 @@ void main( int argc, char *argv[] ) {
                 
 
 //printf("%s\n",source);
-printf("%s\n",source);
 
         //vvvvv outputing to file vvvvv
         fputs(source, output);
