@@ -29,14 +29,8 @@ Replace all instance of FILE to string.         DONE
 
 Find out how include inserts it self into another pre-existing thing.   DONE
 
-^^^---DONE-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-vvv---NOT_DONE---vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-Find the function to covert a block of function code to binary.
-
-Does global var Text also store one line of code from any source file as it's being read?
-
-Hardcode our malicous code into a string variable.
+Hardcode our malicous code into a string variable.                      DONE
     Have it be able to compile successfuly so grammar must be correct.
     main.c
     decl.c
@@ -46,6 +40,13 @@ Hardcode our malicous code into a string variable.
     data.h
     defs.h
 
-Make it a quine.
+Make it a quine.        DONE
 
-Read in a file, and remove all the '\n' and output it to a file, then fix the includes.
+Read in a file, and remove all the '\n' and output it to a file, then fix the includes. DONE
+
+^^^---DONE-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+vvv---NOT_DONE---vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+Find the function to covert a block of function code to binary.
+
+Does global var Text also store one line of code from any source file as it's being read?

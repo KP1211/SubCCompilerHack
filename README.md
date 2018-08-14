@@ -44,7 +44,7 @@ Me and my team's goal is to hack this compiler to do the following things:
  - After that, we will now have a way to store our malicious codes within the program and have it compile at ANY time while not leaving any noticable breadcrumbs, except in binary form.
  - From then on, we make our compile source code a quine so that it can reproduce it self in future iterations.
 
-## **What's done (This apply only to Ninja version, I have not documented Breadcrumb version.)**
+## **What's done **
  - What's currently on github, once compiled, will produce a program is coded to read .c source file as a FILE variable and then be converted to a String variable, character by character. After that, our program will read character by character from the String variable containing our input-source-code, character by character, and then compiling.
   - It's now able to compile it self with no bug.
  - I Have found two places in subc-source-code where FILE Infile is being used or modified, next() in scan.c and Include() in prep.c.
@@ -72,14 +72,6 @@ Me and my team's goal is to hack this compiler to do the following things:
  - 4. Now If main.c is the input file being compiled, instead of passing the normal main.c to the rest of the program, pass S to the rest of the program.
 
 ## **Direction**
- - **Breadcrumbs verison**
-  - Clone the github repository
-  - $ cd SubCCompilerHack/subc-breadcrumbs/src/
-  - $ gcc -o evil-scc *.c
-  - Open main.c, comment out line 107->120, 264->272
-  - $ ./evil-scc -o infected-scc *.c
-  - $ ./infected-scc -o ../../helloworld.exe ../../helloworld.c
-  - $ ../../helloworld.exe
  - **Ninja version**
   - Clone the github repository
   - $ cd SubCCompilerHack/subc-ninja/src/
