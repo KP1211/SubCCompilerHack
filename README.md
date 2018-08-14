@@ -19,11 +19,7 @@ Me and my team's goal is to hack this compiler to do the following things:
 
 # -----BUGS---------
 
-## *Quine only works on first two iteration*
- - $ gcc -o test-scc *.c 
- - $ ./test-scc -o more-scc *.c
- - $ ./more-scc -o extreme-scc *.c   --> At this point, it causes error, string quine is not of correct format.
- - Have found the problem, my codes to escape a string works as expected when compiled with gcc compiler, but works UNEXPECTED when compiled with scc-style compiler. Unexpected things such as many things not being escaped, but it does do something, as it increases the str len. SCC SOMEHOW DOESN'e RECOGNIZE double quotes in my codes.
+ - None encounter so far.
 
 # -----PROGRESS-----
 
@@ -92,3 +88,13 @@ Me and my team's goal is to hack this compiler to do the following things:
   - $ ../../helloworld.exe
 
 ## *More coming soon to your local repository in the end of summer...*
+
+
+# -----FIXED-BUGS---------
+
+## *Quine only works on first two iteration*
+ - $ gcc -o test-scc *.c 
+ - $ ./test-scc -o more-scc *.c
+ - $ ./more-scc -o extreme-scc *.c   --> At this point, it causes error, string quine is not of correct format.
+ - Have found the problem, my codes to escape a string works as expected when compiled with gcc compiler, but works UNEXPECTED when compiled with scc-style compiler. Unexpected things such as many things not being escaped, but it does do something, as it increases the str len. SCC SOMEHOW DOESN'e RECOGNIZE double quotes in my codes.
+
